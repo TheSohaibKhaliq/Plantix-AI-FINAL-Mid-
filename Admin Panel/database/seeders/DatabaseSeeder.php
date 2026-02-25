@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,42 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Disable FK checks so truncation order doesn't matter
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        // Truncate all seeded tables in reverse-dependency order (children first)
+        $tables = [
+            'payout_requests',
+            'payouts',
+            'wallet_transactions',
+            'order_items',
+            'orders',
+            'coupons',
+            'taxes',
+            'product_attributes',
+            'products',
+            'vendors',
+            'role_permissions',
+            'permissions',
+            'role',
+            'categories',
+            'zone_points',
+            'zones',
+            'vendor_store_filters',
+            'store_filters',
+            'gift_cards',
+            'on_board_slides',
+            'cms_pages',
+            'currencies',
+            'users',
+        ];
+
+        foreach ($tables as $table) {
+            DB::table($table)->truncate();
+        }
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         $this->call([
             UsersSeeder::class,
             ZonesSeeder::class,
