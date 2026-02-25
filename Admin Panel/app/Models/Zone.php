@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Zone extends Model
 {
-    protected $fillable = ['zone_name', 'description', 'status', 'firebase_doc_id'];
+    protected $fillable = ['zone_name', 'description', 'status'];
 
     public function vendors(): HasMany
     {

@@ -11,7 +11,7 @@ class GiftCard extends Model
 
     protected $fillable = [
         'code', 'amount', 'remaining_amount', 'purchased_by',
-        'redeemed_by', 'redeemed_at', 'expires_at', 'is_active', 'firebase_doc_id',
+        'redeemed_by', 'redeemed_at', 'expires_at', 'is_active',
     ];
 
     protected $casts = [

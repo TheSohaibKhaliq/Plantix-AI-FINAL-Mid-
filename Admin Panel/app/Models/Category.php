@@ -9,7 +9,7 @@ class Category extends Model
 {
     protected $fillable = [
         'name', 'description', 'image',
-        'active', 'sort_order', 'firebase_doc_id',
+        'active', 'sort_order',
     ];
 
     protected $casts = [

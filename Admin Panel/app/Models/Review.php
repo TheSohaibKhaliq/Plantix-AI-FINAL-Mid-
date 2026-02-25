@@ -9,7 +9,7 @@ class Review extends Model
 {
     protected $fillable = [
         'user_id', 'vendor_id', 'product_id', 'order_id',
-        'rating', 'comment', 'is_active', 'firebase_doc_id',
+        'rating', 'comment', 'is_active',
     ];
 
     protected $casts = [

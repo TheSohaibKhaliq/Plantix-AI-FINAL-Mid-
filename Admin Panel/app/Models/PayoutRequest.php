@@ -9,7 +9,7 @@ class PayoutRequest extends Model
 {
     protected $fillable = [
         'vendor_id', 'amount', 'method', 'status',
-        'admin_note', 'reviewed_by', 'reviewed_at', 'firebase_doc_id',
+        'admin_note', 'reviewed_by', 'reviewed_at',
     ];
 
     protected $casts = [

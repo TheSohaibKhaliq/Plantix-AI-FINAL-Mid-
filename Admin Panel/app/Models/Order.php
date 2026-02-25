@@ -14,7 +14,7 @@ class Order extends Model
         'status', 'subtotal', 'delivery_fee', 'tax_amount', 'discount_amount',
         'total', 'payment_method', 'payment_status',
         'delivery_address', 'delivery_lat', 'delivery_lng',
-        'notes', 'estimated_delivery', 'firebase_doc_id',
+        'notes', 'estimated_delivery',
     ];
 
     protected $casts = [

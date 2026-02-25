@@ -663,26 +663,6 @@
         return null;
     }
 
-    database.collection('settings').doc("notification_setting").get().then(async function (snapshots) {
-        var data = snapshots.data();
-        if(data != undefined){
-            serviceJson = data.serviceJson;
-            if(serviceJson != '' && serviceJson != null){
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        serviceJson: btoa(serviceJson),
-                    },
-                    url: "{{ route('store-firebase-service') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (data) {
-                    }
-                });
-            }
-        }
-    });
 </script>
 </body>
 </html>

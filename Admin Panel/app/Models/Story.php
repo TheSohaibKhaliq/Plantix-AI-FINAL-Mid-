@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Story extends Model
 {
     protected $fillable = [
-        'vendor_id', 'media_url', 'type', 'expires_at', 'is_active', 'firebase_doc_id',
+        'vendor_id', 'media_url', 'type', 'expires_at', 'is_active',
     ];
 
     protected $casts = [

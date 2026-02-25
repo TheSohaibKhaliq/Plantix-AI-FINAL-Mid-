@@ -9,7 +9,7 @@ class StoreFilter extends Model
 {
     protected $table = 'store_filters';
 
-    protected $fillable = ['name', 'icon', 'is_active', 'sort_order', 'firebase_doc_id'];
+    protected $fillable = ['name', 'icon', 'is_active', 'sort_order'];
 
     protected $casts = [
         'is_active' => 'boolean',

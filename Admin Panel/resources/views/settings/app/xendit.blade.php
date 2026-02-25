@@ -146,21 +146,8 @@
 
 @section('scripts')
     <script>
-        var database = firebase.firestore();
-        var paymentRef = database.collection('settings').doc('xendit_settings');
-
-        var mercadoPagoData = database.collection('settings').doc('MercadoPago');
-        var stripeData = database.collection('settings').doc('stripeSettings');
-        var codData = database.collection('settings').doc('CODSettings');
-        var razorpayData = database.collection('settings').doc('razorpaySettings');
-        var paypalData = database.collection('settings').doc('paypalSettings');
-        var paytmData = database.collection('settings').doc('PaytmSettings');
-        var walletData = database.collection('settings').doc('walletSettings');
-        var payFastSettings = database.collection('settings').doc('payFastSettings');
-        var payStackSettings = database.collection('settings').doc('payStack');
-        var flutterWaveSettings = database.collection('settings').doc('flutterWave');
-        var orangePaySettings = database.collection('settings').doc('orange_money_settings');
-        var midtransSettings = database.collection('settings').doc('midtrans_settings');
+        // Firebase has been removed from the application
+        // Payment settings functionality requires backend migration to MySQL
 
         var photo = "";
         var fileName = "";

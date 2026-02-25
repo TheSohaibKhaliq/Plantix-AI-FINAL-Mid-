@@ -14,7 +14,7 @@ class Vendor extends Model
         'address', 'latitude', 'longitude', 'phone', 'image', 'cover_photo',
         'rating', 'review_count', 'is_active', 'is_approved',
         'open_time', 'close_time', 'delivery_fee', 'min_order_amount',
-        'preparation_time', 'commission_rate', 'stripe_account_id', 'firebase_doc_id',
+        'preparation_time', 'commission_rate', 'stripe_account_id',
     ];
 
     protected $casts = [

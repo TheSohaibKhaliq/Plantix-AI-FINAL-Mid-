@@ -19,7 +19,7 @@ class User extends Authenticatable
         'name', 'email', 'phone', 'password', 'role',
         'active', 'is_document_verified', 'vendor_id',
         'wallet_amount', 'fcm_token', 'profile_photo',
-        'firebase_uid', 'must_reset_password', 'role_id',
+        'must_reset_password', 'role_id',
     ];
 
     protected $hidden = [

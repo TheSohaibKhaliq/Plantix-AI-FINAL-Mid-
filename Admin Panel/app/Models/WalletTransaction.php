@@ -9,7 +9,7 @@ class WalletTransaction extends Model
 {
     protected $fillable = [
         'user_id', 'order_id', 'type', 'amount', 'balance',
-        'description', 'firebase_doc_id',
+        'description',
     ];
 
     protected $casts = [

@@ -9,7 +9,7 @@ class BookedTable extends Model
 {
     protected $fillable = [
         'vendor_id', 'user_id', 'booking_date', 'booking_time',
-        'party_size', 'status', 'notes', 'firebase_doc_id',
+        'party_size', 'status', 'notes',
     ];
 
     protected $casts = [

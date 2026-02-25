@@ -11,7 +11,7 @@ class Coupon extends Model
     protected $fillable = [
         'vendor_id', 'code', 'type', 'value', 'min_order',
         'max_discount', 'usage_limit', 'used_count',
-        'starts_at', 'expires_at', 'is_active', 'firebase_doc_id',
+        'starts_at', 'expires_at', 'is_active',
     ];
 
     protected $casts = [

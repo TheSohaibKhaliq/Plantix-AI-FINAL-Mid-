@@ -171,13 +171,16 @@
 @section('scripts')
 
 <script>
+    // Firebase has been removed from the application
+    // Zone editing requires backend migration to MySQL
+    
+    $(document).ready(function () {
+        jQuery("#overlay").hide();
+    });
 
-    var id = "<?php echo $id;?>";
-    var database = firebase.firestore();
-    var ref = database.collection('zone').where("id", "==", id);
-    var default_lat = getCookie('default_latitude');
-    var default_lng = getCookie('default_longitude');
-    var geopoints = '';
+</script>
+
+@endsection
     
     $(document).ready(function () {
 

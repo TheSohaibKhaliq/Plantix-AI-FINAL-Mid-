@@ -10,7 +10,7 @@ class DocumentType extends Model
     protected $table = 'document_types';
 
     protected $fillable = [
-        'name', 'type', 'is_required', 'is_enabled', 'firebase_doc_id',
+        'name', 'type', 'is_required', 'is_enabled',
     ];
 
     protected $casts = [

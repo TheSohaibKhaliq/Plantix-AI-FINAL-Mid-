@@ -9,7 +9,7 @@ class DocumentVerification extends Model
 {
     protected $fillable = [
         'vendor_id', 'document_type_id', 'file_path',
-        'status', 'notes', 'reviewed_by', 'reviewed_at', 'firebase_doc_id',
+        'status', 'notes', 'reviewed_by', 'reviewed_at',
     ];
 
     protected $casts = [

@@ -171,64 +171,16 @@
 @section('scripts')
 
 <script>
-
-    var database = firebase.firestore();
-    var id = database.collection("tmp").doc().id;
-    var ref = database.collection('zone');
-
+    // Firebase has been removed from the application
+    // Zone creation requires backend migration to MySQL
+    
     $(document).ready(function () {
-
-        setTimeout(function(){
-            initMap();
-        },2500);
-        
-        $(".save-form-btn").click(function () {
-            
-            var name = $("#name").val();
-            var publish = $("#publish").is(":checked");
-            var coordinates_object = $('#coordinates').val();
-            
-            $(".error_top").empty();
-            if (name == '') {
-                $(".error_top").show();
-                $(".error_top").html("");
-                $(".error_top").append("<p>{{trans('lang.zone_name_error')}}</p>");
-                window.scrollTo(0, 0);
-            } else if (coordinates_object == "") {
-                $(".error_top").show();
-                $(".error_top").html("");
-                $(".error_top").append("<p>{{trans('lang.zone_coordinates_error')}}</p>");
-                window.scrollTo(0, 0);
-            } else {
-
-                var coordinates_parse = $.parseJSON(coordinates_object);
-                var coordinates = coordinates_parse[0];
-                var latitude = coordinates[0]['lat'];
-                var longitude = coordinates[0]['lng'];
-
-                var area = [];
-                for (let i = 0; i < coordinates.length; i++) {
-                    var item = coordinates[i];
-                    area.push(new firebase.firestore.GeoPoint(item.lat,item.lng));
-                }
-                
-                jQuery("#overlay").show();
-                database.collection('zone').doc(id).set({
-                    'id': id,
-                    'name': name,
-                    'latitude': latitude,
-                    'longitude': longitude,
-                    'area': area,
-                    'publish': publish,
-                }).then(function (result) {
-                    jQuery("#overlay").hide();
-                    window.location.href = '{{ route("zone")}}';
-                });
-            }
-        });
+        jQuery("#overlay").hide();
     });
 
-    var map;
+</script>
+
+@endsection    var map;
     var drawingManager;
     var selectedShape;
     var selectedKernel;

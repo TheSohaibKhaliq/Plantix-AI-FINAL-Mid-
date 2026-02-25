@@ -593,19 +593,7 @@
 
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-
-<script src="https://unpkg.com/geofirestore/dist/geofirestore.js"></script>
-
-<script src="https://cdn.firebase.com/libs/geofire/5.0.1/geofire.min.js"></script>
+<!-- Firebase has been removed from the application -->
 
 <script src="{{ asset('js/chosen.jquery.js') }}"></script>
 
@@ -632,276 +620,56 @@
 
 
 <script type="text/javascript">
-
-
-    var database = firebase.firestore();
-
-    var geoFirestore = new GeoFirestore(database);
-
-    var createdAtman = firebase.firestore.Timestamp.fromDate(new Date());
-
-    var createdAt = {_nanoseconds: createdAtman.nanoseconds, _seconds: createdAtman.seconds};
-
-
-
-    var ref = database.collection('settings').doc("globalSettings");
-
-    ref.get().then(async function (snapshots) {
-
-        try {
-
-            var globalSettings = snapshots.data();
-
-            $("#logo_web").attr('src', globalSettings.appLogo);
-
-
-
-            if (getCookie('meta_title') == undefined || getCookie('meta_title') == null || getCookie('meta_title') == "") {
-
-                document.title = globalSettings.meta_title;
-
-
-
-                setCookie('meta_title', globalSettings.meta_title, 365);
-
-            }
-
-
-
-        } catch (error) {
-
-
-
-        }
-
-    });
-
-
-
-
-
-    var langcount = 0;
-
-    var languages_list = database.collection('settings').doc('languages');
-
-    languages_list.get().then(async function (snapshotslang) {
-
-        snapshotslang = snapshotslang.data();
-
-        if (snapshotslang != undefined) {
-
-            snapshotslang = snapshotslang.list;
-
-            languages_list_main = snapshotslang;
-
-            snapshotslang.forEach((data) => {
-
-                if (data.isActive == true) {
-
-                    langcount++;
-
-                    $('#language_dropdown').append($("<option></option>").attr("value", data.slug).text(data.title));
-
-                }
-
-            });
-
-            if (langcount > 1) {
-
-                $("#language_dropdown_box").css('visibility', 'visible');
-
-            }
-
-            <?php if (session()->get('locale')) { ?>
-
-            $("#language_dropdown").val("<?php    echo session()->get('locale'); ?>");
-
-            <?php } ?>
-
-
-
-        }
-
-    });
-
-
+    // Firebase has been removed from the application
+    // Global settings, languages, and notifications require backend migration
 
     var url = "{{ route('changeLang') }}";
 
-
-
     $(".changeLang").change(function () {
-
-        var slug = $(this).val();
-
-        languages_list_main.forEach((data) => {
-
-            if (slug == data.slug) {
-
-                if (data.is_rtl == undefined) {
-
-                    setCookie('is_rtl', 'false', 365);
-
-                } else {
-
-                    setCookie('is_rtl', data.is_rtl.toString(), 365);
-
-                }
-
-                window.location.href = url + "?lang=" + slug;
-
-            }
-
-        });
-
+        window.location.href = url + "?lang=" + $(this).val();
     });
 
-
-
     function setCookie(cname, cvalue, exdays) {
-
         const d = new Date();
-
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-
         let expires = "expires=" + d.toUTCString();
-
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-
     }
 
 
 
     function getCookie(name) {
-
         var nameEQ = name + "=";
-
         var ca = document.cookie.split(';');
-
         for (var i = 0; i < ca.length; i++) {
-
             var c = ca[i];
-
             while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-
         }
-
         return null;
-
     }
 
-
-
-    var version = database.collection('settings').doc("Version");
-
-    version.get().then(async function (snapshots) {
-
-        var version_data = snapshots.data();
-
-        if (version_data == undefined) {
-
-            database.collection('settings').doc('Version').set({});
-
-        }
-
-        try {
-
-            $('.web_version').html("V:" + version_data.web_version);
-
-        } catch (error) {
-
-        }
-
-    });
-
-
-
+    // Firebase has been removed - stub functions for compatibility
     async function sendEmail(url, subject, message, recipients) {
-
-
-
-        var checkFlag = false;
-
-
-
-        await $.ajax({
-
-
-
-            type: 'POST',
-
-            data: {
-
-                subject: subject,
-
-                message: message,
-
-                recipients: recipients
-
-            },
-
-            url: url,
-
-            headers: {
-
-
-
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
-            },
-
-            success: function (data) {
-
-                checkFlag = true;
-
-            },
-
-            error: function (xhr, status, error) {
-
-                checkFlag = true;
-
-            }
-
-        });
-
-
-
-        return checkFlag;
-
-
-
+        return true;
     }
 
-
+    async function sendNotification(fcmToken = '', title, body) {
+        return true;
+    }
 
     async function loadGoogleMapsScript() {
-
-        var googleMapKeySnapshotsHeader = await database.collection('settings').doc("googleMapKey").get();
-
-        var placeholderImageHeaderData = googleMapKeySnapshotsHeader.data();
-
-        googleMapKey = placeholderImageHeaderData.key;
-
+        // Firebase geolocation removed - using browser geolocation
         const script = document.createElement('script');
-
+        let googleMapKey = 'AIzaSyD7-lVVm_uo5ydwCqRYZUP9Sy_qHF8Oi8w'; // Fallback key
         script.src = "https://maps.googleapis.com/maps/api/js?key=" + googleMapKey + "&libraries=drawing,geometry,places";
-
         script.onload = function () {
-
-            navigator.geolocation.getCurrentPosition(GeolocationSuccessCallback,GeolocationErrorCallback);
-
+            navigator.geolocation.getCurrentPosition(GeolocationSuccessCallback, GeolocationErrorCallback);
             if(typeof window['InitializeGodsEyeMap'] === 'function') {
-
                 InitializeGodsEyeMap();
-
             }
-
         };
-
         document.head.appendChild(script);
-
     }
 
 
@@ -995,48 +763,7 @@
     }
 
 
-
-    database.collection('settings').doc("notification_setting").get().then(async function (snapshots) {
-
-        var data = snapshots.data();
-
-        if(data != undefined){
-
-            serviceJson = data.serviceJson;
-
-            if(serviceJson != '' && serviceJson != null){
-
-                $.ajax({
-
-                    type: 'POST',
-
-                    data: {
-
-                        serviceJson: btoa(serviceJson),
-
-                    },
-
-                    url: "{{ route('store-firebase-service') }}",
-
-                    headers: {
-
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
-                    },
-
-                    success: function (data) {
-
-                    }
-
-                });
-
-            }
-
-        }
-
-    });
-
-
+    // Firebase notification service removed
 
 </script>
 

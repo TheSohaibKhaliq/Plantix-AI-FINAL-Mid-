@@ -12,7 +12,7 @@ class Product extends Model
     protected $fillable = [
         'vendor_id', 'category_id', 'name', 'description',
         'price', 'discount_price', 'image', 'is_active',
-        'is_featured', 'sort_order', 'firebase_doc_id',
+        'is_featured', 'sort_order',
     ];
 
     protected $casts = [

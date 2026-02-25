@@ -1,6 +1,6 @@
 @php
 $user = Auth::user();
-$role_has_permission = App\Models\Permission::where('role_id', $user->role_id)->pluck('permission')->toArray();
+$role_has_permission = json_decode(session('user_permissions', '[]'), true) ?? [];
 @endphp
 
 <nav class="sidebar-nav">
