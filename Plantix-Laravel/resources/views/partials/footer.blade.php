@@ -35,7 +35,7 @@
                                     <!-- Removed deleted file link: Meet Our Team -->
                                 </li>
                                 <li>
-                                    <a href="{{ route('blog.single') }}">News & Media</a>
+                                    <a href="{{ route('forum') }}">News & Media</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('plantix-ai') }}">Plantix-AI</a>
@@ -58,7 +58,7 @@
                             <ul>
                                 <li>
                                     <div class="thumb">
-                                        <a href="{{ route('blog.single') }}">
+                                        <a href="{{ route('forum.thread') }}">
                                             <img src="{{ asset('assets/img/800x800.png') }}" alt="Thumb">
                                         </a>
                                     </div>
@@ -66,13 +66,13 @@
                                         <div class="meta-title">
                                             <span class="post-date">12 Sep, 2025</span>
                                         </div>
-                                        <h5><a href="{{ route('blog.single') }}">How AI Detects Cotton Leaf Curl
+                                        <h5><a href="{{ route('forum.thread') }}">How AI Detects Cotton Leaf Curl
                                                 Early</a></h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="thumb">
-                                        <a href="{{ route('blog.single') }}">
+                                        <a href="{{ route('forum.thread') }}">
                                             <img src="{{ asset('assets/img/fertilizer.png') }}" alt="Thumb">
                                         </a>
                                     </div>
@@ -80,7 +80,7 @@
                                         <div class="meta-title">
                                             <span class="post-date">18 Jul, 2025</span>
                                         </div>
-                                        <h5><a href="{{ route('blog.single') }}">Smart Fertilizer Plans Save 30% on
+                                        <h5><a href="{{ route('forum.thread') }}">Smart Fertilizer Plans Save 30% on
                                                 Costs</a></h5>
                                     </div>
                                 </li>

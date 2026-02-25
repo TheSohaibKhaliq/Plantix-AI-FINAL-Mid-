@@ -115,7 +115,7 @@
                             <a href="{{ route('plantix-ai') }}">Plantix-AI</a>
                         </li>
                         <li>
-                            <a href="{{ route('blog') }}">Forum</a>
+                            <a href="{{ route('forum') }}">Forum</a>
                         </li>
                         <li>
                             <a href="{{ route('shop') }}">Shop</a>
