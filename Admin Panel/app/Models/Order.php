@@ -74,9 +74,37 @@ class Order extends Model
         return $this->hasOne(WalletTransaction::class);
     }
 
-    // -------------------------------------------------------------------------
-    // Status helpers
-    // -------------------------------------------------------------------------
+    /** Full status audit trail */
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class)->latest();
+    }
+
+    /** Return request for this order, if any */
+    public function returnRequest(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ReturnRequest::class);
+    }
+
+    /** Refund for this order, if any */
+    public function refund(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Refund::class);
+    }
+
+    // ── Scopes ────────────────────────────────────────────────────────────────
+
+    public function scopeForVendor($query, int $vendorId)
+    {
+        return $query->where('vendor_id', $vendorId);
+    }
+
+    public function scopeForCustomer($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    // ── Status helpers ────────────────────────────────────────────────────────
 
     public function isPending(): bool    { return $this->status === 'pending'; }
     public function isDelivered(): bool  { return $this->status === 'delivered'; }

@@ -20,6 +20,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Plantix AI — Multi-Guard Strategy
+    |--------------------------------------------------------------------------
+    | All three panels share ONE users table, differentiated by the `role`
+    | column.  Each guard uses the same Eloquent provider / table but targets
+    | a different sub-domain / prefix so sessions never collide.
+    |
+    | admin  → /admin/*      (roles: admin, staff)
+    | vendor → /vendor/*     (role: vendor)
+    | web    → /*            (role: user / customer)
+    |
+    */
+
+    /*
+    |--------------------------------------------------------------------------
     | Authentication Guards
     |--------------------------------------------------------------------------
     |
@@ -36,9 +50,22 @@ return [
     */
 
     'guards' => [
+        // ── Customer / Frontend guard ────────────────────────────────────────
         'web' => [
-            'driver' => 'session',
+            'driver'   => 'session',
             'provider' => 'users',
+        ],
+
+        // ── Admin guard ──────────────────────────────────────────────────────
+        'admin' => [
+            'driver'   => 'session',
+            'provider' => 'admins',
+        ],
+
+        // ── Vendor guard ─────────────────────────────────────────────────────
+        'vendor' => [
+            'driver'   => 'session',
+            'provider' => 'vendors_users',
         ],
     ],
 
@@ -60,15 +87,21 @@ return [
     */
 
     'providers' => [
+        // All guards use the same User model / table – filtered by role in middleware
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model'  => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\User::class,
+        ],
+
+        'vendors_users' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\User::class,
+        ],
     ],
 
     /*
@@ -89,8 +122,22 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
+            'table'    => 'password_resets',
+            'expire'   => 60,
+            'throttle' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
+            'table'    => 'password_resets',
+            'expire'   => 60,
+            'throttle' => 60,
+        ],
+
+        'vendors_users' => [
+            'provider' => 'vendors_users',
+            'table'    => 'password_resets',
+            'expire'   => 60,
             'throttle' => 60,
         ],
     ],

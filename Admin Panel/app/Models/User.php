@@ -107,4 +107,39 @@ class User extends Authenticatable
     {
         return $this->hasMany(BookedTable::class, 'user_id');
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'user_id');
+    }
+
+    public function expert(): HasOne
+    {
+        return $this->hasOne(Expert::class, 'user_id');
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class, 'user_id');
+    }
+
+    public function defaultAddress(): HasOne
+    {
+        return $this->hasOne(UserAddress::class, 'user_id')->where('is_default', true);
+    }
+
+    public function returnRequests(): HasMany
+    {
+        return $this->hasMany(ReturnRequest::class, 'user_id');
+    }
+
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class, 'user_id');
+    }
+
+    public function forumThreads(): HasMany
+    {
+        return $this->hasMany(ForumThread::class, 'user_id');
+    }
 }

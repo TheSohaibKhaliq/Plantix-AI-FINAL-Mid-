@@ -31,6 +31,24 @@ class DatabaseSeeder extends Seeder
 
         // Truncate all seeded tables in reverse-dependency order (children first)
         $tables = [
+            // New Plantix modules (children first)
+            'forum_replies',
+            'forum_threads',
+            'forum_categories',
+            'wishlists',
+            'user_addresses',
+            'refunds',
+            'returns',
+            'return_reasons',
+            'appointments',
+            'experts',
+            'order_status_history',
+            'cart_items',
+            'carts',
+            'product_images',
+            'product_stocks',
+            'brands',
+            // Existing tables
             'payout_requests',
             'payouts',
             'wallet_transactions',
@@ -73,6 +91,11 @@ class DatabaseSeeder extends Seeder
             OrdersSeeder::class,
             WalletAndPayoutsSeeder::class,
             MiscSeeder::class,
+            // ── New Plantix modules ──────────────────────
+            BrandSeeder::class,
+            ForumCategorySeeder::class,
+            ReturnReasonSeeder::class,
+            ExpertSeeder::class,
         ]);
     }
 }
