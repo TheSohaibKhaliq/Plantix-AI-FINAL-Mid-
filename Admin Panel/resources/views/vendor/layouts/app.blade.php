@@ -86,6 +86,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('vendor.coupons.*') ? 'active' : '' }}"
+               href="{{ route('vendor.coupons.index') }}">
+                <i class="bi bi-tag me-2"></i>Coupons
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('vendor.profile') ? 'active' : '' }}"
                href="{{ route('vendor.profile') }}">
                 <i class="bi bi-person-circle me-2"></i>Profile

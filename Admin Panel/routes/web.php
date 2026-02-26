@@ -554,13 +554,24 @@ Route::prefix('vendor')->name('vendor.')->group(function () {
         Route::post('/orders/{id}/status', [App\Http\Controllers\Vendor\VendorOrderController::class, 'updateStatus'])->name('orders.status');
 
         // Earnings / Payouts
-        Route::get('/earnings', [App\Http\Controllers\PayoutRequestController::class, 'index'])->name('earnings.index');
-        Route::get('/payouts',  [App\Http\Controllers\PayoutRequestController::class, 'index'])->name('payouts.index');
-        Route::post('/payouts', [App\Http\Controllers\PayoutRequestController::class, 'store'])->name('payouts.request');
+        Route::get('/earnings',  [App\Http\Controllers\Vendor\VendorEarningsController::class, 'index'])->name('earnings.index');
+        Route::get('/payouts',   [App\Http\Controllers\Vendor\VendorEarningsController::class, 'index'])->name('payouts.index');
+        Route::post('/payouts',  [App\Http\Controllers\Vendor\VendorEarningsController::class, 'requestPayout'])->name('payouts.request');
+
+        // Coupons (vendor-scoped discount codes)
+        Route::get('/coupons',              [App\Http\Controllers\Vendor\VendorCouponController::class, 'index'])->name('coupons.index');
+        Route::get('/coupons/create',       [App\Http\Controllers\Vendor\VendorCouponController::class, 'create'])->name('coupons.create');
+        Route::post('/coupons',             [App\Http\Controllers\Vendor\VendorCouponController::class, 'store'])->name('coupons.store');
+        Route::get('/coupons/{id}/edit',    [App\Http\Controllers\Vendor\VendorCouponController::class, 'edit'])->name('coupons.edit');
+        Route::put('/coupons/{id}',         [App\Http\Controllers\Vendor\VendorCouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/coupons/{id}',      [App\Http\Controllers\Vendor\VendorCouponController::class, 'destroy'])->name('coupons.destroy');
+        Route::post('/coupons/{id}/toggle', [App\Http\Controllers\Vendor\VendorCouponController::class, 'toggle'])->name('coupons.toggle');
 
         // Profile
-        Route::get('/profile', [App\Http\Controllers\UserController::class, 'vendorProfile'])->name('profile');
-        Route::put('/profile', [App\Http\Controllers\UserController::class, 'updateVendorProfile'])->name('profile.update');
+        Route::get('/profile',           [App\Http\Controllers\Vendor\VendorProfileController::class, 'show'])->name('profile');
+        Route::put('/profile',           [App\Http\Controllers\Vendor\VendorProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/store',     [App\Http\Controllers\Vendor\VendorProfileController::class, 'updateStore'])->name('profile.store.update');
+        Route::post('/profile/password', [App\Http\Controllers\Vendor\VendorProfileController::class, 'changePassword'])->name('profile.password');
 
     }); // end vendor.auth
 }); // end /vendor prefix
