@@ -18,15 +18,23 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        // ── Expert & Agency Events ────────────────────────────────────────────
+        \App\Events\Expert\AppointmentStatusChanged::class => [
+            \App\Listeners\Expert\SendAppointmentStatusNotification::class,
+        ],
+
+        \App\Events\Expert\ExpertMentionedInForum::class => [
+            \App\Listeners\Expert\SendForumMentionNotification::class,
+        ],
     ];
 
     /**
      * Register any events for your application.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        
+        //
     }
 }
+

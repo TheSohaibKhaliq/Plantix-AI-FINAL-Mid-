@@ -70,7 +70,7 @@
                             <a href="{{ route('contact') }}">Contact</a>
                         </li>
                         <li>
-                            <a href="{{ route('plantix-ai') }}">Plantix-AI</a>
+                            <a href="{{ route('ai.chat') }}">Plantix-AI</a>
                         </li>
                         <li>
                             <a href="{{ route('forum') }}">Forum</a>
@@ -235,7 +235,7 @@
                     <div class="featured-product">
                         <!-- Single Item -->
                         <div class="product-list-item">
-                            <a href="{{ route('crop-recommendation') }}">
+                            <a href="{{ route('crop.recommendation') }}">
                                 <img src="{{ asset('assets/img/icon/17.png') }}" alt="Icon">
                                 <h5>Crop Recommendation</h5>
                             </a>
@@ -243,7 +243,7 @@
                         <!-- End Single Item -->
                         <!-- Single Item -->
                         <div class="product-list-item">
-                            <a href="{{ route('crop-planning') }}">
+                            <a href="{{ route('crop.planning') }}">
                                 <img src="{{ asset('assets/img/icon/18.png') }}" alt="Icon">
                                 <h5>Crop Planning</h5>
                             </a>
@@ -251,7 +251,7 @@
                         <!-- End Single Item -->
                         <!-- Single Item -->
                         <div class="product-list-item">
-                            <a href="{{ route('disease-identification') }}">
+                            <a href="{{ route('disease.identification') }}">
                                 <img src="{{ asset('assets/img/icon/19.png') }}" alt="Icon">
                                 <h5>Disease Identification</h5>
                             </a>
@@ -259,7 +259,7 @@
                         <!-- End Single Item -->
                         <!-- Single Item -->
                         <div class="product-list-item">
-                            <a href="{{ route('fertilizer-recommendation') }}">
+                            <a href="{{ route('fertilizer.recommendation') }}">
                                 <img src="{{ asset('assets/img/icon/20.png') }}" alt="Icon">
                                 <h5>Fertilizer Recommendation</h5>
                             </a>
@@ -371,7 +371,7 @@
                                             <img src="{{ asset('assets/img/icon/21.png') }}" alt="Image Not Found">
                                         </div>
                                         <div class="info">
-                                            <h4><a href="{{ route('crop-recommendation') }}">Crop Recommendation</a></h4>
+                                            <h4><a href="{{ route('crop.recommendation') }}">Crop Recommendation</a></h4>
                                             <span>Plantix-AI Module</span>
                                         </div>
                                     </div>
@@ -389,7 +389,7 @@
                                             <img src="{{ asset('assets/img/icon/22.png') }}" alt="Image Not Found">
                                         </div>
                                         <div class="info">
-                                            <h4><a href="{{ route('crop-planning') }}">Crop Planning</a></h4>
+                                            <h4><a href="{{ route('crop.planning') }}">Crop Planning</a></h4>
                                             <span>Plantix-AI Module</span>
                                         </div>
                                     </div>
@@ -407,7 +407,7 @@
                                             <img src="{{ asset('assets/img/icon/23.png') }}" alt="Image Not Found">
                                         </div>
                                         <div class="info">
-                                            <h4><a href="{{ route('disease-identification') }}">Disease Identification</a></h4>
+                                            <h4><a href="{{ route('disease.identification') }}">Disease Identification</a></h4>
                                             <span>Plantix-AI Module</span>
                                         </div>
                                     </div>
@@ -425,7 +425,7 @@
                                             <img src="{{ asset('assets/img/icon/24.png') }}" alt="Image Not Found">
                                         </div>
                                         <div class="info">
-                                            <h4><a href="{{ route('fertilizer-recommendation') }}">Fertilizer Recommendation</a>
+                                            <h4><a href="{{ route('fertilizer.recommendation') }}">Fertilizer Recommendation</a>
                                             </h4>
                                             <span>Plantix-AI Module</span>
                                         </div>
@@ -729,7 +729,7 @@
                             optimize fertilizer usage, and make smarter decisions that increase profitability. Join
                             thousands of farmers already transforming their yields with data-driven insights.
                         </p>
-                        <a href="{{ route('plantix-ai') }}">Explore AI Features</a>
+                        <a href="{{ route('ai.chat') }}">Explore AI Features</a>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-12">

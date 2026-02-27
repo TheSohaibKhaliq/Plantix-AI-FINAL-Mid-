@@ -38,10 +38,12 @@ class User extends Authenticatable
     // Role helpers
     // -------------------------------------------------------------------------
 
-    public function isAdmin(): bool  { return $this->role === 'admin'; }
-    public function isVendor(): bool { return $this->role === 'vendor'; }
-    public function isDriver(): bool { return $this->role === 'driver'; }
-    public function isUser(): bool   { return $this->role === 'user'; }
+    public function isAdmin(): bool         { return $this->role === 'admin'; }
+    public function isVendor(): bool        { return $this->role === 'vendor'; }
+    public function isDriver(): bool        { return $this->role === 'driver'; }
+    public function isUser(): bool          { return $this->role === 'user'; }
+    public function isExpert(): bool        { return in_array($this->role, ['expert', 'agency_expert']); }
+    public function isAgencyExpert(): bool  { return $this->role === 'agency_expert'; }
 
     /** Check a named permission from the admin-panel role system */
     public function hasPermission(string $permission): bool

@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         // ── Guard-specific panel middleware ───────────────────────────────────
         'admin'      => \App\Http\Middleware\EnsureAdminGuard::class,
         'vendor.auth'=> \App\Http\Middleware\EnsureVendorGuard::class,
+        'expert.auth'=> \App\Http\Middleware\EnsureExpertGuard::class,
         'customer'   => \App\Http\Middleware\EnsureCustomerAuth::class,
     ];
 }

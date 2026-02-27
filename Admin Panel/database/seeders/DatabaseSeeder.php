@@ -32,6 +32,9 @@ class DatabaseSeeder extends Seeder
         // Truncate all seeded tables in reverse-dependency order (children first)
         $tables = [
             // New Plantix modules (children first)
+            'reviews',
+            'favourite_products',
+            'favourite_vendors',
             'forum_ai_suggestions',
             'ai_chat_messages',
             'ai_chat_sessions',
@@ -55,7 +58,13 @@ class DatabaseSeeder extends Seeder
             'returns',
             'return_reasons',
             'appointments',
+            'appointment_status_history',
+            'appointment_reschedules',
             'experts',
+            'expert_profiles',
+            'expert_specializations',
+            'expert_notification_logs',
+            'forum_expert_responses',
             'order_status_history',
             'cart_items',
             'carts',
@@ -109,8 +118,19 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ForumCategorySeeder::class,
             ReturnReasonSeeder::class,
-            ExpertSeeder::class,
+            // ExpertSeeder::class,     // DISABLED: legacy seeder superseded by ExpertsSeeder
+            ExpertsSeeder::class,       // Extended expert panel seeder (new architecture)
             SeasonalDataSeeder::class,
+            // ── New agriculture ecosystem seeders ────────
+            ProductStockSeeder::class,          // product_stocks + product_images
+            UserLocationSeeder::class,          // user_locations
+            FarmProfileSeeder::class,           // farm_profiles + soil_tests
+            CropActivitySeeder::class,          // crop_recommendations + crop_plans
+            DiseaseReportSeeder::class,         // crop_disease_reports + disease_suggestions
+            FertilizerRecommendationSeeder::class, // fertilizer_recommendations
+            AppointmentSeeder::class,           // appointments + status_history + notifications
+            ForumSeeder::class,                 // forum_threads + replies + expert_responses
+            ReviewSeeder::class,                // reviews (respects UNIQUE user+order)
         ]);
     }
 }

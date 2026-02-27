@@ -712,11 +712,10 @@
 
         var checkFlag = false;
 
-        var sendNotificationUrl = "{{ route('send-notification') }}";
+        // FCM notification endpoint (route not yet defined)
+        var sendNotificationUrl = null;
 
-
-
-        if (fcmToken !== '') {
+        if (fcmToken !== '' && sendNotificationUrl) {
 
             await $.ajax({
 

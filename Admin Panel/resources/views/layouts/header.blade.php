@@ -40,25 +40,31 @@
                             <div class="u-img"><img src="{{ asset('/images/users/user-2.png') }}" alt="user"
                                                     style="max-width: 45px;"></div>
                             <div class="u-text">
-                                <?php
-
-                                ?>
-                                <h4>{{  Auth::user()->name }}</h4>
-                                <p class="text-muted">{{ session()->has('user_role') ? session()->get('user_role') : '' }}</p>
+                                @if(Auth::check())
+                                    <h4>{{ Auth::user()->name }}</h4>
+                                    <p class="text-muted">{{ session()->has('user_role') ? session()->get('user_role') : '' }}</p>
+                                @else
+                                    <h4>Guest User</h4>
+                                    <p class="text-muted">Not Logged In</p>
+                                @endif
                             </div>
                         </div>
                     </li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="{{ route('users.profile') }}"><i
-                                    class="ti-user"></i> {!! trans('lang.user_profile') !!}</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();"><i
-                                    class="fa fa-power-off"></i> {{ __('Logout') }}</a></li>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                    @if(Auth::check())
+                        <li><a href="{{ route('users.profile') }}"><i
+                                        class="ti-user"></i> {!! trans('lang.user_profile') !!}</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();"><i
+                                        class="fa fa-power-off"></i> {{ __('Logout') }}</a></li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    @else
+                        <li><a href="{{ route('signin') }}"><i class="ti-user"></i> Sign In</a></li>
+                    @endif
                 </ul>
             </div>
         </li>

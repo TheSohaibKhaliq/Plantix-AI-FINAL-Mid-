@@ -603,6 +603,68 @@ Route::prefix('vendor')->name('vendor.')->group(function () {
 }); // end /vendor prefix
 
 
+// ══════════════════════════════════════════════════════════════════════════════
+// 3. EXPERT & AGENCY PANEL  (/expert/*)
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::prefix('expert')->name('expert.')->group(function () {
+
+    // ── Expert Auth (guest-only) ──────────────────────────────────────────────
+    Route::middleware('guest:expert')->group(function () {
+        Route::get('/login',  [App\Http\Controllers\Expert\Auth\ExpertLoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [App\Http\Controllers\Expert\Auth\ExpertLoginController::class, 'login']);
+
+        Route::get('/password/email',         [App\Http\Controllers\Expert\Auth\ExpertForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+        Route::post('/password/email',        [App\Http\Controllers\Expert\Auth\ExpertForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+        Route::get('/password/reset/{token}', [App\Http\Controllers\Expert\Auth\ExpertResetPasswordController::class, 'showResetForm'])->name('password.reset');
+        Route::post('/password/reset',        [App\Http\Controllers\Expert\Auth\ExpertResetPasswordController::class, 'reset'])->name('password.update');
+    });
+
+    Route::post('/logout', [App\Http\Controllers\Expert\Auth\ExpertLoginController::class, 'logout'])->name('logout');
+
+    // ── Protected Expert Routes ───────────────────────────────────────────────
+    Route::middleware('expert.auth')->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [App\Http\Controllers\Expert\ExpertDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/',          [App\Http\Controllers\Expert\ExpertDashboardController::class, 'index'])->name('home');
+
+        // ── Appointments ──────────────────────────────────────────────────────
+        Route::prefix('appointments')->name('appointments.')->group(function () {
+            Route::get('/',                          [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'index'])->name('index');
+            Route::get('/{appointment}',             [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'show'])->name('show');
+            Route::post('/{appointment}/accept',     [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'accept'])->name('accept');
+            Route::post('/{appointment}/reject',     [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'reject'])->name('reject');
+            Route::post('/{appointment}/complete',   [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'complete'])->name('complete');
+            Route::post('/{appointment}/reschedule', [App\Http\Controllers\Expert\ExpertAppointmentController::class, 'reschedule'])->name('reschedule');
+        });
+
+        // ── Forum ─────────────────────────────────────────────────────────────
+        Route::prefix('forum')->name('forum.')->group(function () {
+            Route::get('/',                [App\Http\Controllers\Expert\ExpertForumController::class, 'index'])->name('index');
+            Route::get('/{thread}',        [App\Http\Controllers\Expert\ExpertForumController::class, 'show'])->name('show');
+            Route::post('/{thread}/reply', [App\Http\Controllers\Expert\ExpertForumController::class, 'reply'])->name('reply');
+        });
+
+        // ── Notifications ─────────────────────────────────────────────────────
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::get('/',                        [App\Http\Controllers\Expert\ExpertNotificationController::class, 'index'])->name('index');
+            Route::post('/{notification}/read',    [App\Http\Controllers\Expert\ExpertNotificationController::class, 'markRead'])->name('read');
+            Route::post('/mark-all-read',          [App\Http\Controllers\Expert\ExpertNotificationController::class, 'markAllRead'])->name('read-all');
+            Route::get('/unread-count',            [App\Http\Controllers\Expert\ExpertNotificationController::class, 'unreadCount'])->name('unread-count');
+        });
+
+        // ── Profile ───────────────────────────────────────────────────────────
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/',     [App\Http\Controllers\Expert\ExpertProfileController::class, 'show'])->name('show');
+            Route::get('/edit', [App\Http\Controllers\Expert\ExpertProfileController::class, 'edit'])->name('edit');
+            Route::put('/',     [App\Http\Controllers\Expert\ExpertProfileController::class, 'update'])->name('update');
+        });
+
+    }); // end expert.auth
+}); // end /expert prefix
+
+
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 3. CUSTOMER / FRONTEND  (root â€” no prefix)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -722,6 +784,7 @@ Route::middleware('customer')->group(function () {
     Route::get('/plantix-ai/history',   [App\Http\Controllers\Frontend\AiChatController::class, 'history'])->name('ai.chat.history');
     Route::post('/plantix-ai/new',      [App\Http\Controllers\Frontend\AiChatController::class, 'newSession'])->name('ai.chat.new');
     Route::get('/plantix-ai/sessions',  [App\Http\Controllers\Frontend\AiChatController::class, 'sessions'])->name('ai.chat.sessions');
+
 
 }); // end customer middleware
 

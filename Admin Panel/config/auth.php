@@ -67,6 +67,12 @@ return [
             'driver'   => 'session',
             'provider' => 'vendors_users',
         ],
+
+        // ── Expert / Agency guard ─────────────────────────────────────────────
+        'expert' => [
+            'driver'   => 'session',
+            'provider' => 'experts_users',
+        ],
     ],
 
     /*
@@ -99,6 +105,12 @@ return [
         ],
 
         'vendors_users' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\User::class,
+        ],
+
+        // Experts share the same users table, filtered by role=expert in middleware
+        'experts_users' => [
             'driver' => 'eloquent',
             'model'  => App\Models\User::class,
         ],
@@ -136,6 +148,13 @@ return [
 
         'vendors_users' => [
             'provider' => 'vendors_users',
+            'table'    => 'password_resets',
+            'expire'   => 60,
+            'throttle' => 60,
+        ],
+
+        'experts_users' => [
+            'provider' => 'experts_users',
             'table'    => 'password_resets',
             'expire'   => 60,
             'throttle' => 60,
