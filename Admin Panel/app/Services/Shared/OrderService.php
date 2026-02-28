@@ -144,15 +144,15 @@ class OrderService
     private function guardTransition(string $current, string $next): void
     {
         $allowed = [
-            'pending'         => ['accepted', 'rejected'],
-            'accepted'        => ['preparing', 'rejected'],
-            'preparing'       => ['ready'],
-            'ready'           => ['driver_assigned', 'picked_up'],
-            'driver_assigned' => ['picked_up'],
-            'picked_up'       => ['delivered'],
-            'delivered'       => [],
-            'rejected'        => [],
-            'cancelled'       => [],
+            'pending'          => ['confirmed', 'cancelled', 'rejected'],
+            'confirmed'        => ['processing', 'cancelled'],
+            'processing'       => ['shipped', 'cancelled'],
+            'shipped'          => ['delivered'],
+            'delivered'        => ['return_requested'],
+            'return_requested' => ['returned', 'delivered'],
+            'returned'         => [],
+            'rejected'         => [],
+            'cancelled'        => [],
         ];
 
         if (!in_array($next, $allowed[$current] ?? [])) {

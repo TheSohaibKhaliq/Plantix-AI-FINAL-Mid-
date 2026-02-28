@@ -39,7 +39,7 @@ class AdminOrderController extends Controller
 
         $orders = $query->paginate(20)->withQueryString();
 
-        $statuses = ['pending','accepted','preparing','ready','driver_assigned','picked_up','delivered','rejected','cancelled'];
+        $statuses = ['pending','confirmed','processing','shipped','delivered','cancelled','rejected','return_requested','returned'];
 
         return view('admin.orders.index', compact('orders', 'statuses'));
     }
@@ -57,7 +57,7 @@ class AdminOrderController extends Controller
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
         $request->validate([
-            'status' => 'required|in:pending,accepted,preparing,ready,driver_assigned,picked_up,delivered,rejected,cancelled',
+            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,rejected,return_requested,returned',
             'notes'  => 'nullable|string|max:500',
         ]);
 

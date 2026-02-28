@@ -162,6 +162,23 @@ class CartCheckoutService
 
         $order->update($updateData);
 
+        // ── Restore stock on cancel or reject ─────────────────────────────────
+        if (in_array($newStatus, ['cancelled', 'rejected'], true)) {
+            $order->loadMissing('items.product');
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $this->stock->restoreStock(
+                        product:     $item->product,
+                        qty:         $item->quantity,
+                        reason:      'cancel',
+                        orderId:     $order->id,
+                        returnId:    null,
+                        initiatedBy: $changedBy->id,
+                    );
+                }
+            }
+        }
+
         OrderStatusHistory::create([
             'order_id'   => $order->id,
             'status'     => $newStatus,

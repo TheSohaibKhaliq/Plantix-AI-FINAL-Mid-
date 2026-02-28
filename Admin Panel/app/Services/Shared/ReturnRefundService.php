@@ -7,6 +7,7 @@ use App\Models\Refund;
 use App\Models\ReturnRequest;
 use App\Models\User;
 use App\Notifications\ReturnStatusNotification;
+use App\Services\Shared\StockService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,10 @@ use Illuminate\Validation\ValidationException;
 
 class ReturnRefundService
 {
+    public function __construct(
+        private readonly StockService $stock,
+    ) {}
+
     /**
      * Customer submits a return request.
      *
@@ -98,6 +103,25 @@ class ReturnRefundService
     public function approve(ReturnRequest $return, ?string $adminNotes = null): ReturnRequest
     {
         $return->update(['status' => 'approved', 'admin_notes' => $adminNotes]);
+
+        // ── Restore stock for returned items ──────────────────────────────────
+        try {
+            $return->loadMissing('order.items.product');
+            foreach ($return->order->items as $item) {
+                if ($item->product) {
+                    $this->stock->restoreStock(
+                        product:     $item->product,
+                        qty:         $item->quantity,
+                        reason:      'return',
+                        orderId:     $return->order_id,
+                        returnId:    $return->id,
+                        initiatedBy: null,
+                    );
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Stock restoration on return failed: ' . $e->getMessage(), ['return_id' => $return->id]);
+        }
 
         try {
             $return->user->notify(new ReturnStatusNotification($return));

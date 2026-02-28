@@ -35,7 +35,7 @@ class VendorOrderController extends Controller
         }
 
         $orders   = $query->paginate(20)->withQueryString();
-        $statuses = ['pending','accepted','preparing','ready','driver_assigned','picked_up','delivered','rejected','cancelled'];
+        $statuses = ['pending','confirmed','processing','shipped','delivered','cancelled','rejected','return_requested','returned'];
 
         return view('vendor.orders.index', compact('orders', 'statuses'));
     }
@@ -52,7 +52,7 @@ class VendorOrderController extends Controller
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
         $request->validate([
-            'status' => 'required|in:confirmed,preparing,ready,rejected,cancelled',
+            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,rejected,return_requested,returned',
             'notes'  => 'nullable|string|max:500',
         ]);
 
