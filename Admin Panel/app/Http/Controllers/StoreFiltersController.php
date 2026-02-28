@@ -13,18 +13,18 @@ class StoreFiltersController extends Controller
     
     public function index()
     {
-        return view('store_filters.index');
+        return view('admin.store-filters.index');
     }
 
 
     public function edit($id)
     {
         
-        return view('store_filters.edit')->with('id',$id);
+        return view('admin.store-filters.edit')->with('id',$id);
     }
 
     public function create()
     {
-        return view('store_filters.create');
+        return view('admin.store-filters.create');
     }    
 }

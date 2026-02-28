@@ -57,7 +57,7 @@ class ShopController extends Controller
         $categories = Category::orderBy('name')->get();
         $brands     = Brand::active()->orderBy('name')->get();
 
-        return view('pages.shop', compact('products', 'categories', 'brands'));
+        return view('customer.shop', compact('products', 'categories', 'brands'));
     }
 
     public function show(int $id): View
@@ -74,6 +74,6 @@ class ShopController extends Controller
                           ->limit(4)
                           ->get();
 
-        return view('pages.shop-single', compact('product', 'related'));
+        return view('customer.shop-single', compact('product', 'related'));
     }
 }

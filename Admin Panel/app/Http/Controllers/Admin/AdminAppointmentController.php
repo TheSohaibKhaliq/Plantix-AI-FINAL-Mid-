@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Expert;
-use App\Services\AppointmentService;
+use App\Services\Shared\AppointmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -74,3 +74,4 @@ class AdminAppointmentController extends Controller
         return back()->with('success', 'Appointment marked as completed.');
     }
 }
+

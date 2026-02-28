@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
-use App\Services\CartCheckoutService;
+use App\Services\Shared\CartCheckoutService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -48,7 +48,7 @@ class AdminOrderController extends Controller
     {
         $order = Order::with([
             'user', 'vendor', 'driver', 'coupon',
-            'items.product', 'statusHistory.changedBy', 'returnRequest.reason', 'refund',
+            'admin.items.product', 'statusHistory.changedBy', 'returnRequest.reason', 'refund',
         ])->findOrFail($id);
 
         return view('admin.orders.show', compact('order'));
@@ -87,3 +87,4 @@ class AdminOrderController extends Controller
         return back()->with('success', "Driver {$driver->name} assigned.");
     }
 }
+

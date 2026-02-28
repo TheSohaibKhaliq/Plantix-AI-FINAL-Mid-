@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FertilizerRecommendationRequest;
 use App\Models\FertilizerRecommendation;
 use App\Models\SoilTest;
-use App\Services\FertilizerRecommendationService;
+use App\Services\Customer\FertilizerRecommendationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +34,7 @@ class FertilizerRecommendationController extends Controller
                 ->get(['id', 'created_at', 'nitrogen', 'phosphorus', 'potassium', 'ph_level']);
         }
 
-        return view('pages.fertilizer-recommendation', compact('recommendations', 'soilTests'));
+        return view('customer.fertilizer-recommendation', compact('recommendations', 'soilTests'));
     }
 
     /**
@@ -92,7 +92,7 @@ class FertilizerRecommendationController extends Controller
     {
         $recommendation = FertilizerRecommendation::where('user_id', Auth::id())->findOrFail($id);
         $soilTests = collect();
-        return view('pages.fertilizer-recommendation', compact('recommendation', 'soilTests'));
+        return view('customer.fertilizer-recommendation', compact('recommendation', 'soilTests'));
     }
 
     /**
@@ -108,3 +108,4 @@ class FertilizerRecommendationController extends Controller
         return response()->json(['success' => true, 'data' => $list]);
     }
 }
+

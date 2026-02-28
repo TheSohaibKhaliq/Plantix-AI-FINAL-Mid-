@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Services\NotificationService;
-use App\Services\OrderService;
+use App\Services\Shared\NotificationService;
+use App\Services\Shared\OrderService;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,17 +21,17 @@ class OrderController extends Controller
 
     public function index(string $id = ''): \Illuminate\View\View
     {
-        return view('orders.index')->with('id', $id);
+        return view('admin.orders-legacy.index')->with('id', $id);
     }
 
     public function edit(string $id): \Illuminate\View\View
     {
-        return view('orders.edit')->with('id', $id);
+        return view('admin.orders-legacy.edit')->with('id', $id);
     }
 
     public function orderprint(string $id): \Illuminate\View\View
     {
-        return view('orders.print')->with('id', $id);
+        return view('admin.orders-legacy.print')->with('id', $id);
     }
 
     // -------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     /**
      * POST /orders/status
-     * Update order status and send FCM push notification.
+     * Update order status and send FCM push admin.notifications.
      * Replaces the inline Firebase sendNotification curl code.
      */
     public function updateStatus(Request $request): JsonResponse
@@ -117,7 +117,8 @@ class OrderController extends Controller
 
         return response()->json([
             'success' => false,
-            'message' => 'Failed to send notification. Check Firebase credentials.',
+            'message' => 'Failed to send admin.notifications. Check Firebase credentials.',
         ], 500);
     }
 }
+

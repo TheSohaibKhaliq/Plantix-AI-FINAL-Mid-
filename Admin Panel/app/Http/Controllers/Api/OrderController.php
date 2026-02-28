@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
 use App\Repositories\Contracts\OrderRepositoryInterface;
-use App\Services\OrderService;
-use App\Services\NotificationService;
+use App\Services\Shared\OrderService;
+use App\Services\Shared\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -94,3 +94,4 @@ class OrderController extends Controller
         }
     }
 }
+

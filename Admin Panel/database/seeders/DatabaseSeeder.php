@@ -108,6 +108,7 @@ class DatabaseSeeder extends Seeder
             ZonesSeeder::class,
             CategoriesSeeder::class,
             RolesPermissionsSeeder::class,
+            AdminRbacSeeder::class,          // Admin panel RBAC: all permissions + default staff roles
             VendorsSeeder::class,
             ProductsSeeder::class,
             TaxesAndCouponsSeeder::class,

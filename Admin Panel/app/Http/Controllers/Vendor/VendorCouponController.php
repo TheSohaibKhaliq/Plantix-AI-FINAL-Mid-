@@ -24,14 +24,14 @@ class VendorCouponController extends Controller
                          ->latest()
                          ->paginate(20);
 
-        return view('vendor.coupons.index', compact('coupons'));
+        return view('vendor.admin.coupons.index', compact('coupons'));
     }
 
     // ── Create ───────────────────────────────────────────────────────────────
 
     public function create(): View
     {
-        return view('vendor.coupons.form', ['coupon' => null]);
+        return view('vendor.admin.coupons.form', ['coupon' => null]);
     }
 
     // ── Store ────────────────────────────────────────────────────────────────
@@ -47,7 +47,7 @@ class VendorCouponController extends Controller
 
         Coupon::create($data);
 
-        return redirect()->route('vendor.coupons.index')
+        return redirect()->route('vendor.admin.coupons.index')
                          ->with('success', 'Coupon created successfully.');
     }
 
@@ -56,7 +56,7 @@ class VendorCouponController extends Controller
     public function edit(int $id): View
     {
         $coupon = Coupon::where('vendor_id', $this->vendorId())->findOrFail($id);
-        return view('vendor.coupons.form', compact('coupon'));
+        return view('vendor.admin.coupons.form', compact('coupon'));
     }
 
     // ── Update ───────────────────────────────────────────────────────────────
@@ -66,7 +66,7 @@ class VendorCouponController extends Controller
         $coupon = Coupon::where('vendor_id', $this->vendorId())->findOrFail($id);
         $coupon->update($this->validated($request));
 
-        return redirect()->route('vendor.coupons.index')
+        return redirect()->route('vendor.admin.coupons.index')
                          ->with('success', 'Coupon updated.');
     }
 
@@ -76,7 +76,7 @@ class VendorCouponController extends Controller
     {
         Coupon::where('vendor_id', $this->vendorId())->findOrFail($id)->delete();
 
-        return redirect()->route('vendor.coupons.index')
+        return redirect()->route('vendor.admin.coupons.index')
                          ->with('success', 'Coupon deleted.');
     }
 

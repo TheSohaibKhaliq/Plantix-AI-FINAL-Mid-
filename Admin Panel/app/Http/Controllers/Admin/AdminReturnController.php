@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Refund;
 use App\Models\ReturnReason;
 use App\Models\ReturnRequest;
-use App\Services\ReturnRefundService;
+use App\Services\Shared\ReturnRefundService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -33,7 +33,7 @@ class AdminReturnController extends Controller
 
     public function show(int $id): View
     {
-        $return  = ReturnRequest::with(['user', 'order.items.product', 'reason', 'refund'])->findOrFail($id);
+        $return  = ReturnRequest::with(['user', 'order.admin.items.product', 'reason', 'refund'])->findOrFail($id);
         $reasons = ReturnReason::active()->get();
 
         return view('admin.returns.show', compact('return', 'reasons'));
@@ -98,3 +98,4 @@ class AdminReturnController extends Controller
         return back()->with('success', 'Reason deleted.');
     }
 }
+

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\UserLocation;
 use App\Models\WeatherLog;
-use App\Services\WeatherService;
+use App\Services\Customer\WeatherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -106,3 +106,4 @@ class WeatherController extends Controller
         return response()->json(['success' => true, 'data' => $cities]);
     }
 }
+

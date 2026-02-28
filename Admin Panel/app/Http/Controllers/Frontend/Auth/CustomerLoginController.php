@@ -22,7 +22,7 @@ class CustomerLoginController extends Controller
 
     public function showLoginForm(): View
     {
-        return view('pages.signin');
+        return view('customer.signin');
     }
 
     public function login(Request $request): RedirectResponse

@@ -7,12 +7,12 @@ class TermsAndConditionsController extends Controller
 
     public function index()
     {
-       return view("terms_conditions.index");
+       return view("admin.pages.index");
     }
 
     public function privacyindex()
     {
-       return view("privacy_policy.index");
+       return view("admin.pages.index");
     }
 
     

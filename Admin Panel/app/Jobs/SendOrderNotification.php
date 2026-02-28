@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Order;
-use App\Services\NotificationService;
+use App\Services\Shared\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -66,3 +66,4 @@ class SendOrderNotification implements ShouldQueue
         ]);
     }
 }
+

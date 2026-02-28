@@ -12,17 +12,17 @@ class ReviewAttributeController extends Controller
     
 	  public function index()
     {
-        return view("reviewattributes.index");
+        return view("admin.review-attributes.index");
     }
 
      public function edit($id)
     {
-    	return view('reviewattributes.edit')->with('id', $id);
+    	return view('admin.review-attributes.edit')->with('id', $id);
     }
 
     public function create()
     {
-        return view('reviewattributes.create');
+        return view('admin.review-attributes.create');
     }
 
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Zone;
 use App\Models\ZoneArea;
-use App\Services\ZoneService;
+use App\Services\Admin\ZoneService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -142,3 +142,4 @@ class ZoneController extends Controller
         return response()->json(null, 204);
     }
 }
+

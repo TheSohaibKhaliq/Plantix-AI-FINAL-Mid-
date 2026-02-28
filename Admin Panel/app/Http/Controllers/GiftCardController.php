@@ -11,17 +11,17 @@ class GiftCardController extends Controller
     }
     public function index()
     {
-        return view("gift_card.index");
+        return view("admin.gift-cards.index");
         
     }
 
     public function save($id="")
     {
-        return view('gift_card.save')->with('id', $id);
+        return view('admin.gift-cards.save')->with('id', $id);
     }
     public function edit($id)
     {
-        return view('gift_card.save')->with('id', $id);
+        return view('admin.gift-cards.save')->with('id', $id);
     }
 
 }

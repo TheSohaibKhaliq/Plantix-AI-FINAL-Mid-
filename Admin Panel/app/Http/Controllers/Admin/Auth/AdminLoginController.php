@@ -58,7 +58,7 @@ class AdminLoginController extends Controller
         // Load permissions into session for PermissionMiddleware
         $permissions = [];
         if ($user->role_id) {
-            $permissions = \App\Models\Permission::whereHas('roles', fn ($q) => $q->where('role.id', $user->role_id))
+            $permissions = \App\Models\Permission::whereHas('roles', fn ($q) => $q->where('admin.rbac.roles.id', $user->role_id))
                                                  ->pluck('name')
                                                  ->toArray();
         }

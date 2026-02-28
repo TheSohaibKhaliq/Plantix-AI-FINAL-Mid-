@@ -20,18 +20,18 @@ class TaxController extends Controller
 	  public function index()
     {
 
-        return view("taxes.index");
+        return view("admin.taxes.index");
     }
 
 
   public function edit($id)
   {
-      return view('taxes.edit')->with('id',$id);
+      return view('admin.taxes.edit')->with('id',$id);
   }
 
    public function create()
   {
-      return view('taxes.create');
+      return view('admin.taxes.create');
   }
 
 

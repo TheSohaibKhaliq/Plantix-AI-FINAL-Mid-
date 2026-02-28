@@ -29,7 +29,7 @@ class ForumController extends Controller
         $threads    = $query->paginate(15)->withQueryString();
         $categories = ForumCategory::active()->withCount('threads')->get();
 
-        return view('pages.forum', compact('threads', 'categories'));
+        return view('customer.forum', compact('threads', 'categories'));
     }
 
     public function show(int $id): View
@@ -40,14 +40,14 @@ class ForumController extends Controller
 
         $thread->incrementViews();
 
-        return view('pages.forum-thread', compact('thread'));
+        return view('customer.forum-thread', compact('thread'));
     }
 
     public function create(): View
     {
         $this->requireAuth();
         $categories = ForumCategory::active()->get();
-        return view('pages.forum-new', compact('categories'));
+        return view('customer.forum-new', compact('categories'));
     }
 
     public function store(Request $request): RedirectResponse

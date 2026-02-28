@@ -12,18 +12,18 @@ class CategoryController extends Controller
     
 	  public function index()
     {
-        return view("categories.index");
+        return view("admin.categories.index");
         
     }
 
      public function edit($id)
     {
-    	return view('categories.edit')->with('id', $id);
+    	return view('admin.categories.edit')->with('id', $id);
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('admin.categories.create');
     }
 
 }

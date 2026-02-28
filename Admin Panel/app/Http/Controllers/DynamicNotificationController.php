@@ -12,13 +12,13 @@ class DynamicNotificationController extends Controller
 
     public function index()
     {
-        return view("dynamic_notifications.index");
+        return view("admin.dynamic-notifications.index");
     }
 
 
     public function save($id = null)
     {
-        return view('dynamic_notifications.create')->with('id', $id);
+        return view('admin.dynamic-notifications.create')->with('id', $id);
     }
 
 }

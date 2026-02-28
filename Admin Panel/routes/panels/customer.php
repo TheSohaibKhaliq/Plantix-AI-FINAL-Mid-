@@ -1,0 +1,172 @@
+<?php
+
+/*
+|=============================================================================
+| Plantix AI — Customer / User Panel Routes  (root)
+|=============================================================================
+|
+| Auth guard : 'web'   (see config/auth.php)
+| Middleware : EnsureCustomerAuth  →  alias 'customer'
+|
+| Structure:
+|   1. Public pages (no auth)
+|   2. Customer Auth (register / login / password reset)
+|   3. Public shop & forum (read-only without auth)
+|   4. Protected customer routes (requires 'customer' middleware)
+|      - Cart & checkout
+|      - Orders & returns
+|      - Appointments with experts
+|      - AI agriculture modules
+|      - Account / profile
+|
+*/
+
+use Illuminate\Support\Facades\Route;
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 1. PUBLIC PAGES (no authentication required)
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::get('/',          fn () => view('customer.index'))->name('home');
+Route::get('/about-us',  fn () => view('customer.about-us'))->name('about');
+Route::get('/contact',   fn () => view('customer.contact'))->name('contact');
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 2. CUSTOMER AUTH
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::middleware('guest:web')->group(function () {
+    Route::get('/signin',  [\App\Http\Controllers\Frontend\Auth\CustomerLoginController::class, 'showLoginForm'])->name('signin');
+    Route::post('/signin', [\App\Http\Controllers\Frontend\Auth\CustomerLoginController::class, 'login'])->name('login');
+
+    Route::get('/signup',  [\App\Http\Controllers\Frontend\Auth\CustomerRegisterController::class, 'showRegistrationForm'])->name('signup');
+    Route::post('/signup', [\App\Http\Controllers\Frontend\Auth\CustomerRegisterController::class, 'register'])->name('register');
+
+    Route::get('/password/forgot',        [\App\Http\Controllers\Frontend\Auth\CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('password.forgot');
+    Route::post('/password/email',        [\App\Http\Controllers\Frontend\Auth\CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/password/reset/{token}', [\App\Http\Controllers\Frontend\Auth\CustomerResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset',        [\App\Http\Controllers\Frontend\Auth\CustomerResetPasswordController::class, 'reset'])->name('password.update');
+});
+
+Route::post('/signout', [\App\Http\Controllers\Frontend\Auth\CustomerLoginController::class, 'logout'])->name('logout');
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 3. PUBLIC SHOP & FORUM (read-only, no auth required)
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::get('/shop',      [\App\Http\Controllers\Frontend\ShopController::class, 'index'])->name('shop');
+Route::get('/shop/{id}', [\App\Http\Controllers\Frontend\ShopController::class, 'show'])->name('shop.single');
+
+Route::get('/forum',              [\App\Http\Controllers\Frontend\ForumController::class, 'index'])->name('forum');
+Route::get('/forum/{id}',         [\App\Http\Controllers\Frontend\ForumController::class, 'show'])->name('forum.thread');
+Route::redirect('/blog',          '/forum')->name('blog');
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 4. AUTHENTICATED CUSTOMER ROUTES  [EnsureCustomerAuth]
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::middleware('customer')->group(function () {
+
+    // ── Forum (write operations) ──────────────────────────────────────────────
+    Route::get('/forum/new-thread',  [\App\Http\Controllers\Frontend\ForumController::class, 'create'])->name('forum.new');
+    Route::post('/forum',            [\App\Http\Controllers\Frontend\ForumController::class, 'store'])->name('forum.store');
+    Route::post('/forum/{id}/reply', [\App\Http\Controllers\Frontend\ForumController::class, 'reply'])->name('forum.reply');
+
+    // ── Cart ──────────────────────────────────────────────────────────────────
+    Route::get('/cart',             [\App\Http\Controllers\Frontend\CartController::class, 'index'])->name('cart');
+    Route::post('/cart/add',        [\App\Http\Controllers\Frontend\CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{id}',      [\App\Http\Controllers\Frontend\CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{id}',     [\App\Http\Controllers\Frontend\CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart',          [\App\Http\Controllers\Frontend\CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/cart/coupon',     [\App\Http\Controllers\Frontend\CartController::class, 'applyCoupon'])->name('cart.coupon.apply');
+    Route::delete('/cart/coupon',   [\App\Http\Controllers\Frontend\CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
+
+    // ── Checkout ──────────────────────────────────────────────────────────────
+    Route::get('/checkout',   [\App\Http\Controllers\Frontend\CartController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout',  [\App\Http\Controllers\Frontend\CartController::class, 'placeOrder'])->name('checkout.place');
+
+    // ── Orders ────────────────────────────────────────────────────────────────
+    Route::get('/orders',                  [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{id}',             [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'show'])->name('order.details');
+    Route::get('/order/success/{id}',      [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'success'])->name('order.success');
+    Route::post('/orders/{id}/return',     [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'requestReturn'])->name('order.return');
+    Route::post('/orders/{id}/cancel',     [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'cancel'])->name('order.cancel');
+    Route::get('/orders/{id}/invoice',     [\App\Http\Controllers\Frontend\InvoiceController::class, 'download'])->name('order.invoice');
+
+    // ── Appointments with Experts ─────────────────────────────────────────────
+    Route::get('/appointments',              [\App\Http\Controllers\Frontend\CustomerAppointmentController::class, 'index'])->name('appointments');
+    Route::get('/appointment/book',          [\App\Http\Controllers\Frontend\CustomerAppointmentController::class, 'create'])->name('appointment.book');
+    Route::post('/appointment/book',         [\App\Http\Controllers\Frontend\CustomerAppointmentController::class, 'store'])->name('appointment.store');
+    Route::get('/appointment/{id}',          [\App\Http\Controllers\Frontend\CustomerAppointmentController::class, 'show'])->name('appointment.details');
+    Route::post('/appointment/{id}/cancel',  [\App\Http\Controllers\Frontend\CustomerAppointmentController::class, 'cancel'])->name('appointment.cancel');
+
+    // ── Product Reviews ───────────────────────────────────────────────────────
+    Route::post('/products/{id}/reviews', [\App\Http\Controllers\Frontend\ProductReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{id}',        [\App\Http\Controllers\Frontend\ProductReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    // ── Account / Profile ─────────────────────────────────────────────────────
+    Route::get('/account/profile',    [\App\Http\Controllers\Frontend\CustomerProfileController::class, 'show'])->name('account.profile');
+    Route::put('/account/profile',    [\App\Http\Controllers\Frontend\CustomerProfileController::class, 'update'])->name('account.profile.update');
+    Route::post('/account/password',  [\App\Http\Controllers\Frontend\CustomerProfileController::class, 'changePassword'])->name('account.password');
+
+    // ── AI Agriculture: Crop Recommendation ──────────────────────────────────
+    Route::get('/crop-recommendation',          [\App\Http\Controllers\Frontend\CropRecommendationController::class, 'index'])->name('crop.recommendation');
+    Route::post('/crop-recommendation',         [\App\Http\Controllers\Frontend\CropRecommendationController::class, 'recommend'])->name('crop.recommendation.recommend');
+    Route::get('/crop-recommendation/{id}',     [\App\Http\Controllers\Frontend\CropRecommendationController::class, 'show'])->name('crop.recommendation.show');
+    Route::get('/crop-recommendation/history',  [\App\Http\Controllers\Frontend\CropRecommendationController::class, 'history'])->name('crop.recommendation.history');
+
+    // ── AI Agriculture: Crop Planning ─────────────────────────────────────────
+    Route::get('/crop-planning',               [\App\Http\Controllers\Frontend\CropPlanningController::class, 'index'])->name('crop.planning');
+    Route::post('/crop-planning',              [\App\Http\Controllers\Frontend\CropPlanningController::class, 'generate'])->name('crop.planning.generate');
+    Route::get('/crop-planning/{id}',          [\App\Http\Controllers\Frontend\CropPlanningController::class, 'show'])->name('crop.planning.show');
+    Route::patch('/crop-planning/{id}/status', [\App\Http\Controllers\Frontend\CropPlanningController::class, 'updateStatus'])->name('crop.planning.status');
+    Route::delete('/crop-planning/{id}',       [\App\Http\Controllers\Frontend\CropPlanningController::class, 'destroy'])->name('crop.planning.destroy');
+
+    // ── AI Agriculture: Disease Identification ────────────────────────────────
+    Route::get('/disease-identification',   [\App\Http\Controllers\Frontend\DiseaseIdentificationController::class, 'index'])->name('disease.identification');
+    Route::post('/disease-identification',  [\App\Http\Controllers\Frontend\DiseaseIdentificationController::class, 'detect'])->name('disease.detect');
+    Route::get('/disease/{id}',             [\App\Http\Controllers\Frontend\DiseaseIdentificationController::class, 'show'])->name('disease.show');
+    Route::get('/disease-history',          [\App\Http\Controllers\Frontend\DiseaseIdentificationController::class, 'history'])->name('disease.history');
+
+    // ── AI Agriculture: Fertilizer Recommendation ─────────────────────────────
+    Route::get('/fertilizer-recommendation',       [\App\Http\Controllers\Frontend\FertilizerRecommendationController::class, 'index'])->name('fertilizer.recommendation');
+    Route::post('/fertilizer-recommendation',      [\App\Http\Controllers\Frontend\FertilizerRecommendationController::class, 'recommend'])->name('fertilizer.recommendation.recommend');
+    Route::get('/fertilizer-recommendation/{id}',  [\App\Http\Controllers\Frontend\FertilizerRecommendationController::class, 'show'])->name('fertilizer.recommendation.show');
+    Route::get('/fertilizer-history',              [\App\Http\Controllers\Frontend\FertilizerRecommendationController::class, 'history'])->name('fertilizer.recommendation.history');
+
+    // ── Weather ───────────────────────────────────────────────────────────────
+    Route::get('/weather',              [\App\Http\Controllers\Frontend\WeatherController::class, 'current'])->name('weather');
+    Route::post('/weather/location',    [\App\Http\Controllers\Frontend\WeatherController::class, 'saveLocation'])->name('weather.location');
+    Route::get('/weather/history',      [\App\Http\Controllers\Frontend\WeatherController::class, 'history'])->name('weather.history');
+    Route::get('/weather/cities',       [\App\Http\Controllers\Frontend\WeatherController::class, 'cities'])->name('weather.cities');
+    // ── Notifications ──────────────────────────────────────────────────────────
+    Route::get('/notifications',               [\App\Http\Controllers\Frontend\CustomerNotificationController::class, 'index'])->name('notifications');
+    Route::post('/notifications/read-all',     [\App\Http\Controllers\Frontend\CustomerNotificationController::class, 'markAllRead'])->name('notifications.read-all');
+    Route::post('/notifications/{id}/read',    [\App\Http\Controllers\Frontend\CustomerNotificationController::class, 'markRead'])->name('notifications.read');
+    // ── AI Chat (Plantix AI Assistant) ────────────────────────────────────────
+    Route::get('/plantix-ai',            [\App\Http\Controllers\Frontend\AiChatController::class, 'index'])->name('ai.chat');
+    Route::post('/plantix-ai/message',   [\App\Http\Controllers\Frontend\AiChatController::class, 'message'])->name('ai.chat.message');
+    Route::get('/plantix-ai/history',    [\App\Http\Controllers\Frontend\AiChatController::class, 'history'])->name('ai.chat.history');
+    Route::post('/plantix-ai/new',       [\App\Http\Controllers\Frontend\AiChatController::class, 'newSession'])->name('ai.chat.new');
+    Route::get('/plantix-ai/sessions',   [\App\Http\Controllers\Frontend\AiChatController::class, 'sessions'])->name('ai.chat.sessions');
+
+}); // end customer middleware
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 5. SHARED / PAYMENT CALLBACKS  (legacy – no prefix)
+// ══════════════════════════════════════════════════════════════════════════════
+
+Route::get('lang/change', [\App\Http\Controllers\LangController::class, 'change'])->name('changeLang');
+
+Route::post('payments/razorpay/createorder',    [\App\Http\Controllers\RazorPayController::class, 'createOrderid']);
+Route::post('payments/getpaytmchecksum',         [\App\Http\Controllers\PaymentController::class, 'getPaytmChecksum']);
+Route::post('payments/validatechecksum',         [\App\Http\Controllers\PaymentController::class, 'validateChecksum']);
+Route::post('payments/initiatepaytmpayment',     [\App\Http\Controllers\PaymentController::class, 'initiatePaytmPayment']);
+Route::get('payments/paytmpaymentcallback',      [\App\Http\Controllers\PaymentController::class, 'paytmPaymentcallback']);
+Route::post('payments/paypalclientid',           [\App\Http\Controllers\PaymentController::class, 'getPaypalClienttoken']);
+Route::post('payments/paypaltransaction',        [\App\Http\Controllers\PaymentController::class, 'createBraintreePayment']);
+Route::post('payments/stripepaymentintent',      [\App\Http\Controllers\PaymentController::class, 'createStripePaymentIntent']);
+
+Route::get('payment/success',  [\App\Http\Controllers\PaymentController::class, 'paymentsuccess'])->name('payment.success');
+Route::get('payment/failed',   [\App\Http\Controllers\PaymentController::class, 'paymentfailed'])->name('payment.failed');
+Route::get('payment/pending',  [\App\Http\Controllers\PaymentController::class, 'paymentpending'])->name('payment.pending');

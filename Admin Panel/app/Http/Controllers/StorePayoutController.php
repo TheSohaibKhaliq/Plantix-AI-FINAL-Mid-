@@ -14,13 +14,13 @@ class StorePayoutController extends Controller
     public function index($id='')
     {
 
-       return view("store_payouts.index")->with('id',$id);
+       return view("admin.store-payouts.index")->with('id',$id);
     }
 
     public function create($id='')
     {
         
-       return view("store_payouts.create")->with('id',$id);
+       return view("admin.store-payouts.create")->with('id',$id);
     }
 
 }

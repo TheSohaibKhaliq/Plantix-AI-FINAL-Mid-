@@ -13,156 +13,156 @@ class SettingsController extends Controller
 
     public function social()
     {
-        return view("settings.app.social");
+        return view("admin.settings.app.social");
     }
 
     public function globals()
     {
-        return view("settings.app.global");
+        return view("admin.settings.app.global");
     }
 
     public function notifications()
     {
-        return view("settings.app.notification");
+        return view("admin.settings.app.notification");
     }
 
     public function cod()
     {
-        return view('settings.app.cod');
+        return view('admin.settings.app.cod');
     }
 
     public function applePay()
     {
-        return view('settings.app.applepay');
+        return view('admin.settings.app.applepay');
     }
 
     public function stripe()
     {
-        return view('settings.app.stripe');
+        return view('admin.settings.app.stripe');
     }
 
     public function mobileGlobals()
     {
-        return view('settings.mobile.globals');
+        return view('admin.settings.mobile.globals');
     }
 
     public function razorpay()
     {
-        return view('settings.app.razorpay');
+        return view('admin.settings.app.razorpay');
     }
 
     public function paytm()
     {
-        return view('settings.app.paytm');
+        return view('admin.settings.app.paytm');
     }
 
     public function payfast()
     {
-        return view('settings.app.payfast');
+        return view('admin.settings.app.payfast');
     }
 
     public function paypal()
     {
-        return view('settings.app.paypal');
+        return view('admin.settings.app.paypal');
     }
 
     public function orangepay()
     {
-        return view('settings.app.orangepay');
+        return view('admin.settings.app.orangepay');
     }
 
     public function xendit()
     {
-        return view('settings.app.xendit');
+        return view('admin.settings.app.xendit');
     }
 
     public function midtrans()
     {
-        return view('settings.app.midtrans');
+        return view('admin.settings.app.midtrans');
     }
 
     public function adminCommission()
     {
-        return view("settings.app.adminCommission");
+        return view("admin.settings.app.adminCommission");
     }
 
     public function radiosConfiguration()
     {
-        return view("settings.app.radiosConfiguration");
+        return view("admin.settings.app.radiosConfiguration");
     }
 
     public function wallet()
     {
-        return view('settings.app.wallet');
+        return view('admin.settings.app.wallet');
     }
 
     public function bookTable()
     {
-        return view('settings.app.bookTable');
+        return view('admin.settings.app.bookTable');
     }
 
 
     public function paystack()
     {
-        return view('settings.app.paystack');
+        return view('admin.settings.app.paystack');
     }
 
     public function flutterwave()
     {
-        return view('settings.app.flutterwave');
+        return view('admin.settings.app.flutterwave');
     }
 
     public function mercadopago()
     {
-        return view('settings.app.mercadopago');
+        return view('admin.settings.app.mercadopago');
     }
 
     public function deliveryCharge()
     {
-        return view("settings.app.deliveryCharge");
+        return view("admin.settings.app.deliveryCharge");
     }
 
     public function languages()
     {
-        return view('settings.languages.index');
+        return view('admin.settings.languages.index');
     }
 
     public function languagesedit($id)
     {
-        return view('settings.languages.edit')->with('id', $id);
+        return view('admin.settings.languages.edit')->with('id', $id);
     }
 
     public function languagescreate()
     {
-        return view('settings.languages.create');
+        return view('admin.settings.languages.create');
     }
 
     public function specialOffer()
     {
-        return view('settings.app.specialDiscountOffer');
+        return view('admin.settings.app.specialDiscountOffer');
     }
 
     public function menuItems()
     {
-        return view('settings.menu_items.index');
+        return view('admin.settings.menu_admin.items.index');
         
     }
 
     public function menuItemsCreate()
     {
-        return view('settings.menu_items.create');
+        return view('admin.settings.menu_admin.items.create');
 
     }
 
     public function menuItemsEdit($id)
     {
-        return view('settings.menu_items.edit')->with('id', $id);
+        return view('admin.settings.menu_admin.items.edit')->with('id', $id);
 
     }
 
     public function story()
     {
-        return view('settings.app.story');
+        return view('admin.settings.app.story');
 
     }
 
@@ -178,16 +178,16 @@ class SettingsController extends Controller
 
     public function emailTemplatesIndex()
     {
-        return view('email_templates.index');        
+        return view('admin.email-templates.index');        
     }
 
     public function emailTemplatesSave($id = '')
     {
 
-        return view('email_templates.save')->with('id', $id);
+        return view('admin.email-templates.save')->with('id', $id);
     }
     public function documentVerification()
     {
-        return view('settings.app.documentVerificationSetting');
+        return view('admin.settings.app.documentVerificationSetting');
     }
 }

@@ -20,7 +20,7 @@ class CustomerRegisterController extends Controller
 
     public function showRegistrationForm(): View
     {
-        return view('pages.signup');
+        return view('customer.signup');
     }
 
     public function register(RegisterRequest $request): RedirectResponse

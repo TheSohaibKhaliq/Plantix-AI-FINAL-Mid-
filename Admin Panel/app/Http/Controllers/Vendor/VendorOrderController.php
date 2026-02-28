@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Services\CartCheckoutService;
+use App\Services\Shared\CartCheckoutService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -42,7 +42,7 @@ class VendorOrderController extends Controller
 
     public function show(int $id): View
     {
-        $order = Order::with(['user', 'items.product', 'statusHistory', 'driver'])
+        $order = Order::with(['user', 'admin.items.product', 'statusHistory', 'driver'])
                       ->forVendor($this->vendorId())
                       ->findOrFail($id);
 

@@ -18,12 +18,12 @@ class BookTableController extends Controller
       public function index($id='')
     {
 
-        return view("bookTable.index")->with('id',$id);
+        return view("admin.dine-in.index")->with('id',$id);
     }
 
     public function edit($id)
     {
-        return view('bookTable.edit')->with('id', $id);
+        return view('admin.dine-in.edit')->with('id', $id);
     }
 
     public function sendnotification(Request $request)
@@ -84,7 +84,7 @@ class BookTableController extends Controller
             }else{
                 $response = array();
                 $response['success'] = false;
-                $response['message'] = 'Missing sender id or token to send notification.';
+                $response['message'] = 'Missing sender id or token to send admin.notifications.';
             }
 
         }else{

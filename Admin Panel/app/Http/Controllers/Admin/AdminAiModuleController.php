@@ -8,7 +8,7 @@ use App\Models\CropPlan;
 use App\Models\CropRecommendation;
 use App\Models\FertilizerRecommendation;
 use App\Models\SeasonalData;
-use App\Services\DiseaseDetectionService;
+use App\Services\Customer\DiseaseDetectionService;
 use Illuminate\Http\Request;
 
 /**
@@ -169,3 +169,4 @@ class AdminAiModuleController extends Controller
         return redirect()->back()->with('success', 'Entry deleted.');
     }
 }
+

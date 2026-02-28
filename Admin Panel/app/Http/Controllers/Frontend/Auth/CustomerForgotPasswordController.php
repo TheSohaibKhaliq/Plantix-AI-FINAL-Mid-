@@ -15,7 +15,7 @@ class CustomerForgotPasswordController extends Controller
 
     public function showLinkRequestForm(): View
     {
-        return view('pages.password-forgot');
+        return view('customer.password-forgot');
     }
 
     protected function broker(): \Illuminate\Auth\Passwords\PasswordBroker

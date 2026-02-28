@@ -29,27 +29,27 @@ class UserController extends Controller
     public function index()
     {
 
-        return view("settings.users.index");
+        return view("admin.settings.users.index");
         
     }
 
 
     public function edit($id)
     {
-        return view('settings.users.edit')->with('id', $id);
+        return view('admin.settings.users.edit')->with('id', $id);
     }
 
     public function adminUsers()
     {
-        $users = User::join('role', 'role.id', '=', 'users.role_id')
-            ->select('users.*', 'role.role_name as roleName')->where('users.id', '!=', 1)->get();
-        return view('admin_users.index', compact(['users']));
+        $users = User::join('role', 'admin.rbac.roles.id', '=', 'users.role_id')
+            ->select('users.*', 'admin.rbac.roles.role_name as roleName')->where('users.id', '!=', 1)->get();
+        return view('admin.users.index', compact(['users']));
     }
 
     public function createAdminUsers()
     {
         $roles = Role::all();
-        return view('admin_users.create', compact(['roles']));
+        return view('admin.users.create', compact(['roles']));
     }
     public function storeAdminUsers(Request $request)
     {
@@ -76,9 +76,9 @@ class UserController extends Controller
     }
     public function editAdminUsers($id)
     {
-        $user = User::join('role', 'role.id', '=', 'users.role_id')->select('users.*', 'role.role_name as roleName')->find($id);
+        $user = User::join('role', 'admin.rbac.roles.id', '=', 'users.role_id')->select('users.*', 'admin.rbac.roles.role_name as roleName')->find($id);
         $roles = Role::all();
-        return view('admin_users.edit', compact(['user', 'roles']));
+        return view('admin.users.edit', compact(['user', 'roles']));
     }
     public function updateAdminUsers(Request $request, $id)
     {
@@ -148,7 +148,7 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        return view('settings.users.profile', compact(['user']));
+        return view('admin.settings.users.profile', compact(['user']));
     }
 
     public function update(Request $request, $id)
@@ -196,12 +196,12 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('settings.users.create');
+        return view('admin.settings.users.create');
     }
 
     public function view($id)
     {
-        return view('settings.users.view')->with('id', $id);
+        return view('admin.settings.users.view')->with('id', $id);
     }
 
     public function payToUser(Request $request)

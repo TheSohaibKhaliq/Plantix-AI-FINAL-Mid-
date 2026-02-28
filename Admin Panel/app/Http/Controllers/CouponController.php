@@ -12,17 +12,17 @@ class CouponController extends Controller
     
       public function index($id='')
     {
-        return view("coupons.index")->with('id',$id);        
+        return view("admin.coupons.index")->with('id',$id);        
     }
 
     public function edit($id)
     {
-        return view('coupons.edit')->with('id', $id);
+        return view('admin.coupons.edit')->with('id', $id);
     }
 
     public function create($id='')
     {
-        return view('coupons.create')->with('id',$id);
+        return view('admin.coupons.create')->with('id',$id);
     }
 
 }

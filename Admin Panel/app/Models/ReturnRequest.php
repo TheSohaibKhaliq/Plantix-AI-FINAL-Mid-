@@ -15,7 +15,7 @@ class ReturnRequest extends Model
 
     protected $fillable = [
         'order_id', 'user_id', 'return_reason_id',
-        'description', 'status', 'admin_notes', 'images',
+        'description', 'status', 'admin_notes', 'vendor_notes', 'images',
     ];
 
     protected $casts = [

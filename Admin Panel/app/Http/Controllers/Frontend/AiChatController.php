@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\AiChatSession;
-use App\Services\AiChatService;
+use App\Services\Customer\AiChatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ class AiChatController extends Controller
 
         $history = $this->chatService->getHistory($sessionKey);
 
-        return view('pages.plantix-ai', compact('sessionKey', 'history'));
+        return view('customer.plantix-ai', compact('sessionKey', 'history'));
     }
 
     /**
@@ -98,3 +98,4 @@ class AiChatController extends Controller
         return response()->json(['success' => true, 'data' => $sessions]);
     }
 }
+

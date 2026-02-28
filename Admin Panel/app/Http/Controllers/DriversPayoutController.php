@@ -14,13 +14,13 @@ class DriversPayoutController extends Controller
     public function index($id='')
     {
 
-       return view("drivers_payouts.index")->with('id',$id);
+       return view("admin.drivers-payouts.index")->with('id',$id);
     }
 
     public function create($id='')
     {
         
-       return view("drivers_payouts.create")->with('id',$id);
+       return view("admin.drivers-payouts.create")->with('id',$id);
     }
 
 }

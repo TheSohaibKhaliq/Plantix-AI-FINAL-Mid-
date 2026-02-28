@@ -17,21 +17,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('admin.home');
     }
 
     public function welcome()
     {
-        return view('welcome');
+        return view('customer.welcome');
     }
 
     public function dashboard()
     {
-        return view('home');
+        return view('admin.home');
     }
 
     public function users()
     {
-        return view('settings.users.index');
+        return view('admin.settings.users.index');
     }
 }

@@ -14,14 +14,14 @@ class DocumentController extends Controller
 
     public function index()
     {
-        return view('documents.index');
+        return view('admin.documents.index');
     }
     public function create()
     {
-        return view("documents.create");
+        return view("admin.documents.create");
     }
     public function edit($id)
     {
-        return view("documents.edit")->with('id',$id);
+        return view("admin.documents.edit")->with('id',$id);
     }
 }

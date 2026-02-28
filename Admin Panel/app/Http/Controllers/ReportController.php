@@ -14,7 +14,7 @@ class ReportController extends Controller
     public function index($type)
     {
         if ($type == "sales") {
-            return view('reports.sales-report');
+            return view('admin.reports.sales-report');
         }
     }
 }

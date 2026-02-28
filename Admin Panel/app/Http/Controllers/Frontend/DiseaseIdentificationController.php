@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DiseaseReportRequest;
 use App\Models\CropDiseaseReport;
-use App\Services\DiseaseDetectionService;
+use App\Services\Customer\DiseaseDetectionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +28,7 @@ class DiseaseIdentificationController extends Controller
                 ->get();
         }
 
-        return view('pages.disease-identification', compact('reports'));
+        return view('customer.disease-identification', compact('reports'));
     }
 
     /**
@@ -80,7 +80,7 @@ class DiseaseIdentificationController extends Controller
             ->with('suggestion')
             ->findOrFail($id);
 
-        return view('pages.disease-identification', compact('report'));
+        return view('customer.disease-identification', compact('report'));
     }
 
     /**
@@ -97,3 +97,4 @@ class DiseaseIdentificationController extends Controller
         return response()->json(['success' => true, 'data' => $reports]);
     }
 }
+

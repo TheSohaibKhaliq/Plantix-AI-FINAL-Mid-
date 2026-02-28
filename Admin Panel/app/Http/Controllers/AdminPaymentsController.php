@@ -13,12 +13,12 @@ class AdminPaymentsController extends Controller
     
 	public function index()
     {
-       return view("payments.index");
+       return view("admin.payments.index");
     }
 
     public function driverIndex()
  	{
-    	return view("payments.driver_index");
+    	return view("admin.payments.driver_index");
  	}
 
 }

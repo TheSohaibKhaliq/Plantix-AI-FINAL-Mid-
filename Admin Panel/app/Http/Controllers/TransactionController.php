@@ -16,6 +16,6 @@ class TransactionController extends Controller
     
     public function index($id='')
     {
-        return view("transactions.index")->with('id',$id);
+        return view("admin.transactions.index")->with('id',$id);
     }
 }

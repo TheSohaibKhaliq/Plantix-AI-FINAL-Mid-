@@ -12,17 +12,17 @@ class AttributeController extends Controller
     
 	  public function index()
     {
-        return view("attributes.index");
+        return view("admin.attributes.index");
     }
 
      public function edit($id)
     {
-    	return view('attributes.edit')->with('id', $id);
+    	return view('admin.attributes.edit')->with('id', $id);
     }
 
     public function create()
     {
-        return view('attributes.create');
+        return view('admin.attributes.create');
     }
 
 }

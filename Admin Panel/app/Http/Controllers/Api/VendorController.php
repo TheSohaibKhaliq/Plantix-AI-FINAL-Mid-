@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Repositories\Contracts\VendorRepositoryInterface;
-use App\Services\WalletService;
+use App\Services\Shared\WalletService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -140,3 +140,4 @@ class VendorController extends Controller
         ]);
     }
 }
+

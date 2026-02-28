@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CropRecommendationRequest;
 use App\Models\CropRecommendation;
-use App\Services\CropRecommendationService;
+use App\Services\Customer\CropRecommendationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +25,7 @@ class CropRecommendationController extends Controller
                 ->get()
             : collect();
 
-        return view('pages.crop-recommendation', compact('history'));
+        return view('customer.crop-recommendation', compact('history'));
     }
 
     /**
@@ -63,7 +63,7 @@ class CropRecommendationController extends Controller
         $recommendation = CropRecommendation::where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return view('pages.crop-recommendation', compact('recommendation'))->with([
+        return view('customer.crop-recommendation', compact('recommendation'))->with([
             'viewing_history' => true,
         ]);
     }
@@ -93,3 +93,4 @@ class CropRecommendationController extends Controller
         return new \App\Models\User(['id' => null]);
     }
 }
+

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expert;
-use App\Services\AppointmentService;
+use App\Services\Shared\AppointmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,13 +20,13 @@ class CustomerAppointmentController extends Controller
         $user         = auth('web')->user();
         $appointments = $user->appointments()->with('expert.user')->latest()->paginate(10);
 
-        return view('pages.appointments', compact('appointments'));
+        return view('customer.appointments', compact('appointments'));
     }
 
     public function create(): View
     {
         $experts = Expert::with('user')->available()->get();
-        return view('pages.appointment-book', compact('experts'));
+        return view('customer.appointment-book', compact('experts'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -49,7 +49,7 @@ class CustomerAppointmentController extends Controller
         $user        = auth('web')->user();
         $appointment = $user->appointments()->with('expert.user')->findOrFail($id);
 
-        return view('pages.appointment-details', compact('appointment'));
+        return view('customer.appointment-details', compact('appointment'));
     }
 
     public function cancel(int $id): RedirectResponse
@@ -62,3 +62,4 @@ class CustomerAppointmentController extends Controller
         return back()->with('success', 'Appointment cancelled.');
     }
 }
+

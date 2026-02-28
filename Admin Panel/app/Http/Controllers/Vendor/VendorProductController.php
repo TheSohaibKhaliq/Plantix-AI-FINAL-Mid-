@@ -8,7 +8,7 @@ use App\Http\Requests\Vendor\UpdateVendorProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Services\StockService;
+use App\Services\Shared\StockService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

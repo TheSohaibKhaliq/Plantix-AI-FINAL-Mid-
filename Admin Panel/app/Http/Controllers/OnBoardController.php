@@ -16,13 +16,13 @@ class OnBoardController extends Controller
     public function index()
     {
 
-        return view("on-board.index");
+        return view("admin.on-board.index");
     }
 
 
     public function show($id)
     {
-        return view('on-board.save')->with('id', $id);
+        return view('admin.on-board.save')->with('id', $id);
     }
 
 

@@ -8,14 +8,24 @@ use App\Repositories\Contracts\VendorRepositoryInterface;
 use App\Repositories\Eloquent\OrderRepository;
 use App\Repositories\Eloquent\ProductRepository;
 use App\Repositories\Eloquent\VendorRepository;
-use App\Services\AppointmentService;
-use App\Services\CartCheckoutService;
-use App\Services\NotificationService;
-use App\Services\OrderService;
-use App\Services\ReturnRefundService;
-use App\Services\StockService;
-use App\Services\WalletService;
-use App\Services\ZoneService;
+// ── Admin panel services ───────────────────────────────────────────────────────
+use App\Services\Admin\RbacService;
+use App\Services\Admin\ZoneService;
+// ── Shared (multi-panel) services ─────────────────────────────────────────────
+use App\Services\Shared\AppointmentService;
+use App\Services\Shared\CartCheckoutService;
+use App\Services\Shared\NotificationService;
+use App\Services\Shared\OrderService;
+use App\Services\Shared\ReturnRefundService;
+use App\Services\Shared\StockService;
+use App\Services\Shared\WalletService;
+// ── Customer panel services ────────────────────────────────────────────────────
+use App\Services\Customer\AiChatService;
+use App\Services\Customer\CropPlanningService;
+use App\Services\Customer\CropRecommendationService;
+use App\Services\Customer\DiseaseDetectionService;
+use App\Services\Customer\FertilizerRecommendationService;
+use App\Services\Customer\WeatherService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,9 +37,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OrderRepositoryInterface::class,  OrderRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
 
-        // ── Service bindings (singletons) ─────────────────────────────────────
-        $this->app->singleton(NotificationService::class);
+        // ── Admin panel singletons ─────────────────────────────────────────────
+        $this->app->singleton(RbacService::class);
         $this->app->singleton(ZoneService::class);
+
+        // ── Shared service singletons ──────────────────────────────────────────
+        $this->app->singleton(NotificationService::class);
         $this->app->singleton(WalletService::class);
         $this->app->singleton(StockService::class);
         $this->app->singleton(AppointmentService::class);
@@ -47,6 +60,14 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(StockService::class),
             );
         });
+
+        // ── Customer panel singletons ──────────────────────────────────────────
+        $this->app->singleton(AiChatService::class);
+        $this->app->singleton(CropPlanningService::class);
+        $this->app->singleton(CropRecommendationService::class);
+        $this->app->singleton(DiseaseDetectionService::class);
+        $this->app->singleton(FertilizerRecommendationService::class);
+        $this->app->singleton(WeatherService::class);
 
         // ── Countries data shared with all views ───────────────────────────────
         $countriesData = [];

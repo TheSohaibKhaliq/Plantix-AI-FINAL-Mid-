@@ -18,12 +18,12 @@ class NotificationController extends Controller
       public function index($id='')
     {
 
-        return view("notification.index")->with('id',$id);
+        return view("admin.notifications.index")->with('id',$id);
     }
 
     public function send($id='')
     {
-        return view('notification.send')->with('id',$id);
+        return view('admin.notifications.send')->with('id',$id);
     }
 
     public function broadcastnotification(Request $request)
@@ -92,7 +92,7 @@ class NotificationController extends Controller
             }else{
                 $response = array();
                 $response['success'] = false;
-                $response['message'] = 'Missing sender id or token to send notification.';
+                $response['message'] = 'Missing sender id or token to send admin.notifications.';
             }
 
         }else{
@@ -162,7 +162,7 @@ class NotificationController extends Controller
             }else{
                 $response = array();
                 $response['success'] = false;
-                $response['message'] = 'Missing sender id or token to send notification.';
+                $response['message'] = 'Missing sender id or token to send admin.notifications.';
             }
 
         }else{

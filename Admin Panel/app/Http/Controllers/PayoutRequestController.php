@@ -14,12 +14,12 @@ class PayoutRequestController extends Controller
 
     public function index($id = '')
     {
-        return view("payoutRequests.drivers.index")->with('id',$id);
+        return view("admin.payout-requests.admin.drivers.index")->with('id',$id);
     }
 
     public function store($id = '')
     {
-        return view("payoutRequests.stores.index")->with('id',$id);
+        return view("admin.payout-requests.stores.index")->with('id',$id);
         
     }
 

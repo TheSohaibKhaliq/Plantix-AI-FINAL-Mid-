@@ -16,7 +16,7 @@ class CustomerProfileController extends Controller
     public function show(): View
     {
         $user = auth('web')->user()->load('addresses', 'orders');
-        return view('pages.account-profile', compact('user'));
+        return view('customer.account-profile', compact('user'));
     }
 
     public function update(UpdateProfileRequest $request): RedirectResponse

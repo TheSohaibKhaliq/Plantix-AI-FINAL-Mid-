@@ -16,17 +16,17 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view("role.index")->with('roles',$roles);
+        return view("admin.rbac.roles.index")->with('roles',$roles);
     }
 
     public function save()
     {
-            return view("role.save");
+            return view("admin.rbac.roles.save");
     }
     public function edit($id){
         $permissions = Permission::where('role_id', $id)->pluck('routes')->toArray();
         $roles = Role::find($id);
-        return view('role.edit', compact(['permissions', 'roles', 'id']));
+        return view('admin.rbac.roles.edit', compact(['permissions', 'roles', 'id']));
 
     }
     public function store(Request $request)

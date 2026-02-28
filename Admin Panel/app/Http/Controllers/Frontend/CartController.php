@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\CheckoutRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Coupon;
 use App\Models\Product;
-use App\Services\CartCheckoutService;
+use App\Services\Shared\CartCheckoutService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class CartController extends Controller
     public function index(): View
     {
         $cart = $this->getOrCreateCart();
-        return view('pages.cart', ['cart' => $cart->load('items.product.primaryImage')]);
+        return view('customer.cart', ['cart' => $cart->load('admin.items.product.primaryImage')]);
     }
 
     public function add(Request $request): JsonResponse|RedirectResponse
@@ -105,14 +106,81 @@ class CartController extends Controller
         return redirect()->route('cart')->with('success', 'Cart cleared.');
     }
 
+    // ── Coupon ────────────────────────────────────────────────────────────────
+
+    /**
+     * Validate and store a coupon code in the session.
+     * Route: POST /cart/coupon
+     */
+    public function applyCoupon(Request $request): JsonResponse|RedirectResponse
+    {
+        $request->validate(['code' => 'required|string|max:100']);
+
+        $cart   = $this->getOrCreateCart();
+        $coupon = Coupon::where('code', strtoupper(trim($request->code)))
+                        ->where('is_active', true)
+                        ->first();
+
+        if (! $coupon || ! $coupon->isValid()) {
+            $error = 'Invalid or expired coupon code.';
+            return $request->expectsJson()
+                ? response()->json(['error' => $error], 422)
+                : back()->withErrors(['coupon' => $error]);
+        }
+
+        // Ensure coupon belongs to the same vendor as the cart (or is global)
+        if ($coupon->vendor_id && $cart->vendor_id && $coupon->vendor_id !== $cart->vendor_id) {
+            $error = 'This coupon is not valid for items in your cart.';
+            return $request->expectsJson()
+                ? response()->json(['error' => $error], 422)
+                : back()->withErrors(['coupon' => $error]);
+        }
+
+        $subtotal = $cart->load('items')->subtotal;
+
+        if ($cart->vendor_id && $coupon->min_order && $subtotal < $coupon->min_order) {
+            $error = "Minimum order of " . number_format($coupon->min_order, 2) . " required for this coupon.";
+            return $request->expectsJson()
+                ? response()->json(['error' => $error], 422)
+                : back()->withErrors(['coupon' => $error]);
+        }
+
+        $discount = $coupon->calculateDiscount($subtotal);
+
+        session([
+            'coupon_code'     => $coupon->code,
+            'coupon_id'       => $coupon->id,
+            'coupon_discount' => $discount,
+        ]);
+
+        $message = "Coupon applied! You save " . number_format($discount, 2) . ".";
+
+        return $request->expectsJson()
+            ? response()->json(['success' => true, 'message' => $message, 'discount' => $discount])
+            : back()->with('success', $message);
+    }
+
+    /**
+     * Remove an applied coupon from the session.
+     * Route: DELETE /cart/coupon
+     */
+    public function removeCoupon(): JsonResponse|RedirectResponse
+    {
+        session()->forget(['coupon_code', 'coupon_id', 'coupon_discount']);
+
+        return request()->expectsJson()
+            ? response()->json(['success' => true, 'message' => 'Coupon removed.'])
+            : back()->with('success', 'Coupon removed.');
+    }
+
     // ── Checkout ──────────────────────────────────────────────────────────────
 
     public function checkout(): View
     {
         $user = auth('web')->user();
-        $cart = Cart::with('items.product')->where('user_id', $user->id)->firstOrFail();
+        $cart = Cart::with('admin.items.product')->where('user_id', $user->id)->firstOrFail();
 
-        return view('pages.checkout', [
+        return view('customer.checkout', [
             'cart'      => $cart,
             'addresses' => $user->addresses,
         ]);
@@ -145,3 +213,4 @@ class CartController extends Controller
         return $cart ?? new Cart();
     }
 }
+

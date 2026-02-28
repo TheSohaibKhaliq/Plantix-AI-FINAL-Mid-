@@ -11,15 +11,15 @@ class ZoneController extends Controller
 
     public function index()
     {
-        return view('zone.index');
+        return view('admin.zones.index');
     }
     public function edit($id)
     {
-        return view('zone.edit')->with('id',$id);
+        return view('admin.zones.edit')->with('id',$id);
     }
 
     public function create()
     {
-        return view('zone.create');
+        return view('admin.zones.create');
     }
 }

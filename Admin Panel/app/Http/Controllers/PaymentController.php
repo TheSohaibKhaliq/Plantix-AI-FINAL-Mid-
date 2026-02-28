@@ -188,7 +188,7 @@ class PaymentController extends Controller
     }
     public function index($id='')
     {
-        return view("order_transactions.index")->with('id',$id);
+        return view("admin.order-transactions.index")->with('id',$id);
     }
 
     public function paymentsuccess()

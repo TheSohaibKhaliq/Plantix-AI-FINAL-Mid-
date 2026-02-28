@@ -13,16 +13,16 @@ class CmsController extends Controller
 
     public function index()
     {
-         return view('cms.index');
+         return view('admin.cms.index');
     }
     public function Edit($id)
     {
-        return view('cms.edit')->with('id',$id);
+        return view('admin.cms.edit')->with('id',$id);
     }
 
     public function Create()
     {
-        return view('cms.create');
+        return view('admin.cms.create');
     }
 
 }

@@ -11,7 +11,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Vendor;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use App\Services\StockService;
+use App\Services\Shared\StockService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -163,3 +163,4 @@ class AdminProductController extends Controller
         return back()->with('success', 'Featured status updated.');
     }
 }
+

@@ -7,7 +7,7 @@ use App\Http\Requests\CropPlanRequest;
 use App\Models\CropPlan;
 use App\Models\FarmProfile;
 use App\Models\SeasonalData;
-use App\Services\CropPlanningService;
+use App\Services\Customer\CropPlanningService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,7 +33,7 @@ class CropPlanningController extends Controller
             $farmProfiles = FarmProfile::where('user_id', Auth::id())->get();
         }
 
-        return view('pages.crop-planning', compact('plans', 'farmProfiles', 'seasonalCrops'));
+        return view('customer.crop-planning', compact('plans', 'farmProfiles', 'seasonalCrops'));
     }
 
     /**
@@ -84,7 +84,7 @@ class CropPlanningController extends Controller
         $plan = CropPlan::where('user_id', Auth::id())->findOrFail($id);
         $seasonalCrops = SeasonalData::active()->distinct()->pluck('crop_name')->sort()->values();
 
-        return view('pages.crop-planning', compact('plan', 'seasonalCrops'));
+        return view('customer.crop-planning', compact('plan', 'seasonalCrops'));
     }
 
     /**
@@ -109,3 +109,4 @@ class CropPlanningController extends Controller
         return response()->json(['success' => true]);
     }
 }
+
