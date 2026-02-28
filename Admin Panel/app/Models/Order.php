@@ -149,4 +149,12 @@ class Order extends Model
     {
         return in_array($newStatus, self::allowedTransitions()[$this->status] ?? []);
     }
+
+    // ── Compatibility accessor ──────────────────────────────────────────────
+    // Some controllers reference $order->total_amount (legacy alias).
+    // Maps cleanly to the actual 'total' column.
+    public function getTotalAmountAttribute(): string
+    {
+        return $this->total;
+    }
 }

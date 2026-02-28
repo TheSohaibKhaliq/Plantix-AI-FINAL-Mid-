@@ -22,13 +22,13 @@ class AdminDashboardController extends Controller
             $totalCustomers = User::where('role', 'customer')->count();
             $totalVendors = Vendor::count();
             
-            $ordersPlaced = Order::where('status', 'Order Placed')->count();
-            $ordersConfirmed = Order::whereIn('status', ['Order Accepted', 'Driver Accepted'])->count();
-            $ordersShipped = Order::whereIn('status', ['Order Shipped', 'In Transit'])->count();
-            $ordersCompleted = Order::where('status', 'Order Completed')->count();
-            $ordersCanceled = Order::where('status', 'Order Rejected')->count();
-            $ordersFailed = Order::where('status', 'Driver Rejected')->count();
-            $ordersPending = Order::where('status', 'Driver Pending')->count();
+            $ordersPlaced    = Order::where('status', 'pending')->count();
+            $ordersConfirmed = Order::whereIn('status', ['confirmed', 'processing'])->count();
+            $ordersShipped   = Order::where('status', 'shipped')->count();
+            $ordersCompleted = Order::where('status', 'delivered')->count();
+            $ordersCanceled  = Order::whereIn('status', ['cancelled', 'rejected'])->count();
+            $ordersFailed    = Order::where('status', 'return_requested')->count();
+            $ordersPending   = Order::where('status', 'returned')->count();
             
             return response()->json([
                 'success' => true,
@@ -60,15 +60,15 @@ class AdminDashboardController extends Controller
     public function earnings(Request $request)
     {
         try {
-            $completedOrders = Order::where('status', 'Order Completed')->get();
+            $completedOrders = Order::where('status', 'delivered')->get();
             $totalEarnings = 0;
             $adminCommission = 0;
             $monthlyData = array_fill(0, 12, 0);
 
             foreach ($completedOrders as $order) {
-                $orderTotal = $order->total_amount ?? 0;
+                $orderTotal = (float) ($order->total ?? 0);
                 $totalEarnings += $orderTotal;
-                $adminCommission += ($order->admin_commission ?? 0);
+                $adminCommission += round($orderTotal * config('plantix.admin_commission_rate', 0.10), 2);
                 
                 $month = $order->created_at->month - 1;
                 $monthlyData[$month] += $orderTotal;

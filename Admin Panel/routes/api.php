@@ -53,9 +53,9 @@ Route::prefix('customer')->group(function () {
 
         // Cart
         Route::get('/cart',           [CustomerCartApiController::class, 'index']);
-        Route::post('/cart/add',      [CustomerCartApiController::class, 'add']);
-        Route::patch('/cart/{id}',    [CustomerCartApiController::class, 'update']);
-        Route::delete('/cart/{id}',   [CustomerCartApiController::class, 'remove']);
+        Route::post('/cart/add',      [CustomerCartApiController::class, 'addItem']);
+        Route::patch('/cart/{id}',    [CustomerCartApiController::class, 'updateItem']);
+        Route::delete('/cart/{id}',   [CustomerCartApiController::class, 'removeItem']);
         Route::delete('/cart',        [CustomerCartApiController::class, 'clear']);
         Route::post('/cart/coupon',   [CustomerCartApiController::class, 'applyCoupon']);
         Route::delete('/cart/coupon', [CustomerCartApiController::class, 'removeCoupon']);

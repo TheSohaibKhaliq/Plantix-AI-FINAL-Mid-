@@ -72,7 +72,7 @@ class CustomerOrderApiController extends Controller
                       ->whereDoesntHave('returnRequest')
                       ->findOrFail($id);
 
-        $this->returnService->requestReturn($order, $request->user(), $request->validated());
+        $this->returnService->requestReturn($request->user(), $order, $request->validated());
 
         return response()->json(['success' => true, 'message' => 'Return request submitted.']);
     }
@@ -84,7 +84,7 @@ class CustomerOrderApiController extends Controller
         return [
             'id'           => $order->id,
             'status'       => $order->status,
-            'total'        => $order->total_amount,
+            'total'        => $order->total,
             'item_count'   => $order->items->count(),
             'vendor_name'  => optional($order->vendor)->store_name,
             'created_at'   => $order->created_at?->toISOString(),

@@ -12,27 +12,17 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Queued job to deliver an FCM push notification when an order status changes.
+ * Queued job to deliver an in-app (database-channel) notification when an
+ * order status changes.
  *
  * Dispatched from:  OrderService::updateStatus()
  * Queue:            "notifications" (configure in config/queue.php)
- *
- * The job intentionally does NOT use the ShouldBroadcast contract —
- * the WebSocket broadcast is handled separately via OrderStatusUpdated event.
- * This job is *only* responsible for the FCM push layer.
  */
 class SendOrderNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Retry up to 3 times before failing.
-     */
-    public int $tries = 3;
-
-    /**
-     * Back off delay in seconds between retries (exponential).
-     */
+    public int   $tries  = 3;
     public array $backoff = [30, 60, 120];
 
     public function __construct(
@@ -45,7 +35,19 @@ class SendOrderNotification implements ShouldQueue
     public function handle(NotificationService $notificationService): void
     {
         try {
-            $notificationService->sendOrderStatusNotification($this->order, $this->oldStatus);
+            $user = $this->order->user;
+
+            if (! $user) {
+                Log::warning('SendOrderNotification: order has no user', ['order_id' => $this->order->id]);
+                return;
+            }
+
+            $notificationService->sendOrderStatusNotification(
+                $user,
+                (string) $this->order->order_number,
+                (string) $this->order->status,
+                (string) $this->order->id,
+            );
         } catch (\Throwable $e) {
             Log::warning('SendOrderNotification job failed', [
                 'order_id'   => $this->order->id,
@@ -66,4 +68,5 @@ class SendOrderNotification implements ShouldQueue
         ]);
     }
 }
+
 

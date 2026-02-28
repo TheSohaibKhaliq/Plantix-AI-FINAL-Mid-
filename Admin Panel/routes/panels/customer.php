@@ -164,7 +164,7 @@ Route::middleware(['customer', 'verified'])->group(function () {
 // 5. STRIPE PAYMENT CALLBACKS  (verified by Stripe signature - no CSRF)
 // ══════════════════════════════════════════════════════════════════════════════
 
-Route::post('payments/stripe/intent',   [\App\Http\Controllers\Frontend\StripePaymentController::class, 'createIntent'])->middleware('auth:sanctum')->name('stripe.intent');
+Route::post('payments/stripe/intent',   [\App\Http\Controllers\Frontend\StripePaymentController::class, 'createIntent'])->middleware('auth:web')->name('stripe.intent');
 Route::post('stripe/webhook',           [\App\Http\Controllers\Frontend\StripePaymentController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('payment/success',  [\App\Http\Controllers\Frontend\StripePaymentController::class, 'success'])->name('payment.success');

@@ -56,7 +56,7 @@ class StripePaymentController extends Controller
             } else {
                 $intent = PaymentIntent::create([
                     'amount'   => (int) round($order->total * 100), // pence / cents
-                    'currency' => strtolower(config('plantix.currency', 'usd')),
+                    'currency' => strtolower(config('plantix.currency_code', 'usd')),
                     'metadata' => [
                         'order_id'     => $order->id,
                         'order_number' => $order->order_number,
@@ -70,7 +70,7 @@ class StripePaymentController extends Controller
                         'user_id'                => $user->id,
                         'gateway_transaction_id' => $intent->id,
                         'amount'                 => $order->total,
-                        'currency'               => strtolower(config('plantix.currency', 'usd')),
+                        'currency'               => strtolower(config('plantix.currency_code', 'usd')),
                         'status'                 => 'pending',
                     ]
                 );

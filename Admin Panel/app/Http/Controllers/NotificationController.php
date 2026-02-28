@@ -1,179 +1,80 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
-use App\Models\VendorUsers;
+
+use App\Models\User;
+use App\Services\Shared\NotificationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Google\Client as Google_Client;
 
+/**
+ * NotificationController
+ *
+ * Admin UI for sending in-app (database-channel) notifications.
+ * Firebase / FCM removed — all delivery is via the database driver.
+ */
 class NotificationController extends Controller
-{   
+{
+    public function __construct(private readonly NotificationService $notifications) {}
 
-    public function __construct()
+    // ── Admin notification index view ─────────────────────────────────────────
+    public function index(string $id = '')
     {
-        // $this->middleware('auth'); // Removed to avoid guard conflicts
-    }
-    
-      public function index($id='')
-    {
-
-        return view("admin.notifications.index")->with('id',$id);
+        return view('admin.notifications.index', compact('id'));
     }
 
-    public function send($id='')
+    // ── Admin send notification view ──────────────────────────────────────────
+    public function send(string $id = '')
     {
-        return view('admin.notifications.send')->with('id',$id);
+        return view('admin.notifications.send', compact('id'));
     }
 
-    public function broadcastnotification(Request $request)
+    // ── Broadcast to all users of a given role ────────────────────────────────
+    public function broadcastnotification(Request $request): JsonResponse
     {
+        $request->validate([
+            'role'    => 'required|in:customer,vendor,expert,admin',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
 
-        if(Storage::disk('local')->has('firebase/credentials.json')){
+        $users = User::where('role', $request->role)->get();
 
-            $client= new Google_Client();
-            $client->setAuthConfig(storage_path('app/firebase/credentials.json'));
-            $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
-            $client->refreshTokenWithAssertion();
-            $client_token = $client->getAccessToken();
-            $access_token = $client_token['access_token'];
-
-            $role = $request->role;
-            
-            if(!empty($access_token) && !empty($role)){
-
-                $projectId = env('FIREBASE_PROJECT_ID');
-                $url = 'https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send';
-
-                if( $role == "vendor" ) {
-                    $topic = "Foodie_store";
-                }else if( $role == "customer" ) {
-                    $topic = "Foodie_customer";
-                }else if( $role == "driver" ) {
-                    $topic = "Foodie_driver";
-                }
-
-                $data = [
-                    'message' => [
-                        'notification' => [
-                            'title' => $request->subject,
-                            'body' => $request->message,
-                        ],
-                        'topic' => $topic,
-                    ],
-                ];
-
-                $headers = array(
-                    'Content-Type: application/json',
-                    'Authorization: Bearer '.$access_token
-                );
-
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                
-                $result = curl_exec($ch);
-                if ($result === FALSE) {
-                    die('FCM Send Error: ' . curl_error($ch));
-                }
-                curl_close($ch);
-                $result=json_decode($result);
-
-                $response = array();
-                $response['success'] = true;
-                $response['message'] = 'Notification successfully sent.';
-                $response['result'] = $result;
-
-            }else{
-                $response = array();
-                $response['success'] = false;
-                $response['message'] = 'Missing sender id or token to send admin.notifications.';
-            }
-
-        }else{
-            $response = array();
-            $response['success'] = false;
-            $response['message'] = 'Firebase credentials file not found.';
+        if ($users->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No users found for the selected role.',
+            ]);
         }
-       
-        return response()->json($response);
+
+        $this->notifications->sendToMany(
+            $users->all(),
+            $request->subject,
+            $request->message,
+            ['broadcast' => 'true', 'role' => $request->role]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => "Notification sent to {$users->count()} {$request->role}(s).",
+        ]);
     }
-    
-    public function sendNotification(Request $request)
+
+    // ── Send a notification to a single user by ID ────────────────────────────
+    public function sendNotification(Request $request): JsonResponse
     {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'title'   => 'required|string|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
 
-        if(Storage::disk('local')->has('firebase/credentials.json')){
+        $user   = User::findOrFail($request->user_id);
+        $result = $this->notifications->sendToUser($user, $request->title, $request->message);
 
-            $client= new Google_Client();
-            $client->setAuthConfig(storage_path('app/firebase/credentials.json'));
-            $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
-            $client->refreshTokenWithAssertion();
-            $client_token = $client->getAccessToken();
-            $access_token = $client_token['access_token'];
-
-            $fcm_token = $request->fcm;
-            
-            if(!empty($access_token) && !empty($fcm_token)){
-
-                $projectId = env('FIREBASE_PROJECT_ID');
-                $url = 'https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send';
-
-                $data = [
-                    'message' => [
-                        'notification' => [
-                            'title' => $request->title,
-                            'body' => $request->message,
-                        ],
-                        'token' => $fcm_token,
-                    ],
-                ];
-
-                $headers = array(
-                    'Content-Type: application/json',
-                    'Authorization: Bearer '.$access_token
-                );
-
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                
-                $result = curl_exec($ch);
-                if ($result === FALSE) {
-                    die('FCM Send Error: ' . curl_error($ch));
-                }
-                curl_close($ch);
-                $result=json_decode($result);
-
-                $response = array();
-                $response['success'] = true;
-                $response['message'] = 'Notification successfully sent.';
-                $response['result'] = $result;
-
-            }else{
-                $response = array();
-                $response['success'] = false;
-                $response['message'] = 'Missing sender id or token to send admin.notifications.';
-            }
-
-        }else{
-            $response = array();
-            $response['success'] = false;
-            $response['message'] = 'Firebase credentials file not found.';
-        }
-       
-        return response()->json($response);
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Notification sent successfully.' : 'Failed to send notification.',
+        ]);
     }
-
 }
-
-
