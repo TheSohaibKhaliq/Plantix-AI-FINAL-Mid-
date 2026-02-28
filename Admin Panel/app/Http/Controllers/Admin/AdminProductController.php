@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
-use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -27,14 +26,13 @@ class AdminProductController extends Controller
 
     public function index(Request $request): View
     {
-        $filters  = $request->only(['search', 'category_id', 'vendor_id', 'brand_id', 'is_active', 'is_featured', 'sort', 'order']);
+        $filters  = $request->only(['search', 'category_id', 'vendor_id', 'is_active', 'is_featured', 'sort', 'order']);
         $products = $this->products->paginate($filters, 20);
 
         return view('admin.products.index', [
             'products'   => $products,
             'categories' => Category::orderBy('name')->get(['id', 'name']),
-            'vendors'    => Vendor::orderBy('name')->get(['id', 'name']),
-            'brands'     => Brand::orderBy('name')->get(['id', 'name']),
+            'vendors'    => Vendor::orderBy('title')->get(['id', 'title']),
             'filters'    => $filters,
         ]);
     }
@@ -43,8 +41,7 @@ class AdminProductController extends Controller
     {
         return view('admin.products.create', [
             'categories' => Category::orderBy('name')->get(),
-            'vendors'    => Vendor::orderBy('name')->get(),
-            'brands'     => Brand::orderBy('name')->get(),
+            'vendors'    => Vendor::orderBy('title')->get(),
         ]);
     }
 
@@ -101,8 +98,7 @@ class AdminProductController extends Controller
         return view('admin.products.edit', [
             'product'    => $product,
             'categories' => Category::orderBy('name')->get(),
-            'vendors'    => Vendor::orderBy('name')->get(),
-            'brands'     => Brand::orderBy('name')->get(),
+            'vendors'    => Vendor::orderBy('title')->get(),
         ]);
     }
 

@@ -48,7 +48,7 @@ class VendorProductController extends Controller
     public function create(): View
     {
         $categories = Category::orderBy('name')->get();
-        return view('vendor.products.create', compact('categories'));
+        return view('vendor.products.form', compact('categories'));
     }
 
     public function store(StoreVendorProductRequest $request): RedirectResponse
@@ -87,7 +87,7 @@ class VendorProductController extends Controller
     public function edit(int $id): View
     {
         $product = Product::where('vendor_id', $this->vendorId())->findOrFail($id);
-        return view('vendor.products.edit', [
+        return view('vendor.products.form', [
             'product'    => $product,
             'categories' => Category::orderBy('name')->get(),
         ]);
