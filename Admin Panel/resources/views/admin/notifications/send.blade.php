@@ -131,7 +131,7 @@ $(document).ready(function () {
             $.ajax({
                 method: 'POST',
                 dataType: "json",
-                url: '<?php echo route('broadcastnotification'); ?>',
+                url: '<?php echo route('admin.broadcastnotification'); ?>',
                 data: {
                     'role': role,
                     'subject': subject,
@@ -155,7 +155,7 @@ $(document).ready(function () {
                         $(".success_top").append("<p>"+response.message+"</p>");
                         window.scrollTo(0, 0);
                         setTimeout(function(){
-                            window.location.href = '{{ route("notification")}}';
+                            window.location.href = '{{ route("admin.notification")}}';
                         },3000);
                     }else{
                         $(".error_top").show();

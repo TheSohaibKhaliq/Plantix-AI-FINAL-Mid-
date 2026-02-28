@@ -64,7 +64,7 @@
                                 <thead>
 
                                     <tr>
-                                        <?php if (in_array('admin.users.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                        <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                         <th class="delete-all"><input type="checkbox" id="is_active"><label
                                                 class="col-3 control-label" for="is_active">
                                                 <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i
@@ -81,7 +81,7 @@
                                 <tbody id="append_list1">
                                     @foreach($users as $user)
                                     <tr>
-                                        <?php if (in_array('admin.users.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                        <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                         <td class="delete-all"><input type="checkbox" id="is_open_{{$user->id}}"
                                                 class="is_open" dataid="{{$user->id}}"><label
                                                 class="col-3 control-label" for="is_open_{{$user->id}}"></label>
@@ -105,7 +105,7 @@
                                             <a href="{{route('admin.users.edit', ['id' => $user->id])}}"><i
                                                     class="fa fa-edit"></i></a>
                                              @if($user->id != 1)
-                                            <?php if (in_array('admin.users.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                            <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                             <a href="{{route('admin.users.delete', ['id' => $user->id])}}" class="delete-btn"><i
                                                     class="fa fa-trash"></i></a>
                                              <?php } ?>     
@@ -140,7 +140,7 @@
 
 <script type="text/javascript">
 
-    var user_permissions = '<?php echo @session("user_permissions")?>';
+    var user_permissions = '<?php echo @session("admin_permissions")?>';
     user_permissions = Object.values(JSON.parse(user_permissions));
     var checkDeletePermission = false;
     if ($.inArray('admin.users.delete', user_permissions) >= 0) {

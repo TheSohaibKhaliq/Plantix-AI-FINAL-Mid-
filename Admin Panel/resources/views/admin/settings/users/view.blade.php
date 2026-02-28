@@ -10,7 +10,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{!! route('users') !!}">{{trans('lang.user_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.users') !!}">{{trans('lang.user_plural')}}</a>
                     </li>
                     <li class="breadcrumb-item active">{{trans('lang.user_details')}}</li>
                 </ol>
@@ -33,7 +33,7 @@
                                     <a href="{{route('users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('orders')}}?userId={{$id}}">{{trans('lang.tab_orders')}}</a>
+                                    <a href="{{route('admin.orders.index')}}?userId={{$id}}">{{trans('lang.tab_orders')}}</a>
                                 </li>
                                 <li>
                                     <a
@@ -100,7 +100,7 @@
 
                 </div>
                 <div class="form-group col-12 text-center btm-btn">
-                    <a href="{!! route('users') !!}" class="btn btn-default"><i
+                    <a href="{!! route('admin.users') !!}" class="btn btn-default"><i
                                 class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
                 </div>
 

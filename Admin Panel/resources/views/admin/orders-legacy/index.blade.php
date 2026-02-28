@@ -93,7 +93,7 @@
                                    cellspacing="0" width="100%">
                                 <thead>
                                 <tr>
-                                    <?php if (in_array('orders.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                    <?php if (in_array('orders.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                     <th class="delete-all"><input type="checkbox" id="is_active"><label
                                                 class="col-3 control-label" for="is_active">
                                             <a id="deleteAll" class="do_not_delete" href="javascript:void(0)">

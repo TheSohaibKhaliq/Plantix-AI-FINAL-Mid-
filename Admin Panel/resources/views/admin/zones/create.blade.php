@@ -12,7 +12,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('zone') !!}">{{trans('lang.zone_plural')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.zone') !!}">{{trans('lang.zone_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.zone_create')}}</li>
             </ol>
         </div>
@@ -112,7 +112,7 @@
                         <i class="fa fa-save"></i> {{trans('lang.save')}}
                     </button>
 
-                    <a href="{!! route('zone') !!}" class="btn btn-default">
+                    <a href="{!! route('admin.zone') !!}" class="btn btn-default">
                         <i class="fa fa-undo"></i>{{trans('lang.cancel')}}
                     </a>
 

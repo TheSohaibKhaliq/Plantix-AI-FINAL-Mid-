@@ -10,7 +10,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{!! route('tax') !!}">{{trans('lang.tax_plural')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.tax') !!}">{{trans('lang.tax_plural')}}</a></li>
                     <li class="breadcrumb-item active">{{trans('lang.tax_create')}}</li>
                 </ol>
             </div>
@@ -99,7 +99,7 @@
                         <button type="button" class="btn btn-primary  save-form-btn"><i class="fa fa-save"></i> {{
                         trans('lang.save')}}
                         </button>
-                        <a href="{!! route('tax') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
+                        <a href="{!! route('admin.tax') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
                         trans('lang.cancel')}}</a>
                     </div>
 
@@ -159,7 +159,8 @@
 
                 }).then(function (result) {
                     jQuery("#overlay").hide();
-                    window.location.href = '{{ route("tax")}}';
+                    window.location.href = '{{ route("admin.tax")}}';
+
                 }).catch(function (error) {
                     $(".error_top").show();
                     $(".error_top").html("");

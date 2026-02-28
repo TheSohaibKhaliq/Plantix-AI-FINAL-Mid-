@@ -11,7 +11,7 @@
 		<div class="col-md-7 align-self-center">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-				<li class="breadcrumb-item"><a href= "{!! route('users') !!}" >{{trans('lang.user_profile')}}</a></li>
+				<li class="breadcrumb-item"><a href= "{!! route('admin.users') !!}" >{{trans('lang.user_profile')}}</a></li>
 				<li class="breadcrumb-item active">{{trans('lang.user_edit')}}</li>
 			</ol>
 		</div>
@@ -87,7 +87,7 @@
 
         <div class="form-group col-12 text-center btm-btn" >
             <button type="submit" class="btn btn-primary  save_user_btn" id="save_user_btn" ><i class="fa fa-save"></i> {{ trans('lang.save')}}</button>
-            <a href="{!! route('dashboard') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.dashboard') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
         </div>
      </form>
 

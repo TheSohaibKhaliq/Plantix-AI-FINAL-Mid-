@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item"><a href="index.php">{{trans('lang.dashboard')}}</a></li>
                     <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
                     <li class="breadcrumb-item"><a
-                                href="{{route('stores.items',$_GET['eid'])}}">{{trans('lang.item_plural')}}</a>
+                                href="{{route('admin.stores.view',$_GET['eid'])}}">{{trans('lang.item_plural')}}</a>
                     </li>  
                     <?php }else{ ?> 
                     <li class="breadcrumb-item"><a href="{!! route('items') !!}">{{trans('lang.item_plural')}}</a></li>
@@ -285,7 +285,7 @@
                 <div class="form-group col-12 text-center btm-btn">
                         <button type="button" class="btn btn-primary  edit-form-btn"><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
                     <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
-                        <a href="{{route('stores.items',$_GET['eid'])}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+                        <a href="{{route('admin.stores.view',$_GET['eid'])}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
                     <?php }else{ ?>
                         <a href="{!! route('items') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
                     <?php } ?>
@@ -772,7 +772,8 @@
 
                         <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
 
-                            window.location.href = "{{ route('stores.items',$_GET['eid']) }}";
+                            window.location.href = "{{ route('admin.stores.view',$_GET['eid']) }}";
+
                         <?php }else{ ?>
                         jQuery("#data-table_processing").hide();
 

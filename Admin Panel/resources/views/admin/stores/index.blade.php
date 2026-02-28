@@ -96,7 +96,7 @@
 
                             <li class="nav-item">
 
-                                <a class="nav-link" href="{!! route('stores.create') !!}"><i
+                                <a class="nav-link" href="{!! route('admin.stores.create') !!}"><i
 
                                         class="fa fa-plus mr-2"></i>{{trans('lang.create_store')}}</a>
 
@@ -140,7 +140,7 @@
 
                                     <tr>
 
-                                        <?php if (in_array('store.delete', json_decode(@session('user_permissions'), true))) { ?>
+                                        <?php if (in_array('store.delete', json_decode(@session('admin_permissions'), true))) { ?>
 
                                             <th class="delete-all"><input type="checkbox" id="is_active"><label
 

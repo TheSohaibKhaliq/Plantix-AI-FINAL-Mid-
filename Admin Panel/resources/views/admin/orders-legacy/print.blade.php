@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
                     <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
-                        <li class="breadcrumb-item"><a href= "{{route('stores.orders',$_GET['eid'])}}" >{{trans('lang.order_plural')}}</a></li>
+                        <li class="breadcrumb-item"><a href= "{{route('admin.stores.view',$_GET['eid'])}}" >{{trans('lang.order_plural')}}</a></li>
                     <?php }else{ ?>
                         <li class="breadcrumb-item"><a href= "{!! route('orders') !!}" >{{trans('lang.order_plural')}}</a></li>
                     <?php } ?>

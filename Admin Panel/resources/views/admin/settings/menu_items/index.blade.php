@@ -69,7 +69,7 @@
 
                                 <thead>
                                     <tr>
-                                        <?php if (in_array('banners.delete', json_decode(@session('user_permissions'), true))) { ?>
+                                        <?php if (in_array('banners.delete', json_decode(@session('admin_permissions'), true))) { ?>
                                         <th class="delete-all">
                                             <input type="checkbox" id="select-all">
                                             <label class="col-3 control-label" for="select-all">
@@ -221,7 +221,7 @@
                             '<a href="' + route1 + '">' + childData.title + '</a>',
                             childData.position,
                             childData.is_publish ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>',
-                            '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if (in_array('banners.delete', json_decode(@session('user_permissions'), true))) { ?> <a id="' + childData.id + '" name="vendor-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a></span><?php } ?>'
+                            '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if (in_array('banners.delete', json_decode(@session('admin_permissions'), true))) { ?> <a id="' + childData.id + '" name="vendor-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a></span><?php } ?>'
 
                         ]);
                     });

@@ -52,6 +52,11 @@ class PermissionMiddleware
         // at login time (keyed as JSON array of permission slugs + groups).
         $permissions = json_decode(session('admin_permissions', '[]'), true);
 
+        // Wildcard permission '*' grants access to everything
+        if (in_array('*', $permissions, true)) {
+            return $next($request);
+        }
+
         if ($group && ! in_array($group, $permissions, true)) {
             abort(403, "Access denied — missing permission group: {$group}");
         }

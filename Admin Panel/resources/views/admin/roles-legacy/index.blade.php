@@ -64,7 +64,7 @@
                                 <thead>
 
                                     <tr>
-                                        <?php if (in_array('role.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                        <?php if (in_array('role.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                         <th class="delete-all"><input type="checkbox" id="is_active"><label
                                                 class="col-3 control-label" for="is_active">
                                                 <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i
@@ -79,7 +79,7 @@
                                 <tbody id="append_list1">
                                     @foreach($roles as $role)
                                             <tr>
-                                                 <?php if (in_array('role.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                                 <?php if (in_array('role.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                                 <td class="delete-all">
                                                    
                                                 @if($role->role_name!="Super Administrator")
@@ -95,7 +95,7 @@
                                                     <a href="{{route('role.edit', ['id' => $role->id])}}"><i
                                                             class="fa fa-edit"></i></a>
                                                 @if($role->role_name!="Super Administrator")
-                                                 <?php if (in_array('role.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                                 <?php if (in_array('role.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                                     <a href="{{route('role.delete', ['id' => $role->id])}}"><i
                                                             class="fa fa-trash"></i></a>
                                                             <?php } ?>

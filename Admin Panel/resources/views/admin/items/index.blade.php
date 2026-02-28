@@ -88,7 +88,7 @@
 
                                 <thead>
                                     <tr>
-                                        <?php if (in_array('items.delete', json_decode(@session('user_permissions'), true))) { ?>
+                                        <?php if (in_array('items.delete', json_decode(@session('admin_permissions'), true))) { ?>
                                         <th class="delete-all"><input type="checkbox" id="select-all"><label
                                                 class="col-3 control-label" for="select-all">
                                                 <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i

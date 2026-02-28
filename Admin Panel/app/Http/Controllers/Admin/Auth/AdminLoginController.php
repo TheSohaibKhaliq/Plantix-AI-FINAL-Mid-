@@ -55,14 +55,38 @@ class AdminLoginController extends Controller
             ]);
         }
 
-        // Load permissions into session for PermissionMiddleware
+        // Load role and permissions into session for PermissionMiddleware & CheckUserRoleMiddleware
+        $roleName    = null;
         $permissions = [];
-        if ($user->role_id) {
-            $permissions = \App\Models\Permission::whereHas('roles', fn ($q) => $q->where('admin.rbac.roles.id', $user->role_id))
-                                                 ->pluck('name')
-                                                 ->toArray();
+
+        if ($user->role === 'admin' && ! $user->role_id) {
+            // Super-admin: wildcard marker
+            $roleName    = 'Super Admin';
+            $permissions = ['*'];
+        } elseif ($user->role_id) {
+            $roleRow  = \Illuminate\Support\Facades\DB::table('role')->where('id', $user->role_id)->first();
+            $roleName = $roleRow?->role_name ?? $user->role;
+
+            // Collect both group labels and individual permission names
+            $base = \Illuminate\Support\Facades\DB::table('permissions')
+                ->join('role_permissions', 'permissions.id', '=', 'role_permissions.permission_id')
+                ->where('role_permissions.role_id', $user->role_id)
+                ->select('permissions.name', 'permissions.group')
+                ->get();
+
+            $permissions = $base->pluck('name')
+                ->merge($base->pluck('group'))
+                ->filter()
+                ->unique()
+                ->values()
+                ->toArray();
         }
-        session(['user_permissions' => json_encode($permissions)]);
+
+        session([
+            'admin_role'        => $roleName,
+            'admin_permissions' => json_encode($permissions),
+            'admin_user_id'     => $user->id,
+        ]);
 
         return redirect()->intended($this->redirectPath());
     }

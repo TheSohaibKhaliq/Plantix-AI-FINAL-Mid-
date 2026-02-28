@@ -24,7 +24,7 @@
                 <div class="row business-analytics_list">
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('payments') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.payments') !!}'">
                             <h5>{{trans('lang.dashboard_total_earnings')}}</h5>
                             <h2 id="earnings_count"></h2>
                             <i class="mdi mdi-cash-usd"></i>
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('stores') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.stores') !!}'">
                             <h5>{{trans('lang.dashboard_total_stores')}}</h5>
                             <h2 id="vendor_count"></h2>
                             <i class="mdi mdi-shopping"></i>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('orders') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.orders.index') !!}'">
                             <h5>{{trans('lang.dashboard_total_orders')}}</h5>
                             <h2 id="order_count"></h2>
                             <i class="mdi mdi-cart"></i>
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('items') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.products.index') !!}'">
                             <h5>{{trans('lang.dashboard_total_products')}}</h5>
                             <h2 id="product_count"></h2>
                             <i class="mdi mdi-buffer"></i>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('payments') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.payments') !!}'">
                             <h5>{{trans('lang.admin_commission')}}</h5>
                             <h2 id="admincommission_count"></h2>
                             <i class="ti-wallet"></i>
@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('users') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.users') !!}'">
                             <h5>{{trans('lang.dashboard_total_clients')}}</h5>
                             <h2 id="users_count"></h2>
                             <i class="mdi mdi-account"></i>
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card-box" onclick="location.href='{!! route('drivers') !!}'">
+                        <div class="card-box" onclick="location.href='{!! route('admin.drivers') !!}'">
                             <h5>{{trans('lang.dashboard_total_drivers')}}</h5>
                             <h2 id="driver_count"></h2>
                             <i class="mdi mdi-account-check"></i>
@@ -85,7 +85,7 @@
 
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status pending" href="{{ route('orders','status=order-placed') }}">
+                        <a class="order-status pending" href="{{ route('admin.orders.index','status=order-placed') }}">
                             <div class="data">
                                 <i class="mdi mdi-lan-pending"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_placed')}}</h6>
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status confirmed"  href="{!! route('orders','status=order-confirmed') !!}">
+                        <a class="order-status confirmed"  href="{!! route('admin.orders.index','status=order-confirmed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-check-circle"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_confirmed')}}</h6>
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status packaging"  href="{!! route('orders','status=order-shipped') !!}">
+                        <a class="order-status packaging"  href="{!! route('admin.orders.index','status=order-shipped') !!}">
                             <div class="data">
                                 <i class="mdi mdi-clipboard-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_shipped')}}</h6>
@@ -112,7 +112,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status delivered" href="{!! route('orders','status=order-completed') !!}">
+                        <a class="order-status delivered" href="{!! route('admin.orders.index','status=order-completed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-check-circle-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_completed')}}</h6>
@@ -122,7 +122,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status canceled" href="{!! route('orders','status=order-canceled') !!}">
+                        <a class="order-status canceled" href="{!! route('admin.orders.index','status=order-canceled') !!}">
                             <div class="data">
                                 <i class="mdi mdi-window-close"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_canceled')}}</h6>
@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status failed" href="{!! route('orders','status=order-failed') !!}">
+                        <a class="order-status failed" href="{!! route('admin.orders.index','status=order-failed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-alert-circle-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_failed')}}</h6>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status failed" href="{!! route('orders','status=order-pending') !!}">
+                        <a class="order-status failed" href="{!! route('admin.orders.index','status=order-pending') !!}">
                             <div class="data">
                                 <i class="mdi mdi-car-connected"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_pending')}}</h6>
@@ -216,7 +216,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.store_plural')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('stores')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i>
+                            <a href="{{route('admin.stores')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i>
                             </a>
                         </div>
                     </div>
@@ -244,7 +244,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_orders')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('orders')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{route('admin.orders.index')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -275,7 +275,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.top_drivers')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('drivers')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{route('admin.drivers')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -303,7 +303,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_payouts')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('payoutRequests.stores')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{route('admin.payoutRequests.stores')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -788,10 +788,10 @@
         snapshots.docs.forEach((listval) => {
             val = listval.data();
             val.id = listval.id;
-            var route = '<?php echo route("stores.edit", ":id");?>';
+            var route = '<?php echo route("admin.stores.edit", ":id");?>';
             route = route.replace(':id', val.id);
 
-            var routeview = '<?php echo route("stores.view", ":id");?>';
+            var routeview = '<?php echo route("admin.stores.view", ":id");?>';
             routeview = routeview.replace(':id', val.id);
 
             html = html + '<tr>';
@@ -833,10 +833,10 @@
         snapshots.docs.forEach((listval) => {
             val = listval.data();
             val.id = listval.id;
-            var driverroute = '<?php echo route("drivers.edit", ":id");?>';
+            var driverroute = '<?php echo route("admin.drivers.edit", ":id");?>';
             driverroute = driverroute.replace(':id', val.id);
 
-            var driverviewroute = '<?php echo route("drivers.view", ":id");?>';
+            var driverviewroute = '<?php echo route("admin.drivers.view", ":id");?>';
             driverviewroute = driverviewroute.replace(':id', val.id);
 
             html = html + '<tr>';
@@ -884,7 +884,7 @@
 
             html = html + '<tr class="payout_'+val.id+'">';
             
-            var route = '{{route("stores.view",":id")}}';
+            var route = '{{route("admin.stores.view",":id")}}';
             route = route.replace(':id', val.vendorID);   
             html = html + '<td data-url="'+route+'" class="redirecttopage restname_'+val.vendorID+'" ></td>';
             
@@ -920,10 +920,10 @@
         snapshots.docs.forEach((listval) => {
             val = listval.data();
             val.id = listval.id;
-            var route = '<?php echo route("orders.edit", ":id"); ?>';
+            var route = '<?php echo route("admin.orders.show", ":id"); ?>';
             route = route.replace(':id', val.id);
 
-            var vendorroute = '<?php echo route("stores.view", ":id");?>';
+            var vendorroute = '<?php echo route("admin.stores.view", ":id");?>';
             vendorroute = vendorroute.replace(':id', val.vendorID);
 
             html = html + '<tr>';

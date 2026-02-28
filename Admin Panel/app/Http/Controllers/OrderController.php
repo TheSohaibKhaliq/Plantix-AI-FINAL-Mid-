@@ -16,7 +16,7 @@ class OrderController extends Controller
         private readonly OrderService             $orderService,
         private readonly NotificationService      $notifications,
     ) {
-        $this->middleware('auth');
+        // $this->middleware('auth'); // Removed to avoid guard conflicts
     }
 
     public function index(string $id = ''): \Illuminate\View\View

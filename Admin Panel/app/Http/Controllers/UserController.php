@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth'); // Removed to avoid guard conflicts
     }
 
 
@@ -147,7 +147,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        $user = Auth::user();
+        $user = auth('admin')->check() ? auth('admin')->user() : Auth::user();
         return view('admin.settings.users.profile', compact(['user']));
     }
 
@@ -163,7 +163,7 @@ class UserController extends Controller
                 'email' => 'required|email'
             ]);
         } else {
-            $user = Auth::user();
+            $user = auth('admin')->check() ? auth('admin')->user() : Auth::user();
             if (password_verify($old_password, $user->password)) {
                 $validator = Validator::make($request->all(), [
                     'name' => 'required|max:255',

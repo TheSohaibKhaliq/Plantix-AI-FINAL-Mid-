@@ -110,11 +110,11 @@
 
                                         <?php if (
 
-                                            ($type == "approved" && in_array('approve.vendors.delete', json_decode(@session('user_permissions'), true))) ||
+                                            ($type == "approved" && in_array('approve.vendors.delete', json_decode(@session('admin_permissions'), true))) ||
 
-                                            ($type == "pending" && in_array('pending.vendors.delete', json_decode(@session('user_permissions'), true))) ||
+                                            ($type == "pending" && in_array('pending.vendors.delete', json_decode(@session('admin_permissions'), true))) ||
 
-                                            ($type == "all" && in_array('vendors.delete', json_decode(@session('user_permissions'), true)))
+                                            ($type == "all" && in_array('vendors.delete', json_decode(@session('admin_permissions'), true)))
 
                                         ) { ?>
 
@@ -144,11 +144,11 @@
 
                                         <?php if (
 
-                                            ($type == "approved" && in_array('approve.vendors.delete', json_decode(@session('user_permissions'), true))) ||
+                                            ($type == "approved" && in_array('approve.vendors.delete', json_decode(@session('admin_permissions'), true))) ||
 
-                                            ($type == "pending" && in_array('pending.vendors.delete', json_decode(@session('user_permissions'), true))) ||
+                                            ($type == "pending" && in_array('pending.vendors.delete', json_decode(@session('admin_permissions'), true))) ||
 
-                                            ($type == "all" && in_array('vendors.delete', json_decode(@session('user_permissions'), true)))
+                                            ($type == "all" && in_array('vendors.delete', json_decode(@session('admin_permissions'), true)))
 
                                         ) { ?>
 
@@ -204,7 +204,7 @@
 
 
 
-    var user_permissions = '<?php echo @session("user_permissions") ?>';
+    var user_permissions = '<?php echo @session("admin_permissions") ?>';
 
     user_permissions = Object.values(JSON.parse(user_permissions));
 

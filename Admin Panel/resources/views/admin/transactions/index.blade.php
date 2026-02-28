@@ -49,8 +49,8 @@
                             <a href="{{route('stores.coupons',$id)}}"
                                 id="tab_promos">{{trans('lang.tab_promos')}}</a>
                         <li>
-                            <a href="{{route('stores.payout',$id)}}"
-                                id="tab_payouts">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.stores.payout',$id)}}" id="tab_payouts"
+                                >{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li class="active">
                             <a href="{{route('users.walletstransaction',$id)}}"
@@ -65,7 +65,7 @@
                             <a href="{{route('drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('orders')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
                             <a href="{{route('driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
@@ -86,7 +86,7 @@
                             <a href="{{route('users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('orders','userId='.$id)}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index','userId='.$id)}}" >{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li class="active">
                             <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
@@ -202,11 +202,11 @@
                     $(".storeMenuTab").removeClass("d-none");
                     database.collection('vendors').where('author', '==', userDetail.id).get().then(async function (snapshots) {
                         var vendorDetail = snapshots.docs[0].data();
-                        document.getElementById('basic').href = `{{ route('stores.view', ':id') }}`.replace(':id', vendorDetail.id);
-                        document.getElementById('tab_foods').href = `{{ route('stores.items', ':id') }}`.replace(':id', vendorDetail.id);
-                        document.getElementById('tab_orders').href = `{{ route('stores.orders', ':id') }}`.replace(':id', vendorDetail.id);
-                        document.getElementById('tab_promos').href = `{{ route('stores.coupons', ':id') }}`.replace(':id', vendorDetail.id);
-                        document.getElementById('tab_payouts').href = `{{ route('stores.payout', ':id') }}`.replace(':id', vendorDetail.id);
+                        document.getElementById('basic').href = `{{ route('admin.stores.view', ':id') }}`.replace(':id', vendorDetail.id);
+                        document.getElementById('tab_foods').href = `{{ route('admin.stores.view', ':id') }}`.replace(':id', vendorDetail.id);
+                        document.getElementById('tab_orders').href = `{{ route('admin.stores.view', ':id') }}`.replace(':id', vendorDetail.id);
+                        document.getElementById('tab_promos').href = `{{ route('admin.stores.coupons', ':id') }}`.replace(':id', vendorDetail.id);
+                        document.getElementById('tab_payouts').href = `{{ route('admin.stores.payout', ':id') }}`.replace(':id', vendorDetail.id);
                     });
                 }
                 if (userDetail.role == "driver") {

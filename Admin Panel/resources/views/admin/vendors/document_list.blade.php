@@ -22,7 +22,7 @@
 
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
-                    <li class="breadcrumb-item"><a href="{!! route('vendors') !!}">{{trans('lang.vendor')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.vendors') !!}">{{trans('lang.vendor')}}</a></li>
 
                     <li class="breadcrumb-item active">{{trans('lang.vendor_document_details')}}</li>
 

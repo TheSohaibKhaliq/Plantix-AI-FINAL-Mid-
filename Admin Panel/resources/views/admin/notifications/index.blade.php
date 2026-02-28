@@ -66,7 +66,7 @@
                                 <thead>
 
                                     <tr>
-                                        <?php if (in_array('notification.delete', json_decode(@session('user_permissions'), true))) { ?>
+                                        <?php if (in_array('notification.delete', json_decode(@session('admin_permissions'), true))) { ?>
                                             <th class="delete-all"><input type="checkbox" id="is_active"><label
                                                     class="col-3 control-label" for="is_active">
                                                     <a id="deleteAll" class="do_not_delete" href="javascript:void(0)">
@@ -79,7 +79,7 @@
 
                                         <th>{{trans('lang.date_created')}}</th>
 
-                                        <?php if (in_array('notification.delete', json_decode(@session('user_permissions'), true))) { ?>
+                                        <?php if (in_array('notification.delete', json_decode(@session('admin_permissions'), true))) { ?>
                                             <th>{{trans('lang.actions')}}</th>
                                         <?php } ?>
 
@@ -119,7 +119,7 @@
     var ref = refData.orderBy('createdAt', 'desc');
     var append_list = '';
 
-    var user_permissions = '<?php echo @session("user_permissions") ?>';
+    var user_permissions = '<?php echo @session("admin_permissions") ?>';
     user_permissions = Object.values(JSON.parse(user_permissions));
     var checkDeletePermission = false;
     if ($.inArray('notification.delete', user_permissions) >= 0) {

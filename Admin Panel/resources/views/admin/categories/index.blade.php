@@ -62,7 +62,7 @@
                                 <thead>
 
                                 <tr>
-                                    <?php if (in_array('category.delete', json_decode(@session('user_permissions'),true))) { ?>
+                                    <?php if (in_array('category.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                     <th class="delete-all"><input type="checkbox" id="is_active"><label class="col-3 control-label" for="is_active">
                                             <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i class="fa fa-trash"></i> {{trans('lang.all')}}</a></label></th>
                                     <?php } ?>
@@ -209,7 +209,7 @@
                             '<a href="' + url + '">'+childData.totalProducts+'</a>',
                             childData.publish ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>',
 
-                            '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if(in_array('category.delete', json_decode(@session('user_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
+                            '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if(in_array('category.delete', json_decode(@session('admin_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
 
                         ]);
                     });

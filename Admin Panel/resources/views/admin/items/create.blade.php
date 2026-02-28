@@ -42,7 +42,7 @@
 
                     <li class="breadcrumb-item"><a
 
-                            href="{{route('stores.items',$id)}}">{{trans('lang.item_plural')}}</a></li>
+                            href="{{route('admin.stores.view',$id)}}">{{trans('lang.item_plural')}}</a></li>
 
                 <?php } else { ?>
 
@@ -574,7 +574,7 @@
 
                 <?php if ($id != '') { ?>
 
-                    <a href="{{route('stores.items',$id)}}" class="btn btn-default"><i
+                    <a href="{{route('admin.stores.view',$id)}}" class="btn btn-default"><i
 
                             class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
@@ -1250,7 +1250,8 @@
 
 
 
-                                window.location.href = "{{route('stores.items',$id)}}";
+                                window.location.href = "{{route('admin.stores.view',$id)}}";
+
 
                             } else {
 

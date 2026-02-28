@@ -1,8 +1,31 @@
+@php
+    $user = Auth::user();
+    $is_logged_in = Auth::check();
+    $logout_route = route('logout');
+    $profile_route = '#';
+    
+    if(Auth::guard('admin')->check()){
+        $user = Auth::guard('admin')->user();
+        $is_logged_in = true;
+        $logout_route = route('admin.logout'); 
+        $profile_route = route('admin.users.profile');
+    } elseif(Auth::guard('expert')->check()){
+        $user = Auth::guard('expert')->user();
+        $is_logged_in = true;
+        $logout_route = route('expert.logout'); // Assuming expert.logout exists
+        $profile_route = route('expert.profile.show');
+    } elseif(Auth::check()) {
+        // Default customer or generic web guard
+        if (Route::has('account.profile')) {
+            $profile_route = route('account.profile');
+        }
+    }
+@endphp
+
 <div class="navbar-header">
     <a class="navbar-brand" href="<?php echo URL::to('/'); ?>">
-        <b>
-            <img src="{{ asset('/images/logo_web.png') }}" alt="homepage" class="dark-logo" width="100%" id="logo_web">
-            <img src="{{ asset('images/logo-light-icon.png') }}" alt="homepage" class="light-logo">
+        <b class="text-white h3 m-0" style="display: flex; align-items: center; justify-content: center;">
+            <i class="mdi mdi-leaf mr-2 text-success"></i> <span style="font-weight: 700;">Plantix-AI</span>
         </b>
         <span>
         
@@ -40,8 +63,8 @@
                             <div class="u-img"><img src="{{ asset('/images/users/user-2.png') }}" alt="user"
                                                     style="max-width: 45px;"></div>
                             <div class="u-text">
-                                @if(Auth::check())
-                                    <h4>{{ Auth::user()->name }}</h4>
+                                @if($is_logged_in)
+                                    <h4>{{ $user->name }}</h4>
                                     <p class="text-muted">{{ session()->has('user_role') ? session()->get('user_role') : '' }}</p>
                                 @else
                                     <h4>Guest User</h4>
@@ -51,19 +74,21 @@
                         </div>
                     </li>
                     <li role="separator" class="divider"></li>
-                    @if(Auth::check())
-                        <li><a href="{{ route('users.profile') }}"><i
+                    @if($is_logged_in)
+                        <li><a href="{{ $profile_route }}"><i
                                         class="ti-user"></i> {!! trans('lang.user_profile') !!}</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="{{ route('logout') }}"
+                        
+                        {{-- Generic Logout Form Submission --}}
+                        <li><a href="#"
                                onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();"><i
                                         class="fa fa-power-off"></i> {{ __('Logout') }}</a></li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        <form id="logout-form" action="{{ $logout_route }}" method="POST" class="d-none">
                             @csrf
                         </form>
                     @else
-                        <li><a href="{{ route('signin') }}"><i class="ti-user"></i> Sign In</a></li>
+                        <li><a href="{{ url('signin') }}"><i class="ti-user"></i> Sign In</a></li>
                     @endif
                 </ul>
             </div>

@@ -24,7 +24,7 @@
 
 				<li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
-				<li class="breadcrumb-item"><a href="{!! route('users') !!}">{{trans('lang.user_plural')}}</a></li>
+				<li class="breadcrumb-item"><a href="{!! route('admin.users') !!}">{{trans('lang.user_plural')}}</a></li>
 
 				<li class="breadcrumb-item active">{{trans('lang.user_create')}}</li>
 
@@ -230,7 +230,7 @@
 
 					trans('lang.save')}}</button>
 
-				<a href="{!! route('users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
+				<a href="{!! route('admin.users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
 
 					trans('lang.cancel')}}</a>
 
@@ -400,7 +400,7 @@
 
 						jQuery("#data-table_processing").hide();
 
-						window.location.href = '{{ route("users")}}';
+window.location.href = '{{ route("admin.users")}}';
 
 					});           
 

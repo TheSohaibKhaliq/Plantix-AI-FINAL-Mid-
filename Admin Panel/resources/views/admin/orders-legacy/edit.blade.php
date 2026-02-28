@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
                 <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                    <li class="breadcrumb-item"><a href="{{route('stores.orders',$_GET['eid'])}}">{{trans('lang.order_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{{route('admin.stores.view',$_GET['eid'])}}">{{trans('lang.order_plural')}}</a>
                     </li>
                 <?php } else { ?>
                     <li class="breadcrumb-item"><a href="{!! route('orders') !!}">{{trans('lang.order_plural')}}</a>
@@ -277,7 +277,7 @@
             </button>
 
             <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                <a href="{{route('stores.orders',$_GET['eid'])}}" class="btn btn-default"><i
+                <a href="{{route('admin.stores.view',$_GET['eid'])}}" class="btn btn-default"><i
                             class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
             <?php } else { ?>
                 <a href="{!! route('orders') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}

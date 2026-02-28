@@ -29,18 +29,18 @@
                     <div class="menu-tab">
                         <ul>
                             <li class="active">
-                                <a href="{{route('stores.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                                <a href="{{route('admin.stores.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('stores.items',$id)}}">{{trans('lang.tab_items')}}</a>
+                                <a href="{{route('admin.stores.view',$id)}}">{{trans('lang.tab_items')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('stores.orders',$id)}}">{{trans('lang.tab_orders')}}</a>
+                                <a href="{{route('admin.stores.view',$id)}}">{{trans('lang.tab_orders')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('stores.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
+                                <a href="{{route('admin.stores.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
                             <li>
-                                <a href="{{route('stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                                <a href="{{route('admin.stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                             </li>
                             <li>
                                 <a href="{{route('payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>

@@ -24,7 +24,7 @@
 
                 <?php if ($id != '') { ?>
 
-                    <li class="breadcrumb-item"><a href="{{route('stores.coupons',$id)}}">{{trans('lang.coupon_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{{route('admin.stores.coupons',$id)}}">{{trans('lang.coupon_plural')}}</a>
 
                     </li>
 
@@ -278,7 +278,7 @@
 
                 <?php if ($id != '') { ?>
 
-                    <a href="{{route('stores.coupons',$id)}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+                    <a href="{{route('admin.stores.coupons',$id)}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
                 <?php } else { ?>
 
@@ -530,7 +530,8 @@ $(document).ready(function () {
 
                             jQuery("#data-table_processing").hide();
 
-                            window.location.href = "{{route('stores.coupons',$id)}}";
+                            window.location.href = "{{route('admin.stores.coupons',$id)}}";
+
 
                         } else {
 

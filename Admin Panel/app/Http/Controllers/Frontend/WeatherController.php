@@ -48,7 +48,7 @@ class WeatherController extends Controller
      */
     public function saveLocation(Request $request)
     {
-        $this->middleware('auth');
+        // $this->middleware('auth'); // Removed to avoid guard conflicts
 
         $validated = $request->validate([
             'city'      => 'required|string|max:100',

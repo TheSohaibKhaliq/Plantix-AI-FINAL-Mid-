@@ -26,7 +26,7 @@
 
                     <li class="breadcrumb-item"><a
 
-                                href="{{ route('stores.payout', ['id' => $id]) }}">{{trans('lang.stores_payout_table')}}</a>
+                                href="{{ route('admin.stores.payout', ['id' => $id]) }}">{{trans('lang.stores_payout_table')}}</a>
 
                     </li>
 
@@ -144,7 +144,7 @@
 
         <?php if ($id != '') { ?>
 
-            <a href="{{route('stores.payout',$id)}}" class="btn btn-default"><i
+            <a href="{{route('admin.stores.payout',$id)}}" class="btn btn-default"><i
 
                         class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
@@ -654,7 +654,8 @@
 
                                                         <?php if($id != ''){ ?>
 
-                                                        window.location.href = "{{route('stores.payout',$id)}}";
+                                                        window.location.href = "{{route('admin.stores.payout',$id)}}";
+
 
                                                         <?php }else{?>
 

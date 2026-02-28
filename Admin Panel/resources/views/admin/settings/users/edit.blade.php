@@ -9,7 +9,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('users') !!}">{{trans('lang.user_plural')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.users') !!}">{{trans('lang.user_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.user_edit')}}</li>
             </ol>
         </div>
@@ -159,7 +159,7 @@
         </div>
         <div class="form-group col-12 text-center btm-btn">
             <button type="button" class="btn btn-primary  edit-form-btn"><i class="fa fa-save"></i> {{ trans('lang.save')}}</button>
-            <a href="{!! route('users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
         </div>
     </div>
 </div>
@@ -327,7 +327,7 @@
                     }).then(function(result) {
                         jQuery("#data-table_processing").hide();
 
-                        window.location.href = '{{ route("users")}}';
+                        window.location.href = '{{ route("admin.users")}}';
 
                     });
                 }).catch(err => {

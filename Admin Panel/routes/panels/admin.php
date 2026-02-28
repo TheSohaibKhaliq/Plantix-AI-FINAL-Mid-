@@ -36,6 +36,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/',          [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
         Route::get('/dashboard', [\App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
+        // Debug test route
+        Route::get('/debug-auth', function () {
+            $user = auth('admin')->user();
+            return response()->json([
+                'authenticated' => auth('admin')->check(),
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'role_id' => $user->role_id,
+                    'active' => $user->active,
+                ] : null,
+                'session_admin_role' => session('admin_role'),
+                'session_admin_permissions' => json_decode(session('admin_permissions', '[]'), true),
+            ]);
+        })->name('debug-auth');
+
         // Language switcher
         Route::get('/lang/change', [\App\Http\Controllers\LangController::class, 'change'])->name('lang.change');
 

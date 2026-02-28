@@ -14,7 +14,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                 <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                    <li class="breadcrumb-item"><a href="{{route('stores.coupons',$_GET['eid'])}}">{{trans('lang.coupon_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{{route('admin.stores.coupons',$_GET['eid'])}}">{{trans('lang.coupon_plural')}}</a>
                     </li>
                 <?php } else { ?>
                     <li class="breadcrumb-item"><a href="{!! route('coupons') !!}">{{trans('lang.coupon_plural')}}</a>
@@ -145,7 +145,7 @@
                 trans('lang.save')}}
             </button>
             <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                <a href="{{route('stores.coupons',$_GET['eid'])}}" class="btn btn-default"><i
+                <a href="{{route('admin.stores.coupons',$_GET['eid'])}}" class="btn btn-default"><i
                             class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
             <?php } else { ?>
                 <a href="{!! route('coupons') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
@@ -342,7 +342,8 @@ $(document).ready(function () {
                         'isPublic': isPublic
                     }).then(function (result) {
                         <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                            window.location.href = "{{ route('stores.coupons', $_GET['eid']) }}";
+                            window.location.href = "{{ route('admin.stores.coupons', $_GET['eid']) }}";
+
                         <?php } else { ?>
                             window.location.href = '{{ route("coupons") }}';
                         <?php } ?>

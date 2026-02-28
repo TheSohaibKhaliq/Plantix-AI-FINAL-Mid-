@@ -77,9 +77,9 @@
 
                                     <tr>
                                         <?php if (
-    ($type == "approved" && in_array('approve.driver.delete', json_decode(@session('user_permissions'), true))) ||
-    ($type == "pending" && in_array('pending.driver.delete', json_decode(@session('user_permissions'), true))) ||
-    ($type == "all" && in_array('driver.delete', json_decode(@session('user_permissions'), true)))
+    ($type == "approved" && in_array('approve.driver.delete', json_decode(@session('admin_permissions'), true))) ||
+    ($type == "pending" && in_array('pending.driver.delete', json_decode(@session('admin_permissions'), true))) ||
+    ($type == "all" && in_array('driver.delete', json_decode(@session('admin_permissions'), true)))
 ) { ?>
                                             <th class="delete-all"><input type="checkbox" id="is_active"><label
                                                     class="col-3 control-label" for="is_active"><a id="deleteAll"
@@ -144,7 +144,7 @@
     var append_list = '';
 
     var placeholderImage = '';
-    var user_permissions = '<?php echo @session("user_permissions") ?>';
+    var user_permissions = '<?php echo @session("admin_permissions") ?>';
     user_permissions = Object.values(JSON.parse(user_permissions));
     var checkDeletePermission = false;
     if (
@@ -296,7 +296,7 @@
                             childData.isActive ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isOnline"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isOnline"><span class="slider round"></span></label>',
                             '<a href="' + walletTransactions + '">{{trans("lang.wallet_history")}}</a>',
                             '<a href="' + trroute2 + '">' + childData.orders + '</a>',
-                            '<span class="action-btn"><a href="' + driverView + '"><i class="fa fa-eye"></i></a><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if (in_array('driver.delete', json_decode(@session('user_permissions'), true))) { ?> <a id="' + childData.id + '" name="driver-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
+                            '<span class="action-btn"><a href="' + driverView + '"><i class="fa fa-eye"></i></a><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if (in_array('driver.delete', json_decode(@session('admin_permissions'), true))) { ?> <a id="' + childData.id + '" name="driver-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
 
                         ]);
                     });
