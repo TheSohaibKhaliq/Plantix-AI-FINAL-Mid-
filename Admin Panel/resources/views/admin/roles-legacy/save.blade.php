@@ -6,64 +6,71 @@
 
 <div class="page-wrapper">
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-plus-circle me-2 text-success"></i>{{trans('lang.create_role')}}</h3>
+    <div class="row page-titles mb-4 pb-3 border-bottom align-items-center">
+        <div class="col-md-5">
+            <h3 class="text-dark fw-bold mb-0">
+                <i class="fa fa-plus-circle text-success me-2" style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 12px; width: 44px; text-align: center;"></i>
+                {{trans('lang.create_role')}}
+            </h3>
         </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{{ url('role') }}">{{trans('lang.role_plural')}}</a></li>
-                <li class="breadcrumb-item active">{{trans('lang.create_role')}}</li>
+        <div class="col-md-7 text-end">
+            <ol class="breadcrumb d-inline-flex bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}" class="text-muted text-decoration-none">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('role') }}" class="text-muted text-decoration-none">{{trans('lang.role_plural')}}</a></li>
+                <li class="breadcrumb-item active text-dark fw-semibold">{{trans('lang.create_role')}}</li>
             </ol>
         </div>
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                <div class="card-header bg-white border-bottom py-3">
-                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-shield me-2 text-primary"></i>{{trans('lang.role_details')}}</h5>
-                </div>
-                <div class="card-body p-4">
-
-                    <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
-                        {{trans('lang.processing')}}
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-5">
+                        <h4 class="mb-0 fw-bold text-dark">{{trans('lang.role_details')}}</h4>
+                        <p class="text-muted small mt-1">Configure role name and assign specific modular permissions.</p>
                     </div>
-                    
-                    <div class="alert alert-danger error_top rounded border-0 shadow-sm" style="display:none"></div>
-                    <div class="alert alert-success success_top rounded border-0 shadow-sm" style="display:none"></div>
 
-                    <form action="{{route('admin.role.store')}}" method="post" id="roleForm">
-                        @csrf
+                    <div class="card-body p-5">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">
+                            {{trans('lang.processing')}}
+                        </div>
                         
-                        <div class="mb-4 bg-light p-4 rounded-3 border">
-                            <div class="row align-items-center">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-dark">{{trans('lang.name')}}</label>
-                                    <input type="text" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25" id="name" name="name" placeholder="Enter role name (e.g., Manager)">
-                                </div>
-                                <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                                    <label for="permissions" class="form-label d-block fw-semibold text-dark">{{trans('lang.assign_permissions')}}</label>
-                                    <div class="form-check form-switch d-inline-block">
-                                        <input class="form-check-input" type="checkbox" name="all_permission" id="all_permission" style="transform: scale(1.3); margin-top: 0.3rem;">
-                                        <label class="form-check-label ms-2 fw-medium text-primary cursor-pointer" for="all_permission">{{trans('lang.all_permissions')}}</label>
+                        <div class="alert alert-danger error_top rounded-4 border-0 shadow-sm mb-4 fw-semibold" style="display:none"></div>
+                        <div class="alert alert-success success_top rounded-4 border-0 shadow-sm mb-4 fw-semibold" style="display:none"></div>
+
+                        <form action="{{route('admin.role.store')}}" method="post" id="roleForm">
+                            @csrf
+                            
+                            <div class="mb-5 bg-light p-5 rounded-4 border border-white shadow-sm">
+                                <div class="row align-items-end">
+                                    <div class="col-md-7">
+                                        <label class="form-label fw-bold text-dark mb-2">{{trans('lang.name')}} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control px-4 py-3 border-0 bg-white shadow-sm rounded-4" id="name" name="name" placeholder="e.g. Content Manager">
+                                        <div class="form-text mt-2 ms-1 text-muted small">Unique name to identify this set of permissions.</div>
+                                    </div>
+                                    <div class="col-md-5 text-md-end mt-4 mt-md-0">
+                                        <div class="bg-white p-3 rounded-4 shadow-sm d-inline-block border">
+                                            <div class="form-check form-switch m-0 d-flex align-items-center gap-3">
+                                                <input class="form-check-input ms-0" type="checkbox" name="all_permission" id="all_permission" style="width: 3.5em; height: 1.8em; cursor: pointer;">
+                                                <label class="form-check-label fw-bold text-success cursor-pointer mb-0 pt-1" for="all_permission">{{trans('lang.all_permissions')}}</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="card border-0 border-top mt-4 pt-3">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="fw-bold text-uppercase text-muted small w-25">Menu</th>
-                                            <th class="fw-bold text-uppercase text-muted small">Permissions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <div class="permission-matrix mt-4">
+                                <h5 class="fw-bold text-dark mb-4 border-bottom pb-3"><i class="fa fa-th-list me-2 text-success"></i>Modular Permissions Matrix</h5>
+                                <div class="table-responsive rounded-4 border overflow-hidden">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="fw-bold text-uppercase text-dark small py-3 ps-4" style="width: 200px;">Resource / Menu</th>
+                                                <th class="fw-bold text-uppercase text-dark small py-3 pe-4 text-center">Action Permissions Control</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
                                                 <tr>
 
@@ -2040,14 +2047,15 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
-                            <a href="{{url('role')}}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
-                                <i class="fa fa-undo me-2"></i>{{ trans('lang.cancel')}}
-                            </a>
-                            <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold save-form-btn">
-                                <i class="fa fa-save me-2"></i> {{ trans('lang.save')}}
-                            </button>
-                        </div>
+                            <!-- Form Actions -->
+                            <div class="d-flex justify-content-end gap-3 mt-5 pt-4 border-top">
+                                <a href="{{url('role')}}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                                    <i class="fa fa-undo me-2"></i>{{ trans('lang.cancel')}}
+                                </a>
+                                <button type="button" class="btn btn-success rounded-pill px-5 shadow-sm fw-bold save-form-btn">
+                                    <i class="fa fa-save me-2"></i> {{ trans('lang.save')}}
+                                </button>
+                            </div>
                     </form>
                 </div>
             </div>

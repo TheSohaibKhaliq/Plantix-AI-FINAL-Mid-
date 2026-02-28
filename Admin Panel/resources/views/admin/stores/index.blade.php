@@ -10,15 +10,18 @@
 
 
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-shopping-bag me-2 text-success"></i>{{trans('lang.store_plural')}}</h3>
+    <div class="row page-titles mb-4 pb-3 border-bottom align-items-center">
+        <div class="col-md-5">
+            <h3 class="text-dark fw-bold mb-0">
+                <i class="fa fa-shopping-bag text-success me-2" style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 12px; width: 44px; text-align: center;"></i>
+                {{trans('lang.store_plural')}}
+            </h3>
         </div>
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item">{{trans('lang.store_plural')}}</li>
-                <li class="breadcrumb-item active">{{trans('lang.store_table')}}</li>
+        <div class="col-md-7 text-end">
+            <ol class="breadcrumb d-inline-flex bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}" class="text-muted text-decoration-none">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item text-muted">{{trans('lang.store_plural')}}</li>
+                <li class="breadcrumb-item active text-dark fw-semibold">{{trans('lang.store_table')}}</li>
             </ol>
         </div>
     </div>
@@ -26,20 +29,24 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
-                    <div class="card-header bg-white border-bottom py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                        <ul class="nav nav-tabs card-header-tabs border-bottom-0 fw-semibold m-0">
-                            <li class="nav-item">
-                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{!! url()->current() !!}">
-                                    <i class="fa fa-list me-2"></i>{{trans('lang.stores_table')}}
+                <div class="card border-0 shadow-sm hover-card overflow-hidden" style="border-radius:20px;">
+                    <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-success text-white rounded-3 p-2">
+                                    <i class="fa fa-list fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 fw-bold text-dark">{{trans('lang.stores_table')}}</h5>
+                                    <p class="text-muted small mb-0">Manage and oversee all registered storefronts</p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{!! route('admin.stores.create') !!}" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                                    <i class="fa fa-plus-circle"></i> {{trans('lang.create_store')}}
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-muted" href="{!! route('admin.stores.create') !!}">
-                                    <i class="fa fa-plus me-2"></i>{{trans('lang.create_store')}}
-                                </a>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="card-body p-0">
@@ -75,46 +82,55 @@
                             </table>
                         </div>
 
-                        <!-- Popup -->
+                        <!-- Popup Modal -->
                         <div class="modal fade" id="create_vendor" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
-                                    <div class="modal-header border-bottom bg-light py-3">
-                                        <h5 class="modal-title fw-bold" id="exampleModalLongTitle">
-                                            <i class="fa fa-copy text-primary me-2"></i>{{trans('lang.copy_vendor')}}
-                                            <span id="vendor_title_lable" class="text-success ms-1"></span>
-                                        </h5>
-                                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content border-0 shadow-lg" style="border-radius:24px; overflow: hidden;">
+                                    <div class="modal-header border-0 bg-success text-white py-4 px-4 align-items-center">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="bg-white text-success rounded-3 p-2">
+                                                <i class="fa fa-copy fa-lg"></i>
+                                            </div>
+                                            <h5 class="modal-title fw-bold m-0" id="exampleModalLongTitle">
+                                                {{trans('lang.copy_vendor')}}
+                                                <span id="vendor_title_lable" class="badge bg-white text-success ms-2"></span>
+                                            </h5>
+                                        </div>
+                                        <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body p-4">
-                                        <div id="data-table_processing" class="text-success mb-3" style="display: none;">{{trans('lang.processing')}}</div>
-                                        <div class="error_top text-danger mb-3 font-weight-bold"></div>
+                                    <div class="modal-body p-5">
+                                        <div id="data-table_processing" class="text-success mb-4 fw-bold" style="display: none;">
+                                            <i class="fa fa-spinner fa-spin me-2"></i>{{trans('lang.processing')}}
+                                        </div>
+                                        <div class="error_top alert alert-danger rounded-4 border-0 mb-4 fw-semibold" style="display:none"></div>
                                         
-                                        <div class="row g-3">
+                                        <div class="row g-4">
                                             <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-muted">{{trans('lang.first_name')}}</label>
-                                                <input placeholder="Name" type="text" id="user_name" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                                <label class="form-label fw-bold text-dark small mb-2">{{trans('lang.first_name')}}</label>
+                                                <input placeholder="First name" type="text" id="user_name" class="form-control px-4 py-3 bg-light border-0 rounded-4">
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-muted">{{trans('lang.last_name')}}</label>
-                                                <input placeholder="Name" type="text" id="user_last_name" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                                <label class="form-label fw-bold text-dark small mb-2">{{trans('lang.last_name')}}</label>
+                                                <input placeholder="Last name" type="text" id="user_last_name" class="form-control px-4 py-3 bg-light border-0 rounded-4">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-semibold text-muted">{{trans('lang.vendor_title')}}</label>
-                                                <input placeholder="Vendor Title" type="text" id="vendor_title" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                                <label class="form-label fw-bold text-dark small mb-2">{{trans('lang.vendor_title')}}</label>
+                                                <input placeholder="New Vendor Title" type="text" id="vendor_title" class="form-control px-4 py-3 bg-light border-0 rounded-4">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-semibold text-muted">{{trans('lang.email')}}</label>
-                                                <input placeholder="Email" value="" id="user_email" type="email" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                                <label class="form-label fw-bold text-dark small mb-2">{{trans('lang.email')}}</label>
+                                                <input placeholder="Email Address" id="user_email" type="email" class="form-control px-4 py-3 bg-light border-0 rounded-4">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-semibold text-muted">{{trans('lang.password')}}</label>
-                                                <input placeholder="Password" id="user_password" type="password" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                                <label class="form-label fw-bold text-dark small mb-2">{{trans('lang.password')}}</label>
+                                                <input placeholder="6+ characters password" id="user_password" type="password" class="form-control px-4 py-3 bg-light border-0 rounded-4">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer border-top bg-light py-3">
-                                        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm save-form-btn">{{trans('lang.create')}}</button>
+                                    <div class="modal-footer border-0 p-4 pt-0 justify-content-center">
+                                        <button type="button" class="btn btn-success border-0 rounded-pill px-5 py-3 fw-bold shadow-sm w-75 save-form-btn">
+                                            <i class="fa fa-check-circle me-2"></i>{{trans('lang.create_vendor')}}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -553,24 +569,20 @@
             }
 
             if (val.photo != '' && val.photo != null) {
-                html.push('<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" alt="" width="100%" style="width:70px;height:70px;" src="' + val.photo + '" alt="image">');
-
+                html.push('<div class="rounded-4 overflow-hidden shadow-sm" style="width:50px; height:50px; border: 2px solid #f8f9fa;"><img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" alt="" width="100%" height="100%" src="' + val.photo + '" style="object-fit: cover;"></div>');
             } else {
-
-                html.push('<img alt="" width="100%" style="width:70px;height:70px;" src="' + placeholderImage + '" alt="image">');
+                html.push('<div class="rounded-4 overflow-hidden shadow-sm" style="width:50px; height:50px; border: 2px solid #f8f9fa;"><img alt="" width="100%" height="100%" src="' + placeholderImage + '" style="object-fit: cover;"></div>');
             }
 
             if(val.title != null && val.title != ""){
-                html.push('<a href="' + route_view + '">' + val.title + '</a>');
-            }
-            else
-            {
+                html.push('<div class="d-flex flex-column"><a href="' + route_view + '" class="text-dark fw-bold text-decoration-none hover-success mb-1" style="font-size: 0.95rem;">' + val.title + '</a><span class="text-muted small"><i class="fa fa-map-marker me-1"></i>Storefront</span></div>');
+            } else {
                 html.push('');
             }
             
 
             if (val.hasOwnProperty('phonenumber') && val.phonenumber != null && val.phonenumber != "") {
-                html.push(shortEditNumber(val.phonenumber));
+                html.push('<div class="text-muted fw-medium"><i class="fa fa-phone me-2 text-success opacity-50"></i>' + shortEditNumber(val.phonenumber) + '</div>');
             } else {
                 html.push('');
             }
@@ -582,9 +594,8 @@
                     date = val.createdAt.toDate().toDateString();
                     time = val.createdAt.toDate().toLocaleTimeString('en-US');
                 } catch (err) {
-
                 }
-                html.push('<span class="dt-time">' + date + ' ' + time + '</span>');
+                html.push('<div class="d-flex flex-column"><span class="fw-medium text-dark small" style="white-space:nowrap;">' + date + '</span><span class="text-muted" style="font-size: 0.75rem;">' + time + '</span></div>');
             } else {
                 html.push('');
             }
@@ -592,23 +603,24 @@
             var payoutRequests = '{{route("admin.users.walletstransaction",":id")}}';
             payoutRequests = payoutRequests.replace(':id', val.author);
 
-            html.push('<a href="' + payoutRequests + '">{{trans("lang.wallet_history")}}</a>');
+            html.push('<a href="' + payoutRequests + '" class="btn btn-sm btn-outline-warning rounded-pill px-3 fw-bold small"><i class="fa fa-history me-1"></i>Wallet</a>');
 
             var active = val.isActive;
             var vendorId = val.id;
             var url = '{{route("admin.stores.items",":id")}}';
             url = url.replace(":id", vendorId);
-            html.push('<a href = "' + url + '">' + val.foods + '</a>');
+            html.push('<a href = "' + url + '" class="badge bg-light text-dark border px-3 py-2 rounded-pill text-decoration-none fw-bold"><i class="fa fa-cubes me-1 text-success"></i>' + val.foods + '</a>');
 
             var url2 = '{{route("admin.stores.orders",":id")}}';
             url2 = url2.replace(":id", vendorId);
-            html.push('<a href="' + url2 + '">' + val.orders + '</a>');
-            var actionHtml = '<div class="d-flex align-items-center gap-1 justify-content-end pe-4">';
-            actionHtml += '<a href="javascript:void(0)" vendor_id="' + val.id + '" author="' + val.author + '" name="vendor-clone" class="btn btn-sm btn-outline-secondary rounded-pill shadow-sm px-3" title="Clone"><i class="fa fa-clone"></i></a>';
-            actionHtml += '<a href="' + route_view + '" class="btn btn-sm btn-outline-info rounded-pill shadow-sm px-3" title="View"><i class="fa fa-eye"></i></a>';
-            actionHtml += '<a href="' + route1 + '" class="btn btn-sm btn-outline-success rounded-pill shadow-sm px-3" title="Edit"><i class="fa fa-edit"></i></a>';
+            html.push('<a href="' + url2 + '" class="badge bg-success-light text-success border border-success-subtle px-3 py-2 rounded-pill text-decoration-none fw-bold"><i class="fa fa-shopping-cart me-1"></i>' + val.orders + '</a>');
+
+            var actionHtml = '<div class="d-flex align-items-center gap-1 justify-content-end">';
+            actionHtml += '<a href="javascript:void(0)" vendor_id="' + val.id + '" author="' + val.author + '" name="vendor-clone" class="btn btn-sm btn-light rounded-3 p-2 shadow-sm border" title="Clone"><i class="fa fa-clone text-muted"></i></a>';
+            actionHtml += '<a href="' + route_view + '" class="btn btn-sm btn-light rounded-3 p-2 shadow-sm border" title="View"><i class="fa fa-eye text-primary"></i></a>';
+            actionHtml += '<a href="' + route1 + '" class="btn btn-sm btn-light rounded-3 p-2 shadow-sm border" title="Edit"><i class="fa fa-edit text-success"></i></a>';
             if (checkDeletePermission) {
-                actionHtml += '<a id="' + val.id + '" author="' + val.author + '" name="vendor-delete" class="btn btn-sm btn-outline-danger rounded-pill shadow-sm px-3 delete-btn" href="javascript:void(0)" title="Delete"><i class="fa fa-trash"></i></a>';
+                actionHtml += '<a id="' + val.id + '" author="' + val.author + '" name="vendor-delete" class="btn btn-sm btn-light rounded-3 p-2 shadow-sm border delete-btn" href="javascript:void(0)" title="Delete"><i class="fa fa-trash text-danger"></i></a>';
             }
             actionHtml += '</div>';
             html.push(actionHtml);

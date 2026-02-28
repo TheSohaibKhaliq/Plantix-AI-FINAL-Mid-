@@ -5,49 +5,36 @@
 <div class="page-wrapper">
 
 
-    <div class="row page-titles">
-
-        <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor restaurantTitle">{{trans('lang.admin_plural')}}</h3>
-
+    <div class="row page-titles mb-4 pb-3 border-bottom align-items-center">
+        <div class="col-md-5">
+            <h3 class="text-dark fw-bold mb-0">
+                <i class="fa fa-users text-success me-2" style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 12px; width: 44px; text-align: center;"></i>
+                {{trans('lang.admin_plural')}}
+            </h3>
         </div>
-
-        <div class="col-md-7 align-self-center">
-
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item active">{{trans('lang.admin_plural')}}</li>
+        <div class="col-md-7 text-end">
+            <ol class="breadcrumb d-inline-flex bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}" class="text-muted text-decoration-none">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item active text-dark fw-semibold">{{trans('lang.admin_plural')}}</li>
             </ol>
-
         </div>
-
-        <div>
-
-        </div>
-
     </div>
 
 
-    <div class="container-fluid">
+    <div class="container-fluid pl-0 pr-0">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
-                    <div class="card-header bg-white border-bottom py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                        <ul class="nav nav-tabs card-header-tabs border-bottom-0 fw-semibold m-0">
-                            <li class="nav-item">
-                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{!! url()->current() !!}">
-                                    <i class="fa fa-list me-2"></i>{{trans('lang.admin_table')}}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-muted" href="{!! route('admin.users.create') !!}">
-                                    <i class="fa fa-plus me-2"></i>{{trans('lang.create_admin')}}
-                                </a>
-                            </li>
-                        </ul>
+                <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0 fw-bold text-dark">{{trans('lang.admin_table')}}</h4>
+                            <p class="text-muted small mt-1">Manage administrative users and their permissions.</p>
+                        </div>
+                        <a href="{!! route('admin.users.create') !!}" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold">
+                            <i class="fa fa-plus me-2"></i>{{trans('lang.create_admin')}}
+                        </a>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-5">
                         <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">Processing...</div>
                         <div class="table-responsive">
                             <table id="adminTable" class="table table-hover align-middle mb-0" cellspacing="0" width="100%">
@@ -72,44 +59,52 @@
                                 </thead>
                                 <tbody id="append_list1">
                                     @foreach($users as $user)
-                                    <tr>
+                                    <tr class="hover-card-row">
                                         <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
                                         <td class="delete-all ps-4">
                                             <div class="form-check m-0">
-                                                <input type="checkbox" id="is_open_{{$user->id}}" class="is_open form-check-input" dataid="{{$user->id}}">
+                                                <input type="checkbox" id="is_open_{{$user->id}}" class="is_open form-check-input custom-checkbox" dataid="{{$user->id}}">
                                             </div>
                                         </td>
                                         <?php } ?>
 
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">
+                                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem; background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;">
                                                     {{ strtoupper(substr($user->name, 0, 1)) }}
                                                 </div>
-                                                <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="text-decoration-none fw-bold text-dark hover-text-primary">
-                                                    {{ $user->name }}
-                                                </a>
+                                                <div>
+                                                    <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="text-decoration-none fw-bold text-dark fs-6 d-block mb-0">
+                                                        {{ $user->name }}
+                                                    </a>
+                                                    <span class="text-muted small">Admin User</span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="text-muted small"><i class="fa fa-envelope-o me-1"></i>{{ $user->email }}</span>
+                                            <div class="d-flex align-items-center text-muted">
+                                                <i class="fa fa-envelope-o me-2 text-success opacity-75"></i>
+                                                {{ $user->email }}
+                                            </div>
                                         </td>
                                         <td>
-                                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 shadow-sm fs-6">
-                                                {{ $user->roleName }}
+                                            <span class="badge bg-light text-success rounded-pill px-3 py-2 fw-semibold border shadow-sm small">
+                                                <i class="fa fa-shield me-1"></i> {{ $user->roleName }}
                                             </span>
                                         </td>
                                         <td class="action-btn text-end pe-4">
-                                            <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="btn btn-sm btn-outline-success rounded-pill px-3 shadow-sm me-1">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                             @if($user->id != 1)
-                                            <?php if (in_array('admin.admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
-                                            <a href="{{route('admin.admin.users.delete', ['id' => $user->id])}}" class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm delete-btn">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                             <?php } ?>     
-                                             @endif  
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm hover-card d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="Edit">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                 @if($user->id != 1)
+                                                <?php if (in_array('admin.admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
+                                                <a href="{{route('admin.admin.users.delete', ['id' => $user->id])}}" class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-card d-flex align-items-center justify-content-center delete-btn" style="width: 38px; height: 38px;" title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                                 <?php } ?>     
+                                                 @endif  
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

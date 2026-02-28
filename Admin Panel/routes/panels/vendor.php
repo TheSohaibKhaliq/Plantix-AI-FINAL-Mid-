@@ -53,11 +53,6 @@ Route::prefix('vendor')->name('vendor.')->group(function () {
         Route::get('/orders/{id}',          [\App\Http\Controllers\Vendor\VendorOrderController::class, 'show'])->name('orders.show');
         Route::post('/orders/{id}/status',  [\App\Http\Controllers\Vendor\VendorOrderController::class, 'updateStatus'])->name('orders.status');
 
-        // ── Earnings & Payouts ────────────────────────────────────────────────
-        Route::get('/earnings',    [\App\Http\Controllers\Vendor\VendorEarningsController::class, 'index'])->name('earnings.index');
-        Route::get('/payouts',     [\App\Http\Controllers\Vendor\VendorEarningsController::class, 'index'])->name('payouts.index');
-        Route::post('/payouts',    [\App\Http\Controllers\Vendor\VendorEarningsController::class, 'requestPayout'])->name('payouts.request');
-
         // ── Coupons (vendor-scoped) ───────────────────────────────────────────
         Route::get('/coupons',               [\App\Http\Controllers\Vendor\VendorCouponController::class, 'index'])->name('coupons.index');
         Route::get('/coupons/create',        [\App\Http\Controllers\Vendor\VendorCouponController::class, 'create'])->name('coupons.create');

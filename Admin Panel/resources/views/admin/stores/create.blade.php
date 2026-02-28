@@ -14,41 +14,43 @@
 
 
 
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-plus-circle me-2 text-success"></i>{{trans('lang.create_store')}}</h3>
+    <div class="row page-titles mb-4 pb-3 border-bottom align-items-center">
+        <div class="col-md-5">
+            <h3 class="text-dark fw-bold mb-0">
+                <i class="fa fa-plus-circle text-success me-2" style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 12px; width: 44px; text-align: center;"></i>
+                {{trans('lang.create_store')}}
+            </h3>
         </div>
-
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('admin.stores') !!}">{{trans('lang.store_plural')}}</a></li>
-                <li class="breadcrumb-item active">{{trans('lang.create_store')}}</li>
+        <div class="col-md-7 text-end">
+            <ol class="breadcrumb d-inline-flex bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}" class="text-muted text-decoration-none">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.stores') !!}" class="text-muted text-decoration-none">{{trans('lang.store_plural')}}</a></li>
+                <li class="breadcrumb-item active text-dark fw-semibold">{{trans('lang.create_store')}}</li>
             </ol>
         </div>
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                <div class="card-header bg-white border-bottom py-3">
-                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-info-circle me-2 text-primary"></i>{{trans('lang.store_details')}}</h5>
-                </div>
-                <div class="card-body p-4">
-                    <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
-                        {{trans('lang.processing')}}
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-md-12">
+                <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-5">
+                        <h4 class="mb-0 fw-bold text-dark">{{trans('lang.store_details')}}</h4>
+                        <p class="text-muted small mt-1">Register a new storefront with owner credentials and business details.</p>
                     </div>
-                    
-                    <div class="alert alert-danger error_top rounded border-0 shadow-sm" style="display:none"></div>
-                    <div class="alert alert-success success_top rounded border-0 shadow-sm" style="display:none"></div>
+
+                    <div class="card-body p-5">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">
+                            {{trans('lang.processing')}}
+                        </div>
+                        
+                        <div class="alert alert-danger error_top rounded-4 border-0 shadow-sm mb-4 fw-semibold" style="display:none"></div>
+                        <div class="alert alert-success success_top rounded-4 border-0 shadow-sm mb-4 fw-semibold" style="display:none"></div>
 
                     <div class="restaurant_payout_create">
                         <div class="restaurant_payout_create-inner">
-                            <fieldset>
-
-
-
-                            <legend>{{trans('lang.admin_area')}}</legend>
+                            <div class="section-container mb-5 pb-4 border-bottom">
+                                <h5 class="fw-bold text-dark mb-4"><i class="fa fa-user-circle me-2 text-success"></i>{{trans('lang.admin_area')}}</h5>
 
 
 
@@ -56,79 +58,24 @@
 
 
 
-                            <div class="form-group row width-50">
-
-
-
-                                <label class="col-3 control-label">{{trans('lang.first_name')}}</label>
-
-
-
-                                <div class="col-7">
-
-
-
-                                    <input type="text" class="form-control user_first_name" required>
-
-
-
-                                    <div class="form-text text-muted">
-
-
-
-                                        {{ trans("lang.user_first_name_help") }}
-
-
-
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold text-dark mb-2 small">{{trans('lang.first_name')}} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control px-4 py-3 border-0 bg-light rounded-4 user_first_name" required placeholder="Owner's first name">
+                                        <div class="form-text mt-2 ms-1 text-muted small" style="font-size: 0.75rem;">{{ trans("lang.user_first_name_help") }}</div>
                                     </div>
 
 
 
-                                </div>
-
-
-
-                            </div>
 
 
 
 
-
-
-
-                            <div class="form-group row width-50">
-
-
-
-                                <label class="col-3 control-label">{{trans('lang.last_name')}}</label>
-
-
-
-                                <div class="col-7">
-
-
-
-                                    <input type="text" class="form-control user_last_name">
-
-
-
-                                    <div class="form-text text-muted">
-
-
-
-                                        {{ trans("lang.user_last_name_help") }}
-
-
-
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold text-dark mb-2 small">{{trans('lang.last_name')}}</label>
+                                        <input type="text" class="form-control px-4 py-3 border-0 bg-light rounded-4 user_last_name" placeholder="Owner's last name">
+                                        <div class="form-text mt-2 ms-1 text-muted small" style="font-size: 0.75rem;">{{ trans("lang.user_last_name_help") }}</div>
                                     </div>
-
-
-
-                                </div>
-
-
-
-                            </div>
 
 
 
@@ -300,11 +247,8 @@
 
 
 
-                        <fieldset>
-
-
-
-                            <legend>{{trans('lang.store_details')}}</legend>
+                            <div class="section-container mb-5 pb-4 border-bottom">
+                                <h5 class="fw-bold text-dark mb-4"><i class="fa fa-store me-2 text-success"></i>{{trans('lang.store_details')}}</h5>
 
 
 

@@ -2,107 +2,122 @@
 
 @section('content')
     <div class="page-wrapper">
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor fw-bold"><i class="fa fa-tags me-2 text-success"></i>{{trans('lang.category_plural')}}</h3>
+        <div class="row page-titles mb-4 pb-3 border-bottom align-items-center">
+            <div class="col-md-5">
+                <h3 class="text-dark fw-bold mb-0">
+                    <i class="fa fa-tags text-success me-2" style="background: rgba(40, 167, 69, 0.1); padding: 12px; border-radius: 12px;"></i>
+                    {{trans('lang.category_edit')}}
+                </h3>
             </div>
-            <div class="col-md-7 align-self-center">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{!! route('admin.categories') !!}">{{trans('lang.category_plural')}}</a></li>
-                    <li class="breadcrumb-item active">{{trans('lang.category_edit')}}</li>
+            <div class="col-md-7 text-end">
+                <ol class="breadcrumb d-inline-flex bg-transparent p-0 m-0">
+                    <li class="breadcrumb-item"><a href="{{url('/dashboard')}}" class="text-muted text-decoration-none">{{trans('lang.dashboard')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.categories') !!}" class="text-muted text-decoration-none">{{trans('lang.category_plural')}}</a></li>
+                    <li class="breadcrumb-item active text-dark fw-semibold">{{trans('lang.category_edit')}}</li>
                 </ol>
             </div>
         </div>
 
-        <div class="container-fluid">
+        <!-- Main Content -->
+        <div class="container-fluid pl-0 pr-0">
             <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                        <div class="card-header bg-white border-bottom py-3">
-                            <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
+                <div class="col-lg-8 col-md-12">
+                    <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                        <div class="card-header bg-white border-bottom py-3 px-5">
+                            <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0 m-0">
                                 <li role="presentation" class="nav-item">
-                                    <a href="#category_information" aria-controls="description" role="tab" data-toggle="tab" class="nav-link active text-success border-success border-bottom border-2 bg-transparent fw-bold" style="border-radius:0;">
+                                    <a href="#category_information" aria-controls="description" role="tab" data-toggle="tab" class="nav-link active text-success border-success border-bottom border-2 bg-transparent fw-bold pb-3" style="border-radius:0;">
                                         <i class="fa fa-info-circle me-2"></i>{{trans('lang.category_information')}}
                                     </a>
                                 </li>
                                 <li role="presentation" class="nav-item">
-                                    <a href="#review_attributes" aria-controls="review_attributes" role="tab" data-toggle="tab" class="nav-link text-muted border-0 bg-transparent" style="border-radius:0;">
+                                    <a href="#review_attributes" aria-controls="review_attributes" role="tab" data-toggle="tab" class="nav-link text-muted border-0 bg-transparent pb-3" style="border-radius:0;">
                                         <i class="fa fa-star me-2"></i>{{trans('lang.reviewattribute_plural')}}
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        <div class="card-body p-4">
+                        <div class="card-body p-5">
                             <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">
                                 {{trans('lang.processing')}}
                             </div>
-                            <div class="alert alert-danger error_top rounded border-0 shadow-sm mb-4" style="display:none"></div>
-                        <div class="row restaurant_payout_create" role="tabpanel">
+                            <div class="alert alert-danger error_top rounded-4 border-0 shadow-sm mb-4" style="display:none"></div>
 
-                            <div class="restaurant_payout_create-inner tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="category_information">
-                                    <fieldset>
-                                        <legend>{{trans('lang.category_edit')}}</legend>
-                                        <div class="form-group row width-100">
-                                            <label class="col-3 control-label">{{trans('lang.category_name')}}</label>
-                                            <div class="col-7">
-                                                <input type="text" class="form-control cat-name">
-                                                <div class="form-text text-muted">{{ trans("lang.category_name_help") }} </div>
+                            <div class="row restaurant_payout_create" role="tabpanel">
+                                <div class="restaurant_payout_create-inner tab-content w-100">
+                                    <div role="tabpanel" class="tab-pane active" id="category_information">
+                                        <h4 class="mb-4 fw-bold text-dark">{{trans('lang.category_edit')}}</h4>
+
+                                        <!-- Modern Form Layout -->
+                                        <div class="row">
+                                            <!-- Category Name -->
+                                            <div class="col-md-12 mb-4">
+                                                <label class="form-label fw-semibold text-dark mb-2">{{trans('lang.category_name')}} <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control cat-name px-4 py-3 border-0 bg-light rounded-4" placeholder="Enter category name">
+                                                <div class="form-text text-muted mt-2"><i class="fa fa-info-circle me-1"></i>{{ trans("lang.category_name_help") }} </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row width-100">
-                                            <label class="col-3 control-label ">{{trans('lang.category_description')}}</label>
-                                            <div class="col-7">
-                                <textarea rows="7" class="category_description form-control"
-                                          id="category_description"></textarea>
-                                                <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                                            <!-- Category Description -->
+                                            <div class="col-md-12 mb-4">
+                                                <label class="form-label fw-semibold text-dark mb-2">{{trans('lang.category_description')}}</label>
+                                                <textarea rows="5" class="category_description form-control px-4 py-3 border-0 bg-light rounded-4" id="category_description" placeholder="Enter category description"></textarea>
+                                                <div class="form-text text-muted mt-2"><i class="fa fa-info-circle me-1"></i>{{ trans("lang.category_description_help") }}</div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row width-100">
-                                            <label class="col-3 control-label">{{trans('lang.category_image')}}</label>
-                                            <div class="col-7">
-                                                <input type="file" id="category_image">
-                                                <div class="placeholder_img_thumb cat_image"></div>
+                                            <!-- Category Image -->
+                                            <div class="col-md-12 mb-4">
+                                                <label class="form-label fw-semibold text-dark mb-2">{{trans('lang.category_image')}}</label>
+                                                <input type="file" id="category_image" class="form-control px-4 py-3 border-0 bg-light rounded-4">
+                                                <div class="placeholder_img_thumb cat_image mt-3"></div>
                                                 <div id="uploding_image"></div>
-                                                <div class="form-text text-muted w-50">{{ trans("lang.category_image_help") }}</div>
+                                                <div class="form-text text-muted mt-2"><i class="fa fa-image me-1"></i>{{ trans("lang.category_image_help") }}</div>
                                             </div>
                                         </div>
 
-                                       <div class="form-check row width-100">
-                                        <input type="checkbox" class="item_publish" id="item_publish">
-                                        <label class="col-3 control-label"
-                                               for="item_publish">{{trans('lang.item_publish')}}</label>
-                                       </div>
+                                        <!-- Toggles Section -->
+                                        <hr class="my-4 border-light">
+                                        <h5 class="fw-bold text-dark mb-4">Visibility Settings</h5>
 
-                                        <div class="form-check row width-100" id="show_in_home">
-                                            <input type="checkbox" id="show_in_homepage">
-                                            <label class="col-3 control-label" for="show_in_homepage">{{trans('lang.show_in_home')}}</label>
-                                            <div class="form-text text-muted w-50">{{trans('lang.show_in_home_desc')}}<span id="forsection"></span></div>
-                                        </div>            
-                       
-                                    </fieldset>
-                                </div>
+                                        <div class="row">
+                                            <!-- Publish Toggle -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex align-items-center bg-light p-3 rounded-4 custom-switch-card" style="border: 1px solid #e9ecef;">
+                                                    <div class="form-check form-switch m-0 p-0 d-flex align-items-center w-100">
+                                                        <input class="form-check-input item_publish ms-0 my-0 me-3 text-success custom-switch" type="checkbox" id="item_publish" style="width: 40px; height: 20px;">
+                                                        <label class="form-check-label fw-semibold text-dark mb-0 ms-2" for="item_publish" style="cursor: pointer;">{{trans('lang.item_publish')}}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div role="tabpanel" class="tab-pane" id="review_attributes">
+                                            <!-- Show in Home Toggle -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex align-items-center bg-light p-3 rounded-4 custom-switch-card flex-column align-items-start" style="border: 1px solid #e9ecef;">
+                                                    <div class="form-check form-switch m-0 p-0 d-flex align-items-center w-100 mb-2">
+                                                        <input class="form-check-input ms-0 my-0 me-3 custom-switch text-success" type="checkbox" id="show_in_homepage" style="width: 40px; height: 20px;">
+                                                        <label class="form-check-label fw-semibold text-dark mb-0 ms-2" for="show_in_homepage" style="cursor: pointer;">{{trans('lang.show_in_home')}}</label>
+                                                    </div>
+                                                    <div class="form-text text-muted small ms-5 ps-3">{{trans('lang.show_in_home_desc')}}<span id="forsection"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div role="tabpanel" class="tab-pane" id="review_attributes">
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
 
+                        <!-- Footer / Actions -->
+                        <div class="card-footer bg-light border-0 py-4 px-5 d-flex justify-content-end gap-3 rounded-bottom-4">
+                            <a href="{!! route('admin.categories') !!}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                                <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                            </a>
+                            <button type="button" class="btn btn-success rounded-pill px-5 shadow-sm fw-bold edit-form-btn">
+                                <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-                        <a href="{!! route('admin.categories') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
-                            <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
-                        </a>
-                        <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold edit-form-btn">
-                            <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
-                        </button>
-                    </div>
-
                 </div>
             </div>
         </div>
