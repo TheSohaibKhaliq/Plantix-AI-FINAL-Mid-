@@ -30,37 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    // ─── Firebase (FCM push only — Firestore/Auth removed) ───────────────────
-    'firebase' => [
-        'project_id'   => env('FIREBASE_PROJECT_ID'),
-        'credentials'  => storage_path('app/firebase/credentials.json'),
-        'fcm_endpoint' => 'https://fcm.googleapis.com/v1/projects/%s/messages:send',
-    ],
-
     // ─── Payment Gateways ─────────────────────────────────────────────────────
+    // Only Stripe (card) and Cash on Delivery are supported.
     'stripe' => [
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
-    ],
-
-    'razorpay' => [
-        'key'    => env('RAZORPAY_KEY'),
-        'secret' => env('RAZORPAY_SECRET'),
-    ],
-
-    'paypal' => [
-        'client_id'     => env('PAYPAL_CLIENT_ID'),
-        'client_secret' => env('PAYPAL_CLIENT_SECRET'),
-        'mode'          => env('PAYPAL_MODE', 'sandbox'),
-    ],
-
-    'flutterwave' => [
-        'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
-        'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
-    ],
-
-    'google_maps' => [
-        'api_key' => env('GOOGLE_MAPS_API_KEY'),
     ],
 
 ];

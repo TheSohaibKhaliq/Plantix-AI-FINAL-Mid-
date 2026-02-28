@@ -35,12 +35,6 @@ return [
     // Appointment slots per day per expert (used for availability check)
     'appointments_per_day' => (int) env('PLANTIX_APPOINTMENTS_PER_DAY', 10),
 
-    // Admin commission percentage (0–100)
-    'admin_commission' => (float) env('PLANTIX_ADMIN_COMMISSION', 10.0),
-
-    // Refund wallet credit validity (days)
-    'wallet_credit_validity_days' => (int) env('PLANTIX_WALLET_VALIDITY', 365),
-
     // ── AI / External API Keys ──────────────────────────────────────────────
     // OpenWeatherMap (https://openweathermap.org/api)
     'openweather_api_key' => env('OPENWEATHER_API_KEY', ''),
