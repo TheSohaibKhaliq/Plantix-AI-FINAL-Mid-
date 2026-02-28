@@ -45,7 +45,7 @@
               <li><a href="{{ route('home') }}">Home</a></li>
               <li><a href="{{ route('about') }}">About</a></li>
               <li><a href="{{ route('contact') }}">Contact</a></li>
-              <li><a href="{{ route('plantix-ai') }}">Plantix-AI</a></li>
+              <li><a href="{{ route('ai.chat') }}">Plantix-AI</a></li>
               <li><a href="{{ route('forum') }}">Forum</a></li>
               <li><a href="{{ route('shop') }}">Shop</a></li>
               <li><a href="{{ route('appointments') }}">Appointments</a></li>
@@ -54,24 +54,48 @@
           <div class="attr-right">
             <div class="attr-nav">
               <ul>
+@php
+    $cartCount = 0;
+    if (auth('web')->check()) {
+        $cart = \App\Models\Cart::where('user_id', auth('web')->id())->withCount('items')->first();
+        $cartCount = $cart ? $cart->items_count : 0;
+    }
+@endphp
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                    ><i class="far fa-shopping-cart"></i
-                    ><span class="badge">0</span></a
-                  >
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="far fa-shopping-cart"></i>
+                    <span class="badge">{{ $cartCount }}</span>
+                  </a>
                   <ul class="dropdown-menu cart-list">
-                    <li class="total">
-                      <span class="pull-right"
-                        ><strong>Total</strong>: PKR 0</span
-                      ><a href="{{ route('cart') }}" class="btn btn-default btn-cart"
-                        >Cart</a
-                      ><a href="{{ route('checkout') }}" class="btn btn-default btn-cart"
-                        >Checkout</a
-                      >
+                    @if($cartCount > 0)
+                      <li class="total">
+                        <a href="{{ route('cart') }}" class="btn btn-default btn-cart">View Cart</a>
+                        <a href="{{ route('checkout') }}" class="btn btn-default btn-cart">Checkout</a>
+                      </li>
+                    @else
+                      <li><p class="text-center p-3 text-muted">Your cart is empty.</p></li>
+                    @endif
+                  </ul>
+                </li>
+                @auth('web')
+                <li class="dropdown user-nav">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="far fa-user"></i> {{ Str::limit(auth('web')->user()->name, 14) }}
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ route('account.profile') }}"><i class="fas fa-user fa-fw"></i> Profile</a></li>
+                    <li><a href="{{ route('orders') }}"><i class="fas fa-box fa-fw"></i> Orders</a></li>
+                    <li>
+                      <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="dropdown-item border-0 bg-transparent"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
+                      </form>
                     </li>
                   </ul>
                 </li>
+                @else
                 <li class="button"><a href="{{ route('signin') }}">Sign In</a></li>
+                @endauth
               </ul>
             </div>
           </div>

@@ -1,4 +1,4 @@
-﻿<!-- Start Footer 
+<!-- Start Footer 
     ============================================= -->
     <footer class="bg-dark text-light" style="background-image: url({{ asset('assets/img/shape/8.png') }});">
         <div class="container">
@@ -38,7 +38,7 @@
                                     <a href="{{ route('forum') }}">News & Media</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('plantix-ai') }}">Plantix-AI</a>
+                                    <a href="{{ route('ai.chat') }}">Plantix-AI</a>
                                 </li>
                                 <li>
                                     <!-- Removed deleted file link: Contact Us -->
@@ -58,7 +58,7 @@
                             <ul>
                                 <li>
                                     <div class="thumb">
-                                        <a href="{{ route('forum.thread') }}">
+                                        <a href="{{ route('forum') }}">
                                             <img src="{{ asset('assets/img/800x800.png') }}" alt="Thumb">
                                         </a>
                                     </div>
@@ -66,13 +66,13 @@
                                         <div class="meta-title">
                                             <span class="post-date">12 Sep, 2025</span>
                                         </div>
-                                        <h5><a href="{{ route('forum.thread') }}">How AI Detects Cotton Leaf Curl
+                                        <h5><a href="{{ route('forum') }}">How AI Detects Cotton Leaf Curl
                                                 Early</a></h5>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="thumb">
-                                        <a href="{{ route('forum.thread') }}">
+                                        <a href="{{ route('forum') }}">
                                             <img src="{{ asset('assets/img/fertilizer.png') }}" alt="Thumb">
                                         </a>
                                     </div>
@@ -80,7 +80,7 @@
                                         <div class="meta-title">
                                             <span class="post-date">18 Jul, 2025</span>
                                         </div>
-                                        <h5><a href="{{ route('forum.thread') }}">Smart Fertilizer Plans Save 30% on
+                                        <h5><a href="{{ route('forum') }}">Smart Fertilizer Plans Save 30% on
                                                 Costs</a></h5>
                                     </div>
                                 </li>
