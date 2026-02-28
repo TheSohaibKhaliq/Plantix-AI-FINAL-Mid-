@@ -292,12 +292,6 @@
             jQuery("#users_count").append(snapshot.docs.length);
         });
 
-        db.collection('users').where("role", "==", "driver").orderBy("createdAt",'desc').get().then((snapshot) => {
-            jQuery("#driver_count").empty();
-            jQuery("#driver_count").append(snapshot.docs.length);
-        }); 
-
-
         db.collection('vendors').where('title','!=',"").get().then( 
             (snapshot) => {
                 jQuery("#vendor_count").empty();
@@ -397,7 +391,7 @@
         var endarray = [];
         var inx = parseInt(offest) * parseInt(pagesize);
         var append_listrecent_order = document.getElementById('append_list_recent_order');
-        append_list.innerHTML = '';
+        append_listrecent_order.innerHTML = '';
 
         ref = db.collection('restaurant_orders');
         ref.orderBy('createdAt', 'desc').where('status', 'in', ["Order Placed", "Order Accepted", "Driver Pending", "Driver Accepted", "Order Shipped", "In Transit"]).limit(inx).get().then(async (snapshots) => {
@@ -987,16 +981,14 @@
                 "{{trans('lang.dashboard_total_orders')}}",
                 "{{trans('lang.dashboard_total_products')}}",
                 "{{trans('lang.dashboard_total_clients')}}",
-                "{{trans('lang.dashboard_total_drivers')}}",
             ],
             datasets: [{
-                data: [jQuery("#vendor_count").text(), jQuery("#order_count").text(), jQuery("#product_count").text(), jQuery("#users_count").text(), jQuery("#driver_count").text()],
+                data: [jQuery("#vendor_count").text(), jQuery("#order_count").text(), jQuery("#product_count").text(), jQuery("#users_count").text()],
                 backgroundColor: [
                     '#218be1',
                     '#B1DB6F',
                     '#7360ed',
                     '#FFAB2E',
-                    '#FF683A',
                 ],
                 hoverOffset: 4
             }]
