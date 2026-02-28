@@ -1,101 +1,95 @@
 ﻿@extends('layouts.app')
 
 @section('content')
-    <div class="page-wrapper">
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                @if($id=='')
-                    <h3 class="text-themecolor">{{trans('lang.create_email_templates')}}</h3>
-                @else
-                    <h3 class="text-themecolor">{{trans('lang.edit_email_templates')}}</h3>
-                @endif
+<div class="container-fluid" style="padding-top: 24px;">
 
-            </div>
-
-            <div class="col-md-7 align-self-center">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a
-                                href="{{ url('email-templates') }}">{{trans('lang.email_templates')}}</a></li>
-
-                    @if($id=='')
-                        <li class="breadcrumb-item active">{{trans('lang.create_email_templates')}}</li>
-                    @else
-                        <li class="breadcrumb-item active">{{trans('lang.edit_email_templates')}}</li>
-                    @endif
-
-
-                </ol>
-            </div>
-
+    {{-- Breadcrumb/Header Section --}}
+    <div style="margin-bottom: 32px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <a href="{{url('/dashboard')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">{{trans('lang.dashboard')}}</a>
+            <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+            <a href="{{url('email-templates')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">{{trans('lang.email_templates')}}</a>
+            <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+            <span style="color: var(--agri-primary); font-size: 14px; font-weight: 600;">
+                @if($id=='') {{trans('lang.create_email_templates')}} @else {{trans('lang.edit_email_templates')}} @endif
+            </span>
         </div>
-        <div>
+        <h1 style="font-size: 28px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;">
+            @if($id=='') Create Template @else Edit Template @endif
+        </h1>
+    </div>
 
-            <div class="card-body">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card-agri" style="padding: 40px;">
 
-                <div id="data-table_processing" class="dataTables_processing panel panel-default"
-                     style="display: none;">
+                <div id="data-table_processing" class="dataTables_processing" style="display: none; background: rgba(255,255,255,0.8); color: var(--agri-primary); font-weight: 700; border-radius: 12px; z-index: 10;">
+                    <div class="spinner-border spinner-border-sm mr-2" role="status"></div>
                     {{trans('lang.processing')}}
                 </div>
 
-                <div class="error_top" style="display:none"></div>
+                <div class="error_top" style="display: none; background: var(--agri-error-light); color: var(--agri-error); padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 600;"></div>
+                <div class="success_top" style="display: none; background: #d1fae5; color: #065f46; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 600;"></div>
 
-                <div class="success_top" style="display:none"></div>
+                <form>
+                    <div style="margin-bottom: 32px;">
+                        <h4 style="font-size: 18px; font-weight: 700; color: var(--agri-primary-dark); margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-envelope-open-text"></i> Message Configuration
+                        </h4>
 
-                <div class="row restaurant_payout_create">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="agri-label">{{trans('lang.type')}}</label>
+                                <input type="text" class="form-agri" id="type" readonly style="background-color: var(--agri-bg); cursor: not-allowed; border: 1px dashed var(--agri-border);">
+                            </div>
 
-                    <div class="restaurant_payout_create-inner">
+                            <div class="col-md-6">
+                                <label class="agri-label">{{trans('lang.subject')}} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-agri" id="subject" placeholder="Enter email subject line...">
+                            </div>
 
-                        <fieldset>
-                            <legend>{{trans('lang.notification')}}</legend>
-
-                            <div class="form-group row width-100">
-                                <label class="col-3 control-label">{{trans('lang.type')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control" id="type" readonly>
+                            <div class="col-12 mt-4">
+                                <label class="agri-label" style="margin-bottom: 12px;">{{trans('lang.message')}} <span class="text-danger">*</span></label>
+                                <div style="border: 1px solid var(--agri-border); border-radius: 16px; overflow: hidden;">
+                                    <textarea class="form-control" name="message" id="message"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group row width-100">
-                                <label class="col-3 control-label">{{trans('lang.subject')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control" id="subject">
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-100">
-                                <label class="col-3 control-label">{{trans('lang.message')}}</label>
-                                <div class="col-7"><textarea class="form-control col-7" name="message" id="message"></textarea></div>
-                            </div>
-
-                            <div class="form-group row width-100">
-
-                                <div class="form-check width-100">
-
-                                    <input type="checkbox" id="is_send_to_admin">
-
-                                    <label class="col-3 control-label"
-                                           for="is_send_to_admin">{{trans('lang.is_send_to_admin')}}</label>
-
-                                </div>
-
-                            </div>
-
-
-                        </fieldset>
+                        </div>
                     </div>
 
-                </div>
+                    <div style="margin-bottom: 32px; background: #fffbeb; padding: 24px; border-radius: 16px; border: 1px solid #fde68a; display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h5 style="font-size: 15px; font-weight: 700; color: #92400e; margin-bottom: 4px;">{{trans('lang.is_send_to_admin')}}</h5>
+                            <p style="font-size: 13px; color: #b45309; margin: 0;">Also CC this notification to the system administrator.</p>
+                        </div>
+                        <div class="form-check form-switch" style="padding: 0; margin: 0;">
+                            <input type="checkbox" id="is_send_to_admin" style="width: 50px; height: 26px; cursor: pointer; accent-color: var(--agri-primary);">
+                        </div>
+                    </div>
 
+                    <div style="display: flex; gap: 16px; border-top: 1px solid var(--agri-border); padding-top: 32px;">
+                        <button type="button" class="btn-agri btn-agri-primary edit-form-btn" style="flex: 2; height: 50px; font-size: 16px;">
+                            <i class="fas fa-save" style="margin-right: 8px;"></i> {{trans('lang.save')}}
+                        </button>
+                        <a href="{{url('email-templates')}}" class="btn-agri btn-agri-outline" style="flex: 1; height: 50px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px;">
+                             {{trans('lang.cancel')}}
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group col-12 text-center btm-btn">
-                <button type="button" class="btn btn-primary edit-form-btn"><i class="fa fa-save"></i> {{
-                trans('lang.save')}}
-                </button>
-                <a href="{{url('email-templates')}}" class="btn btn-default"><i class="fa fa-undo"></i>{{
-                trans('lang.cancel')}}</a>
-            </div>
-
         </div>
+    </div>
+</div>
+
+<style>
+    .agri-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--agri-text-heading);
+        margin-bottom: 8px;
+        display: block;
+    }
+</style>
 
         @endsection
 
@@ -104,12 +98,18 @@
             <script>
 
                 var requestId = "<?php echo $id; ?>";
-                var database = firebase.firestore();
-                var createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                var id = (requestId == '') ? database.collection("tmp").doc().id : requestId;
 
-                var pagesize = 20;
-                var start = '';
+                function getCookie(name) {
+                    const nameEQ = name + "=";
+                    const cookies = document.cookie.split(';');
+                    for(let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if(cookie.indexOf(nameEQ) === 0) {
+                            return decodeURIComponent(cookie.substring(nameEQ.length));
+                        }
+                    }
+                    return null;
+                }
 
                 $('#message').summernote({
                     height: 400,
@@ -129,44 +129,49 @@
 
                 $(document).ready(function () {
                     if (requestId != '') {
-                        var ref = database.collection('email_templates').where('id', '==', id);
                         jQuery("#data-table_processing").show();
-                        ref.get().then(async function (snapshots) {
-                            if (snapshots.docs.length) {
-                                var data = snapshots.docs[0].data();
-                                $("#subject").val(data.subject);
-                                $('#message').summernote("code", data.message);
+                        $.ajax({
+                            url: '/api/admin/email-templates/' + requestId,
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + getCookie('token')
+                            },
+                            success: function(response) {
+                                if (response.success && response.data) {
+                                    var data = response.data;
+                                    $("#subject").val(data.subject);
+                                    $('#message').summernote("code", data.message);
 
-                                if (data.isSendToAdmin) {
-                                    $("#is_send_to_admin").prop('checked', true);
+                                    if (data.is_send_to_admin) {
+                                        $("#is_send_to_admin").prop('checked', true);
+                                    }
+
+                                    var type = '';
+                                    if (data.type == "new_order_placed") {
+                                        type = "{{trans('lang.new_order_placed')}}";
+                                    } else if (data.type == "new_vendor_signup") {
+                                        type = "{{trans('lang.new_vendor_signup')}}";
+                                    } else if (data.type == "payout_request") {
+                                        type = "{{trans('lang.payout_request')}}";
+                                    } else if (data.type == "payout_request_status") {
+                                        type = "{{trans('lang.payout_request_status')}}";
+                                    } else if (data.type == "wallet_topup") {
+                                        type = "{{trans('lang.wallet_topup')}}";
+                                    }
+                                    $('#type').val(type);
                                 }
-
-                                var type = '';
-
-                                if (data.type == "new_order_placed") {
-                                    type = "{{trans('lang.new_order_placed')}}";
-
-                                } else if (data.type == "new_vendor_signup") {
-                                    type = "{{trans('lang.new_vendor_signup')}}";
-                                } else if (data.type == "payout_request") {
-                                    type = "{{trans('lang.payout_request')}}";
-                                } else if (data.type == "payout_request_status") {
-                                    type = "{{trans('lang.payout_request_status')}}";
-
-                                } else if (data.type == "wallet_topup") {
-                                    type = "{{trans('lang.wallet_topup')}}";
-                                }
-
-                                $('#type').val(type);
-
+                                jQuery("#data-table_processing").hide();
+                            },
+                            error: function(xhr) {
+                                jQuery("#data-table_processing").hide();
+                                $(".error_top").show();
+                                $(".error_top").html("<p>{{trans('lang.please_try_again')}}</p>");
                             }
-                            jQuery("#data-table_processing").hide();
-
                         });
                     }
                 });
 
-                $(".edit-form-btn").click(async function () {
+                $(".edit-form-btn").click(function () {
 
                     $(".success_top").hide();
                     $(".error_top").hide();
@@ -174,7 +179,6 @@
                     var message = $('#message').summernote('code');
                     var type = $('#type').val();
                     var isSendToAdmin = $("#is_send_to_admin").is(":checked");
-
 
                     if (subject == "") {
                         $(".error_top").show();
@@ -190,47 +194,44 @@
                         return false;
                     } else {
                         jQuery("#data-table_processing").show();
-                        requestId == '' ? (database.collection('email_templates').doc(id).set({
-                                'id': id,
+                        
+                        var method = requestId == '' ? 'POST' : 'PUT';
+                        var url = requestId == '' ? '/api/admin/email-templates' : '/api/admin/email-templates/' + requestId;
+
+                        $.ajax({
+                            url: url,
+                            method: method,
+                            headers: {
+                                'Authorization': 'Bearer ' + getCookie('token'),
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
                                 'subject': subject,
                                 'message': message,
                                 'type': type,
-                                'isSendToAdmin': isSendToAdmin,
-                                'createdAt': createdAt
-
-                            }).then(function (result) {
+                                'is_send_to_admin': isSendToAdmin
+                            },
+                            success: function (result) {
                                 jQuery("#data-table_processing").hide();
                                 $(".success_top").show();
                                 $(".success_top").html("");
-                                $(".success_top").append("<p>{{trans('lang.email_templates_created_success')}}</p>");
+                                if (requestId == '') {
+                                    $(".success_top").append("<p>{{trans('lang.email_templates_created_success')}}</p>");
+                                } else {
+                                    $(".success_top").append("<p>{{trans('lang.email_templates_updated_success')}}</p>");
+                                }
                                 window.scrollTo(0, 0);
-                                window.location.href = '{{ route("admin.email-templates.index")}}';
-                            }).catch(function (error) {
-                                $(".error_top").show();
-                                $(".error_top").html("");
-                                $(".error_top").append("<p>" + error + "</p>");
-                            })) :
-                            (database.collection('email_templates').doc(id).update({
-
-                                'subject': subject,
-                                'message': message,
-                                'isSendToAdmin': isSendToAdmin,
-
-
-                            }).then(function (result) {
+                                setTimeout(function() {
+                                    window.location.href = '{{ route("admin.email-templates.index")}}';
+                                }, 1000);
+                            },
+                            error: function (xhr) {
                                 jQuery("#data-table_processing").hide();
-                                $(".success_top").show();
-                                $(".success_top").html("");
-                                $(".success_top").append("<p>{{trans('lang.email_templates_updated_success')}}</p>");
-                                window.scrollTo(0, 0);
-
-                                window.location.href = '{{ route("admin.email-templates.index")}}';
-                            }).catch(function (error) {
                                 $(".error_top").show();
                                 $(".error_top").html("");
-                                $(".error_top").append("<p>" + error + "</p>");
-                            }));
-
+                                $(".error_top").append("<p>" + (xhr.responseJSON?.message || "{{trans('lang.please_try_again')}}") + "</p>");
+                            }
+                        });
                     }
 
                 });

@@ -414,440 +414,279 @@
 
 @section('scripts')
 
-
-
     <script>
 
-
-
-        var database = firebase.firestore();
-
-        var ref = database.collection('settings').doc("globalSettings");
-
-        var mapKey = database.collection('settings').doc("googleMapKey");
-
-        var refPlaceholderImage = database.collection('settings').doc("placeHolderImage");
-
-        var contactUs = database.collection('settings').doc("ContactUs");
-
-        var version = database.collection('settings').doc("Version");
-
-        var restaurant = database.collection('settings').doc("restaurant");
-
-        var story = database.collection('settings').doc("story");
-
-        var DriverNearByRef = database.collection('settings').doc("DriverNearBy");
-
-        var referralAmountRef = database.collection('settings').doc("referral_amount");
-
-        var refEmailSetting = database.collection('settings').doc("emailSetting");
-
-        var homepagethemeRef = database.collection('settings').doc("home_page_theme");
-
-        var refNotificationSetting = database.collection('settings').doc("notification_setting");
-
-
-
-        var theme_1_url = '{!! url("images/app_homepage_theme_1.png"); !!}';
-
-        var theme_2_url = '{!! url("images/app_homepage_theme_2.png"); !!}';
-
-
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for(let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if(cookie.indexOf(nameEQ) === 0) {
+                    return decodeURIComponent(cookie.substring(nameEQ.length));
+                }
+            }
+            return null;
+        }
 
         var photo = "";
-
         var placeholderphoto = '';
-
         var favicon="";
-
         var appLogoImagePath = '';
-
         var appFavIconImagePath = '';
-
         var placeholderImagePath = '';
-
         var logoFileName = '';
-
         var favIconFileName = '';
-
         var serviceJsonFile = '';
-
         var placeholderFileName='';
-
-        var storageRef = firebase.storage().ref('images');
-
-        var storage = firebase.storage();
-
-
-
-        var refCurrency = database.collection('currencies').where('isActive', '==', true);
-
-        refCurrency.get().then(async function (snapshots) {
-
-            var currencyData = snapshots.docs[0].data();
-
-            $(".currentCurrency").text(currencyData.symbol);
-
-        });
-
-
 
         $(document).ready(function () {
 
-
-
             jQuery("#data-table_processing").show();
 
+            // Fetch all global settings via AJAX
+            $.ajax({
+                url: '/api/admin/settings/global',
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie('token')
+                },
+                success: function(response) {
+                    if (response.success && response.data) {
+                        var globalSettings = response.data;
 
+                        // Basic settings
+                        $(".application_name").val(globalSettings.application_name || '');
+                        $(".meta_title").val(globalSettings.meta_title || '');
+                        $("#website_color").val(globalSettings.website_color || '#2EC7D9');
+                        $("#admin_color").val(globalSettings.admin_panel_color || '#2EC7D9');
+                        $("#store_color").val(globalSettings.store_panel_color || '#2EC7D9');
+                        $("#customer_app_color").val(globalSettings.app_customer_color || '#2EC7D9');
+                        $("#driver_app_color").val(globalSettings.app_driver_color || '#2EC7D9');
+                        $("#restaurant_app_color").val(globalSettings.app_restaurant_color || '#2EC7D9');
 
-            ref.get().then(async function (snapshots) {
+                        // App Images
+                        if(globalSettings.app_logo) {
+                            photo = globalSettings.app_logo;
+                            appLogoImagePath = globalSettings.app_logo;
+                            $(".logo_img_thumb").html('<img class="rounded" style="width:50px" src="' + photo + '" alt="image">');
+                        }
 
+                        if(globalSettings.favicon) {
+                            favicon = globalSettings.favicon;
+                            appFavIconImagePath = globalSettings.favicon;
+                            $(".favicon_img_thumb").html('<img class="rounded" style="width:50px" src="' + favicon + '" alt="image">');
+                        }
 
+                        // Contact Info
+                        $('.contact_us_address').val(globalSettings.contact_us_address || '');
+                        $('.contact_us_email').val(globalSettings.contact_us_email || '');
+                        $('.contact_us_phone').val(globalSettings.contact_us_phone || '');
 
-                var globalSettings = snapshots.data();
+                        // Map Settings
+                        $('#map_key').val(globalSettings.map_key || '');
+                        $('#selectedMapType').val(globalSettings.selected_map_type || 'google');
+                        $('#map_type').val(globalSettings.map_type || 'google');
 
+                        // Version Info
+                        $('.app_version').val(globalSettings.app_version || '');
+                        $('#web_version').val(globalSettings.web_version || '');
+                        $('#app_store_link').val(globalSettings.app_store_link || '');
+                        $('#play_store_link').val(globalSettings.play_store_link || '');
 
+                        // Theme Selection
+                        if(globalSettings.app_homepage_theme) {
+                            $('input[name="app_homepage_theme"][value="' + globalSettings.app_homepage_theme + '"]').prop('checked', true);
+                        }
 
-                if (globalSettings == undefined) {
+                        // Restaurant Settings
+                        if(globalSettings.auto_approve_restaurant) {
+                            $("#auto_approve_restaurant").prop('checked', true);
+                        }
 
-                    database.collection('settings').doc('globalSettings').set({});
+                        // Story Settings
+                        if(globalSettings.story_enabled) {
+                            $("#restaurant_can_upload_story").prop('checked', true);
+                            $("#story_upload_time_div").show();
+                        }
+                        $("#story_upload_time").val(globalSettings.story_upload_time || '');
 
+                        // Placeholder Image
+                        if(globalSettings.placeholder_image) {
+                            placeholderphoto = globalSettings.placeholder_image;
+                            placeholderImagePath = globalSettings.placeholder_image;
+                            $(".placeholder_img_thumb").html('<img class="rounded" style="width:50px" src="' + placeholderphoto + '" alt="image">');
+                        }
+
+                        // Notification Settings
+                        $('#sender_id').val(globalSettings.sender_id || '');
+                        if(globalSettings.service_json) {
+                            $('#uploded_json_file').html("<a href='" + globalSettings.service_json + "' class='btn-link pl-3' target='_blank'>See Uploaded File</a>");
+                            serviceJsonFile = globalSettings.service_json;
+                        }
+
+                        $(".currentCurrency").text(globalSettings.currency_symbol || '$');
+                    }
+                    jQuery("#data-table_processing").hide();
+                },
+                error: function(xhr) {
+                    jQuery("#data-table_processing").hide();
+                    console.log('Error loading global settings', xhr);
                 }
-
-
-
-                try {
-
-                    $(".application_name").val(globalSettings.applicationName);
-
-                    $(".meta_title").val(globalSettings.meta_title)
-
-                    $("#website_color").val(globalSettings.website_color);
-
-                    $("#admin_color").val(globalSettings.admin_panel_color);
-
-                    $("#store_color").val(globalSettings.store_panel_color);
-
-                    $("#customer_app_color").val(globalSettings.app_customer_color);
-
-                    $("#driver_app_color").val(globalSettings.app_driver_color);
-
-                    $("#restaurant_app_color").val(globalSettings.app_restaurant_color);
-
-
-                    if(globalSettings.appLogo!="" && globalSettings.appLogo!=null){
-
-                        photo = globalSettings.appLogo;
-
-                        appLogoImagePath=globalSettings.appLogo;
-
-                        $(".logo_img_thumb").append('<img class="rounded" style="width:50px" src="' + photo + '" alt="image">');
-
-                    }
-
-
-
-                    if(globalSettings.favicon!="" && globalSettings.favicon!=null){
-
-                        favicon = globalSettings.favicon;
-
-                        appFavIconImagePath=globalSettings.favicon;
-
-                        $(".favicon_img_thumb").append('<img class="rounded" style="width:50px" src="' + favicon + '" alt="image">');
-
-
-
-                    }
-
-
-
-
-
-                } catch (error) {
-
-
-
-                }
-
-
-
-                jQuery("#data-table_processing").hide();
-
-            })
-
-
-
-            refNotificationSetting.get().then(async function (snapshots) {
-
-                var notificationData = snapshots.data();
-
-                if (notificationData == undefined) {
-
-                    database.collection('settings').doc('notification_setting').set({});
-
-                }else{
-
-                    if(notificationData.senderId != '' && notificationData.senderId != null){
-
-                        $('#sender_id').val(notificationData.senderId);
-
-                    }
-
-                    if(notificationData.serviceJson != '' && notificationData.serviceJson != null){
-
-                        $('#uploded_json_file').html("<a href='"+notificationData.serviceJson+"' class='btn-link pl-3' target='_blank'>See Uploaded File</a>");
-
-                        serviceJsonFile = notificationData.serviceJson;
-
-                    }
-
-                }
-
             });
 
+            // Handle file selections
+            window.handleFileSelect = function(event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    photo = e.target.result;
+                    logoFileName = file.name;
+                    $(".logo_img_thumb").html('<img class="rounded" style="width:50px" src="' + photo + '" alt="image">');
+                };
+                reader.readAsDataURL(file);
+            };
 
+            window.handleFileSelectFavicon = function(event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    favicon = e.target.result;
+                    favIconFileName = file.name;
+                    $(".favicon_img_thumb").html('<img class="rounded" style="width:50px" src="' + favicon + '" alt="image">');
+                };
+                reader.readAsDataURL(file);
+            };
 
-            refPlaceholderImage.get().then(async function (snapshots) {
+            window.handleFileSelectplaceholder = function(event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    placeholderphoto = e.target.result;
+                    placeholderFileName = file.name;
+                    $(".placeholder_img_thumb").html('<img class="rounded" style="width:50px" src="' + placeholderphoto + '" alt="image">');
+                };
+                reader.readAsDataURL(file);
+            };
 
-                var placeholderImage = snapshots.data();
-
-                jQuery("#data-table_processing").hide();
-
-                if(placeholderImage.image!="" && placeholderImage.image!=null){
-
-                    placeholderphoto = placeholderImage.image;
-
-                    placeholderImagePath=placeholderImage.image;
-
-                    $(".placeholder_img_thumb").append('<img class="rounded" style="width:50px" src="' + placeholderphoto + '" alt="image">');
-
-
-
+            // Handle story time toggle
+            $('#restaurant_can_upload_story').on('change', function() {
+                if($(this).is(':checked')) {
+                    $("#story_upload_time_div").show();
+                } else {
+                    $("#story_upload_time_div").hide();
                 }
-
-            })
-
-
-
-            restaurant.get().then(async function (snapshots) {
-
-                var restaurantdata = snapshots.data();
-
-                if (restaurantdata == undefined) {
-
-                    database.collection('settings').doc('restaurant').set({});
-
-                }
-
-                try {
-
-                    if (restaurantdata.auto_approve_restaurant) {
-
-                        $("#auto_approve_restaurant").prop('checked', true);
-
-                    }
-
-                } catch (error) {
-
-
-
-                }
-
-                jQuery("#data-table_processing").hide();
-
-            })
-
-
-
-            story.get().then(async function (snapshots) {
-
-                var story_data = snapshots.data();
-
-
-
-                if (story_data == undefined) {
-
-                    database.collection('settings').doc('story').set({});
-
-                }
-
-                try {
-
-                    if (story_data.isEnabled) {
-
-                        $("#restaurant_can_upload_story").prop('checked', true);
-
-                        $("#story_upload_time_div").show();
-
-                    }
-
-                    $("#story_upload_time").val(story_data.videoDuration);
-
-                } catch (error) {
-
-
-
-                }
-
             });
 
-
-
-            version.get().then(async function (snapshots) {
-
-                var version_data = snapshots.data();
-
-
-
-                if (version_data == undefined) {
-
-                    database.collection('settings').doc('Version').set({});
-
+            // Handle theme modal
+            $(document).on('click', '.theme-card', function() {
+                var modal = $('#themeModal');
+                var selectedTheme = $(this).find('input[name="app_homepage_theme"]').val();
+                
+                if(selectedTheme === 'theme_1') {
+                    modal.find('#themeImage').attr('src',$('#theme_1_url').val() || '');
+                } else if(selectedTheme === 'theme_2') {
+                    modal.find('#themeImage').attr('src',$('#theme_2_url').val() || '');
                 }
-
-                try {
-
-                    $('.app_version').val(version_data.app_version);
-
-                    $('#web_version').val(version_data.web_version);
-
-                    $('#app_store_link').val(version_data.appStoreLink);
-
-                    $('#play_store_link').val(version_data.googlePlayLink);
-
-                } catch (error) {
-
-
-
-                }
-
-
-
+                modal.modal('show');
             });
 
+            // Save all settings
+            $('.edit-form-btn').click(function() {
+                jQuery("#data-table_processing").show();
+                $(".error_top").hide();
 
+                var formData = {
+                    application_name: $(".application_name").val(),
+                    meta_title: $(".meta_title").val(),
+                    website_color: $("#website_color").val(),
+                    admin_panel_color: $("#admin_color").val(),
+                    store_panel_color: $("#store_color").val(),
+                    app_customer_color: $("#customer_app_color").val(),
+                    app_driver_color: $("#driver_app_color").val(),
+                    app_restaurant_color: $("#restaurant_app_color").val(),
+                    contact_us_address: $('.contact_us_address').val(),
+                    contact_us_email: $('.contact_us_email').val(),
+                    contact_us_phone: $('.contact_us_phone').val(),
+                    map_key: $('#map_key').val(),
+                    selected_map_type: $('#selectedMapType').val(),
+                    map_type: $('#map_type').val(),
+                    app_version: $('.app_version').val(),
+                    web_version: $('#web_version').val(),
+                    app_store_link: $('#app_store_link').val(),
+                    play_store_link: $('#play_store_link').val(),
+                    app_homepage_theme: $('input[name="app_homepage_theme"]:checked').val(),
+                    auto_approve_restaurant: $("#auto_approve_restaurant").is(':checked') ? 1 : 0,
+                    story_enabled: $("#restaurant_can_upload_story").is(':checked') ? 1 : 0,
+                    story_upload_time: $("#story_upload_time").val(),
+                    sender_id: $('#sender_id').val()
+                };
 
-            contactUs.get().then(async function (snapshots) {
-
-                var contactUsData = snapshots.data();
-
-
-
-                if (contactUsData == undefined) {
-
-                    database.collection('settings').doc('ContactUs').set({});
-
-                }
-
-
-
-                try {
-
-                    $('.contact_us_address').val(contactUsData.Address);
-
-                    $('.contact_us_email').val(contactUsData.Email);
-
-                    $('.contact_us_phone').val(contactUsData.Phone);
-
-
-
-                } catch (error) {
-
-
-
-                }
-
-            })
-
-
-
-            mapKey.get().then(async function (snapshots) {
-
-                var key = snapshots.data();
-
-
-
-                if (key == undefined) {
-
-                    database.collection('settings').doc('googleMapKey').set({});
-
-                }
-
-                try {
-
-                    $('#map_key').val(key.key);
-
-
-
-                } catch (error) {
-
-
-
-                }
-
-
-
+                $.ajax({
+                    url: '/api/admin/settings/update',
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    success: function(result) {
+                        jQuery("#data-table_processing").hide();
+                        alert('Settings updated successfully');
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        jQuery("#data-table_processing").hide();
+                        $(".error_top").show();
+                        $(".error_top").html("<p>Error updating settings. Please try again.</p>");
+                    }
+                });
             });
+        });
 
+        // Handle JSON file upload
+        $('#addFile').on('change', function(e) {
+            if (e.target.files.length > 0) {
+                var f = e.target.files[0];
+                var reader = new FileReader();
+                
+                reader.onload = (function(file) {
+                    return function(e) {
+                        var formData = new FormData();
+                        formData.append('file', file);
 
+                        $.ajax({
+                            url: '/api/admin/settings/upload-json',
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer ' + getCookie('token')
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                if(response.success) {
+                                    serviceJsonFile = response.data.file_url;
+                                    jQuery("#uploding_json_file").text("Upload is completed");
+                                    $('#uploded_json_file').html("<a href='" + serviceJsonFile + "' class='btn-link pl-3' target='_blank'>See Uploaded File</a>");
+                                    setTimeout(function(){
+                                        jQuery("#uploding_json_file").hide();
+                                    }, 3000);
+                                }
+                            },
+                            error: function(xhr) {
+                                jQuery("#uploding_json_file").text("Upload failed");
+                            }
+                        });
+                    };
+                })(f);
+                
+                reader.readAsDataURL(f);
+            }
+        });
 
-            DriverNearByRef.get().then(async function (snapshots) {
+    </script>
 
-
-
-                var DriverNearData = snapshots.data();
-
-
-
-                if (DriverNearData == undefined) {
-
-                    database.collection('settings').doc('DriverNearBy').set({});
-
-                }
-
-
-
-                try {
-
-                    $(".minimum_deposit_amount").val(DriverNearData.minimumDepositToRideAccept);
-
-                    $(".minimum_withdrawal_amount").val(DriverNearData.minimumAmountToWithdrawal);
-
-
-
-                    if (DriverNearData.mapType) {
-
-                        $('#map_type').val(DriverNearData.mapType).trigger('change');
-
-                    }
-
-                    if (DriverNearData.selectedMapType) {
-                        $('#selectedMapType').val(DriverNearData.selectedMapType).trigger('change');
-                    }
-               
-
-
-
-                    if (DriverNearData.driverLocationUpdate) {
-
-                        $('#driver_location_update').val(DriverNearData.driverLocationUpdate);
-
-                    }
-
-
-
-                    if(DriverNearData.singleOrderReceive ){
-
-                        $('#single_order_receive').prop('checked',true);
-
-                    }else{
-
-                        $('#single_order_receive').prop('checked',false);
-
-                    }
-
-
-
+@endsection
 
 
                 } catch (error) {
@@ -857,148 +696,12 @@
                 }
 
 
-
-            })
-
-
-
-            referralAmountRef.get().then(async function (snapshots) {
-
-
-
-                var referralAmountData = snapshots.data();
-
-
-
-                if (referralAmountData == undefined) {
-
-                    database.collection('settings').doc('referral_amount').set({});
-
-                }
-
-
-
-                try {
-
-                    $(".referral_amount").val(referralAmountData.referralAmount);
-
-
-
-                } catch (error) {
-
-
-
-                }
-
-
-
-                jQuery("#data-table_processing").hide();
-
-            })
-
-
-
-            refEmailSetting.get().then(async function (snapshots) {
-
-                var emailSettingData = snapshots.data();
-
-
-
-                if (emailSettingData == undefined) {
-
-                    database.collection('settings').doc('emailSetting').set({});
-
-                }
-
-
-
-                try {
-
-
-
-                    if (emailSettingData.fromName) {
-
-                        $('.from_name').val(emailSettingData.fromName);
-
-
-
-                    }
-
-                    if (emailSettingData.host) {
-
-                        $('.host').val(emailSettingData.host);
-
-
-
-                    }
-
-
-
-                    if (emailSettingData.port) {
-
-                        $('.port').val(emailSettingData.port);
-
-
-
-                    }
-
-
-
-                    if (emailSettingData.userName) {
-
-                        $('.user_name').val(emailSettingData.userName);
-
-
-
-                    }
-
-                    if (emailSettingData.password) {
-
-                        $('.password').val(emailSettingData.password);
-
-
-
-                    }
-
-
-
-                } catch (error) {
-
-
-
-                }
-
-
-
-                jQuery("#data-table_processing").hide();
-
-
-
-            });
-
-
-
-            homepagethemeRef.get().then(async function (snapshots) {
-
-                var themeData = snapshots.data();
-
-                if(themeData.theme == "theme_1"){
-
-                    $("#app_homepage_theme_1").prop('checked',true);
-
-                }else if(themeData.theme == "theme_2"){
-
-                    $("#app_homepage_theme_2").prop('checked',true);
-
-                }
 
             });
 
 
 
         });
-
-
 
         $(".save-form-btn").click(function () {
 
@@ -1192,172 +895,56 @@
 
                 jQuery("#data-table_processing").show();
 
-                storeImageData().then(IMG => {
-
-                database.collection('settings').doc("globalSettings").update({
-
-                    'website_color': website_color,
-
-                    'admin_panel_color': admin_color,
-
-                    'store_panel_color': store_color,
-
-                    'app_customer_color': customer_app_color,
-
-                    'app_driver_color': driver_app_color,
-
-                    'app_restaurant_color': restaurant_app_color,
-
-                    'applicationName': applicationName,
-
-                    'meta_title': meta_title,
-
-                    'appLogo': IMG.photo,
-
-                    'favicon': IMG.favicon,
-
-                });
-
-
-
-                database.collection('settings').doc('placeHolderImage').update({
-
-                    'image': IMG.placeholderphoto
-
-                });
-
-
-
-                database.collection('settings').doc("ContactUs").update({
-
-                    'Address': contact_us_address,
-
-                    'Email': contact_us_email,
-
-                    'Phone': contact_us_phone
-
-                });
-
-
-
-                database.collection('settings').doc("Version").update({
-
-                    'app_version': app_version,
-
-                    'web_version': web_version,
-
-                    'appStoreLink': app_store_link,
-
-                    'googlePlayLink': play_store_link,
-
-                });
-
-
-
-                database.collection('settings').doc("restaurant").update({
-
-                    'auto_approve_restaurant': auto_approve_restaurant,
-
-                });
-
-
-
-                database.collection('settings').doc("story").update({
-
-                    'isEnabled': restaurant_can_upload_story,
-
-                    'videoDuration': story_upload_time,
-
-                });
-
-
-
-                database.collection('settings').doc("googleMapKey").update({
-
-                    'key': googleApiKey,
-
-                });
-
-
-
-                database.collection('settings').doc("DriverNearBy").update({
-
-                    'minimumDepositToRideAccept': minimumDepositToRideAccept,
-
-                    'minimumAmountToWithdrawal': minimumAmountToWithdrawal,
-
-                    'selectedMapType':selectedMapType,
-
-                    'mapType': map_type,
-
-                    'driverLocationUpdate': driver_location_update,
-
-                    'singleOrderReceive': single_order_receive
-
-                });
-
-
-
-                database.collection('settings').doc("referral_amount").update({
-
-                    'referralAmount': referralAmount
-
-                });
-
-
-
-                database.collection('settings').doc('home_page_theme').update({
-
-                    'theme': app_homepage_theme
-
-                });
-
-
-
-                database.collection('settings').doc("notification_setting").update({
-
-                    'senderId': senderId,
-
-                    'serviceJson': serviceJsonFile,
-
-                });
-
-
-
-                database.collection('settings').doc("emailSetting").update({
-
-                    'fromName': fromName,
-
-                    'host': host,
-
-                    'port': port,
-
-                    'userName': userName,
-
-                    'password': password,
-
-                    'mailMethod': "smtp",
-
-                    'mailEncryptionType': "ssl",
-
-                }).then(function (result) {
-
-                    window.location.href = '{{ url("settings/app/globals")}}';
-
-                });
-
-                }).catch(err => {
-
-                    jQuery("#data-table_processing").hide();
-
-                    $(".error_top").show();
-
-                    $(".error_top").html("");
-
-                    $(".error_top").append("<p>" + err + "</p>");
-
-                    window.scrollTo(0, 0);
-
+                var formData = {
+                    application_name: applicationName,
+                    meta_title: meta_title,
+                    website_color: website_color,
+                    admin_panel_color: admin_color,
+                    store_panel_color: store_color,
+                    app_customer_color: customer_app_color,
+                    app_driver_color: driver_app_color,
+                    app_restaurant_color: restaurant_app_color,
+                    contact_us_address: contact_us_address,
+                    contact_us_email: contact_us_email,
+                    contact_us_phone: contact_us_phone,
+                    map_key: googleApiKey,
+                    selected_map_type: selectedMapType,
+                    map_type: map_type,
+                    app_version: app_version,
+                    web_version: web_version,
+                    app_store_link: app_store_link,
+                    play_store_link: play_store_link,
+                    app_homepage_theme: app_homepage_theme,
+                    auto_approve_restaurant: auto_approve_restaurant ? 1 : 0,
+                    story_enabled: restaurant_can_upload_story ? 1 : 0,
+                    story_upload_time: story_upload_time,
+                    sender_id: senderId,
+                    from_name: fromName,
+                    host: host,
+                    port: port,
+                    user_name: userName,
+                    password: password
+                };
+
+                $.ajax({
+                    url: '/api/admin/settings/update',
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    success: function(result) {
+                        jQuery("#data-table_processing").hide();
+                        window.location.href = '{{ url("settings/app/globals")}}';
+                    },
+                    error: function(xhr) {
+                        jQuery("#data-table_processing").hide();
+                        $(".error_top").show();
+                        $(".error_top").html("");
+                        $(".error_top").append("<p>Error updating settings. Please try again.</p>");
+                        window.scrollTo(0, 0);
+                    }
                 });
 
 
@@ -1418,97 +1005,13 @@
 
         });
 
+        // File uploads are now handled via AJAX in the form submission
 
+        function storeImageData() {
 
-        var storageRef = firebase.storage().ref('images');
+            return Promise.resolve({photo: photo, favicon: favicon, placeholderphoto: placeholderphoto});
 
-
-
-        async function storeImageData() {
-
-
-
-            var newPhoto = [];
-
-            try {
-
-                if(appLogoImagePath != "" && photo != appLogoImagePath){
-
-                    var appLogoImagePathRef = await storage.refFromURL(appLogoImagePath);
-
-
-
-                }
-
-                if(photo != appLogoImagePath){
-
-                    photo = photo.replace(/^data:image\/[a-z]+;base64,/, "")
-
-                    var uploadTask = await storageRef.child(logoFileName).putString(photo, 'base64', {contentType:'image/jpg'});
-
-                    var downloadURL = await uploadTask.ref.getDownloadURL();
-
-                    newPhoto['photo'] = downloadURL;
-
-                    photo = downloadURL;
-
-                }else{
-
-                    newPhoto['photo'] = photo;
-
-                }
-
-                if(appFavIconImagePath != "" && favicon != appFavIconImagePath){
-
-                    var appFavIconImagePathRef = await storage.refFromURL(appFavIconImagePath);
-
-
-
-                }
-
-                if(favicon != appFavIconImagePath){
-
-                    favicon = favicon.replace(/^data:image\/[a-z]+;base64,/, "")
-
-                    var uploadTask = await storageRef.child(favIconFileName).putString(favicon, 'base64', {contentType:'image/jpg'});
-
-                    var downloadURL = await uploadTask.ref.getDownloadURL();
-
-                    newPhoto['favicon'] = downloadURL;
-
-                    favicon = downloadURL;
-
-                }else{
-
-                    newPhoto['favicon'] = favicon;
-
-                }
-
-                if(placeholderImagePath != "" && placeholderphoto != placeholderImagePath){
-
-                    var placeholderImagePathRef = await storage.refFromURL(placeholderImagePath);
-
-
-
-                }
-
-                if(placeholderphoto != placeholderImagePath){
-
-                    placeholderphoto = placeholderphoto.replace(/^data:image\/[a-z]+;base64,/, "")
-
-                    var uploadTask = await storageRef.child(placeholderFileName).putString(placeholderphoto, 'base64', {contentType:'image/jpg'});
-
-                    var downloadURL = await uploadTask.ref.getDownloadURL();
-
-                    newPhoto['placeholderphoto'] = downloadURL;
-
-                    placeholderphoto = downloadURL;
-
-                }else{
-
-                    newPhoto['placeholderphoto'] = placeholderphoto;
-
-                }
+        }
 
 
 
@@ -1690,63 +1193,7 @@
 
         function handleUploadJsonFile(evt) {
 
-            var f = evt.target.files[0];
-
-            var reader = new FileReader();
-
-            reader.onload = (function (theFile) {
-
-                return function (e) {
-
-                    var filePayload = e.target.result;
-
-                    var hash = CryptoJS.SHA256(Math.random() + CryptoJS.SHA256(filePayload));
-
-                    var val = f.name;
-
-                    var ext = val.split('.')[1];
-
-                    var docName = val.split('fakepath')[1];
-
-                    var filename = (f.name).replace(/C:\\fakepath\\/i, '')
-
-                    var timestamp = Number(new Date());
-
-                    var filename = filename.split('.')[0] + "_" + timestamp + '.' + ext;
-
-                    var uploadTask = firebase.storage().ref('/').child(filename).put(theFile);
-
-                    uploadTask.on('state_changed', function (snapshot) {
-
-                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-                        jQuery("#uploding_json_file").text("File is uploading...");
-
-                    }, function (error) {
-
-                    }, function () {
-
-                        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-
-                            jQuery("#uploding_json_file").text("Upload is completed");
-
-                            serviceJsonFile = downloadURL;
-
-                            setTimeout(function(){
-
-                                jQuery("#uploding_json_file").hide();
-
-                            },3000);
-
-                        });
-
-                    });
-
-                };
-
-            })(f);
-
-            reader.readAsDataURL(f);
+            // File upload handled via AJAX in the #addFile change event handler
 
         }
 

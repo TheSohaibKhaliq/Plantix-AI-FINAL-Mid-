@@ -256,8 +256,10 @@ $(document).ready(function () {
                     'resturant_id': resturant_id, 'isPublic': isPublic
                 }).then(() => {
                     window.location.href = "<?php echo route('admin.coupons'); ?>";
-                } else {
-                    window.location.href = "<?php echo route('admin.coupons'); ?>";
+                }).catch((error) => {
+                    jQuery("#data-table_processing").hide();
+                    $(".error_top").show().html("<p>" + error + "</p>");
+                    window.scrollTo(0, 0);
                 });
             });
         });

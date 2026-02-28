@@ -256,449 +256,254 @@
 
     jQuery("#data-table_processing").show();
 
-    var db = firebase.firestore();
-    var currency = db.collection('settings');
-
     var currentCurrency = '';
     var currencyAtRight = false;
     var decimal_degits = 0;
-    var refCurrency = database.collection('currencies').where('isActive', '==', true);
-    refCurrency.get().then(async function (snapshots) {
-        var currencyData = snapshots.docs[0].data();
-        currentCurrency = currencyData.symbol;
-        currencyAtRight = currencyData.symbolAtRight;
+    var placeholderImage = '';
 
-        if (currencyData.decimal_degits) {
-            decimal_degits = currencyData.decimal_degits;
+    // Fetch currency settings from API
+    $.ajax({
+        url: '{{ route("api.admin.settings.currency") }}',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + getCookie('token')
+        },
+        success: function(response) {
+            if (response && response.data) {
+                currentCurrency = response.data.symbol;
+                currencyAtRight = response.data.symbolAtRight;
+                decimal_degits = response.data.decimal_degits || 0;
+            }
         }
     });
 
     $(document).ready(function () {
 
-        db.collection('restaurant_orders').orderBy("createdAt",'desc').get().then(
-            (snapshot) => {   
-                jQuery("#order_count").empty(); 
-                jQuery("#order_count").text(snapshot.docs.length);
-            });
-
-        db.collection('vendor_products').get().then(
-            (snapshot) => {
-                jQuery("#product_count").empty();
-                jQuery("#product_count").text(snapshot.docs.length);
-            });
- 
-        db.collection('users').where("role", "==", "customer").orderBy("createdAt",'desc').get().then((snapshot) => {
-            jQuery("#users_count").empty();
-            jQuery("#users_count").append(snapshot.docs.length);
+        // Fetch dashboard statistics
+        $.ajax({
+            url: '{{ route("api.admin.dashboard.stats") }}',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                if (response && response.data) {
+                    jQuery("#order_count").text(response.data.total_orders || 0);
+                    jQuery("#product_count").text(response.data.total_products || 0);
+                    jQuery("#users_count").text(response.data.total_customers || 0);
+                    jQuery("#vendor_count").text(response.data.total_vendors || 0);
+                    
+                    jQuery("#placed_count").text(response.data.orders_placed || 0);
+                    jQuery("#confirmed_count").text(response.data.orders_confirmed || 0);
+                    jQuery("#shipped_count").text(response.data.orders_shipped || 0);
+                    jQuery("#completed_count").text(response.data.orders_completed || 0);
+                    jQuery("#canceled_count").text(response.data.orders_canceled || 0);
+                    jQuery("#failed_count").text(response.data.orders_failed || 0);
+                    jQuery("#pending_count").text(response.data.orders_pending || 0);
+                }
+            }
         });
 
-        db.collection('vendors').where('title','!=',"").get().then( 
-            (snapshot) => {
-                jQuery("#vendor_count").empty();
-                jQuery("#vendor_count").text(snapshot.docs.length)
-                setVisitors();
-            });
+        // Fetch placeholder image
+        $.ajax({
+            url: '{{ route("api.admin.settings.placeholder") }}',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                if (response && response.data) {
+                    placeholderImage = response.data.image;
+                }
+            }
+        });
 
-        
         getTotalEarnings();
 
-        db.collection('restaurant_orders').where('status', 'in', ["Order Placed"]).get().then(
-            (snapshot) => {
-                jQuery("#placed_count").empty();
-                jQuery("#placed_count").text(snapshot.docs.length);
-            });
+        // Fetch top vendors
+        $.ajax({
+            url: '{{ route("api.admin.vendors.top") }}?limit=5',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                var append_listvendors = document.getElementById('append_list');
+                append_listvendors.innerHTML = '';
+                
+                if (response && response.data && response.data.length > 0) {
+                    var html = buildVendorHTML(response.data);
+                    append_listvendors.innerHTML = html;
+                }
 
-        db.collection('restaurant_orders').where('status', 'in', ["Order Accepted", "Driver Accepted"]).get().then(
-            (snapshot) => {
-                jQuery("#confirmed_count").empty();
-                jQuery("#confirmed_count").text(snapshot.docs.length);
-            });
-
-        db.collection('restaurant_orders').where('status', 'in', ["Order Shipped", "In Transit"]).get().then(
-            (snapshot) => {
-                jQuery("#shipped_count").empty();
-                jQuery("#shipped_count").text(snapshot.docs.length);
-            });
-
-        db.collection('restaurant_orders').where('status', 'in', ["Order Completed"]).get().then(
-            (snapshot) => {
-                jQuery("#completed_count").empty();
-                jQuery("#completed_count").text(snapshot.docs.length);
-            });
-
-        db.collection('restaurant_orders').where('status', 'in', ["Order Rejected"]).get().then(
-            (snapshot) => {
-                jQuery("#canceled_count").empty();
-                jQuery("#canceled_count").text(snapshot.docs.length);
-            });
-
-        db.collection('restaurant_orders').where('status', 'in', ["Driver Rejected"]).get().then(
-            (snapshot) => {
-                jQuery("#failed_count").empty();
-                jQuery("#failed_count").text(snapshot.docs.length);
-            });
-
-        db.collection('restaurant_orders').where('status', 'in', ["Driver Pending"]).get().then(
-            (snapshot) => {
-                jQuery("#pending_count").empty();
-                jQuery("#pending_count").text(snapshot.docs.length);
-            });
-
-        var placeholder = db.collection('settings').doc('placeHolderImage');
-        placeholder.get().then(async function (snapshotsimage) {
-            var placeholderImageData = snapshotsimage.data();
-            placeholderImage = placeholderImageData.image;
-
-        })
-
-        var offest = 1;
-        var pagesize = 5;
-        var start = null;
-        var end = null;
-        var endarray = [];
-        var inx = parseInt(offest) * parseInt(pagesize);
-        var append_listvendors = document.getElementById('append_list');
-        append_listvendors.innerHTML = '';
-
-        let ref = db.collection('vendors');
-        ref.orderBy('reviewsCount', 'desc').limit(inx).get().then(async (snapshots) => {
-            var html = '';
-            html = await buildHTML(snapshots);
-            if (html != '') {
-                append_listvendors.innerHTML = html;
-                start = snapshots.docs[snapshots.docs.length - 1];
-                endarray.push(snapshots.docs[0]);
-            }
-
-            $('#storeTable').DataTable({
-                order: [],
-                columnDefs: [
-                    {orderable: false, targets: [0, 2, 3]},
-                ],
-                "language": {
-                    "zeroRecords": "{{trans("lang.no_record_found")}}",
-                    "emptyTable": "{{trans("lang.no_record_found")}}"
-                },
-                responsive: true
-            });
-
-        });
-
-        var offest = 1;
-        var pagesize = 10;
-        var start = null;
-        var end = null;
-        var endarray = [];
-        var inx = parseInt(offest) * parseInt(pagesize);
-        var append_listrecent_order = document.getElementById('append_list_recent_order');
-        append_listrecent_order.innerHTML = '';
-
-        ref = db.collection('restaurant_orders');
-        ref.orderBy('createdAt', 'desc').where('status', 'in', ["Order Placed", "Order Accepted", "Driver Pending", "Driver Accepted", "Order Shipped", "In Transit"]).limit(inx).get().then(async (snapshots) => {
-            var html = '';
-            html = await buildOrderHTML(snapshots);
-            if (html != '') {
-                append_listrecent_order.innerHTML = html;
-                start = snapshots.docs[snapshots.docs.length - 1];
-                endarray.push(snapshots.docs[0]);
-            }
-
-            $('#orderTable').DataTable({
-                order: [],
-                "language": {
-                    "zeroRecords": "{{trans("lang.no_record_found")}}",
-                    "emptyTable": "{{trans("lang.no_record_found")}}"
-                },
-                responsive: true
-            });
-        });
-
-        var append_list_recent_payouts = document.getElementById('append_list_recent_payouts');
-        append_list_recent_payouts.innerHTML = '';
-        db.collection('payouts').where('paymentStatus', '==', 'Success').orderBy('paidDate', 'desc').limit(10).get().then(async (snapshots) => {
-            var html = '';
-            html = await buildRecentPayoutsHTML(snapshots);
-            if (html != '') {
-                append_list_recent_payouts.innerHTML = html;
-            }
-            setTimeout(function(){
-                $('#recentPayoutsTable').DataTable({
+                $('#storeTable').DataTable({
+                    order: [],
                     columnDefs: [
-                        {
-                            targets: 2,
-                            type: 'date',
-                            render: function (data) {
-                                return data;
-                            } 
-                        },
-                        {
-                            targets: 1,
-                            type: 'num-fmt',
-                            render: function (data, type, row, meta) {
-                                if (type === 'display') {
-                                    return data;
-                                }
-                                return parseFloat(data.replace(/[^0-9.-]+/g, ""));
-                            }
-                        },
+                        {orderable: false, targets: [0, 2, 3]},
                     ],
-                    order: [['2', 'desc']],
                     "language": {
                         "zeroRecords": "{{trans("lang.no_record_found")}}",
                         "emptyTable": "{{trans("lang.no_record_found")}}"
                     },
                     responsive: true
                 });
-            },1500);
+            }
+        });
+
+        // Fetch recent orders
+        $.ajax({
+            url: '{{ route("api.admin.orders.recent") }}?limit=10',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                var append_listrecent_order = document.getElementById('append_list_recent_order');
+                append_listrecent_order.innerHTML = '';
+                
+                if (response && response.data && response.data.length > 0) {
+                    var html = buildOrderHTML(response.data);
+                    append_listrecent_order.innerHTML = html;
+                }
+
+                $('#orderTable').DataTable({
+                    order: [],
+                    "language": {
+                        "zeroRecords": "{{trans("lang.no_record_found")}}",
+                        "emptyTable": "{{trans("lang.no_record_found")}}"
+                    },
+                    responsive: true
+                });
+            }
+        });
+
+        // Fetch recent payouts
+        $.ajax({
+            url: '{{ route("api.admin.payouts.recent") }}?limit=10',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                var append_list_recent_payouts = document.getElementById('append_list_recent_payouts');
+                append_list_recent_payouts.innerHTML = '';
+                
+                if (response && response.data && response.data.length > 0) {
+                    var html = buildRecentPayoutsHTML(response.data);
+                    append_list_recent_payouts.innerHTML = html;
+                }
+
+                setTimeout(function(){
+                    $('#recentPayoutsTable').DataTable({
+                        columnDefs: [
+                            {
+                                targets: 2,
+                                type: 'date',
+                                render: function (data) {
+                                    return data;
+                                } 
+                            },
+                            {
+                                targets: 1,
+                                type: 'num-fmt',
+                                render: function (data, type, row, meta) {
+                                    if (type === 'display') {
+                                        return data;
+                                    }
+                                    return parseFloat(data.replace(/[^0-9.-]+/g, ""));
+                                }
+                            },
+                        ],
+                        order: [['2', 'desc']],
+                        "language": {
+                            "zeroRecords": "{{trans("lang.no_record_found")}}",
+                            "emptyTable": "{{trans("lang.no_record_found")}}"
+                        },
+                        responsive: true
+                    });
+                },1500);
+            }
         });
     });
 
     async function getTotalEarnings() {
-        var intRegex = /^\d+$/;
-        var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
-        var v01 = 0;
-        var v02 = 0;
-        var v03 = 0;
-        var v04 = 0;
-        var v05 = 0;
-        var v06 = 0;
-        var v07 = 0;
-        var v08 = 0;
-        var v09 = 0;
-        var v10 = 0;
-        var v11 = 0;
-        var v12 = 0;
-        var currentYear = new Date().getFullYear();
-        await db.collection('restaurant_orders').where('status', 'in', ["Order Completed"]).get().then(async function (orderSnapshots) {
-            var paymentData = orderSnapshots.docs;
-            var totalEarning = 0;
-            var adminCommission = 0;
-            paymentData.forEach((order) => {
-                var orderData = order.data();
-                var price = 0;
-                var minprice = 0;
-                orderData.products.forEach((product) => {
+        $.ajax({
+            url: '{{ route("api.admin.dashboard.earnings") }}',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                if (response && response.data) {
+                    var totalEarning = response.data.total_earnings || 0;
+                    var adminCommission = response.data.admin_commission || 0;
+                    var monthlyData = response.data.monthly_data || [0,0,0,0,0,0,0,0,0,0,0,0];
 
-                    if (product.price && product.quantity != 0) {
-                        var extras_price = 0;
-                        if (product.extras_price != undefined && product.extras_price != null) {
-                            extras_price = parseFloat(product.extras_price) * parseInt(product.quantity);
-                        }
-                        if (!isNaN(extras_price)) {
-                            var productTotal = (parseFloat(product.price) * parseInt(product.quantity)) + extras_price;
-                        } else {
-                            var productTotal = (parseFloat(product.price) * parseInt(product.quantity));
-                        }
-                        if (!isNaN(productTotal)) {
-                            price = price + productTotal;
-                            minprice = minprice + productTotal;
-                        }
-
-                    }
-                })
-
-                discount = orderData.discount;
-                if ((intRegex.test(discount) || floatRegex.test(discount)) && !isNaN(discount)) {
-                    discount = parseFloat(discount).toFixed(decimal_degits);
-                    price = price - parseFloat(discount);
-                    minprice = minprice - parseFloat(discount);
-                }
-
-                tax = 0;
-                if (orderData.hasOwnProperty('taxSetting')) {
-                    if (orderData.taxSetting.type && orderData.taxSetting.tax) {
-                        if (orderData.taxSetting.type == "percent") {
-                            tax = (parseFloat(orderData.taxSetting.tax) * minprice) / 100;
-                        } else {
-                            tax = parseFloat(orderData.taxSetting.tax);
-                        }
-                    }
-                }
-
-                if (!isNaN(tax)) {
-                    price = price + tax;
-                }
-
-                if (orderData.deliveryCharge != undefined && orderData.deliveryCharge != "" && orderData.deliveryCharge > 0) {
-                    price = price + parseFloat(orderData.deliveryCharge);
-                }
-
-                if (orderData.adminCommission != undefined && orderData.adminCommissionType != undefined && orderData.adminCommission > 0 && price > 0) {
-                    var commission = 0;
-                    if (orderData.adminCommissionType == "Percent") {
-                        commission = (price * parseFloat(orderData.adminCommission)) / 100;
-
+                    if (currencyAtRight) {
+                        totalEarning = parseFloat(totalEarning).toFixed(decimal_degits) + "" + currentCurrency;
+                        adminCommission = parseFloat(adminCommission).toFixed(decimal_degits) + "" + currentCurrency;
                     } else {
-                        commission = parseFloat(orderData.adminCommission);
+                        totalEarning = currentCurrency + "" + parseFloat(totalEarning).toFixed(decimal_degits);
+                        adminCommission = currentCurrency + "" + parseFloat(adminCommission).toFixed(decimal_degits);
                     }
 
-                    adminCommission = commission + adminCommission;
-                } else if (orderData.adminCommission != undefined && orderData.adminCommission > 0 && price > 0) {
-                    var commission = parseFloat(orderData.adminCommission);
-                    adminCommission = commission + adminCommission;
+                    $("#earnings_count").append(totalEarning);
+                    $("#earnings_count_graph").append(totalEarning);
+                    $("#admincommission_count_graph").append(adminCommission);
+                    $("#admincommission_count").append(adminCommission);
+                    $("#total_earnings_header").text(totalEarning);
+                    $(".earnings_over_time").append(totalEarning);
+                    
+                    var labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                    var $salesChart = $('#sales-chart');
+                    var salesChart = renderChart($salesChart, monthlyData, labels);
+                    setCommision();
                 }
-
-                totalEarning = parseFloat(totalEarning) + parseFloat(price);
-
-                try {
-
-                    if (orderData.createdAt) {
-                        var orderMonth = orderData.createdAt.toDate().getMonth() + 1;
-                        var orderYear = orderData.createdAt.toDate().getFullYear();
-                        if (currentYear == orderYear) {
-                            switch (parseInt(orderMonth)) {
-                                case 1:
-                                    v01 = parseInt(v01) + price;
-                                    break;
-                                case 2:
-                                    v02 = parseInt(v02) + price;
-                                    break;
-                                case 3:
-                                    v03 = parseInt(v03) + price;
-                                    break;
-                                case 4:
-                                    v04 = parseInt(v04) + price;
-                                    break;
-                                case 5:
-                                    v05 = parseInt(v05) + price;
-                                    break;
-                                case 6:
-                                    v06 = parseInt(v06) + price;
-                                    break;
-                                case 7:
-                                    v07 = parseInt(v07) + price;
-                                    break;
-                                case 8:
-                                    v08 = parseInt(v08) + price;
-                                    break;
-                                case 9:
-                                    v09 = parseInt(v09) + price;
-                                    break;
-                                case 10:
-                                    v10 = parseInt(v10) + price;
-                                    break;
-                                case 11:
-                                    v11 = parseInt(v11) + price;
-                                    break;
-                                default :
-                                    v12 = parseInt(v12) + price;
-                                    break;
-                            }
-                        }
-                    }
-
-                } catch (err) {
-
-
-                    var datas = new Date(orderData.createdAt._seconds * 1000);
-
-                    var dates = firebase.firestore.Timestamp.fromDate(datas);
-
-                    db.collection('restaurant_orders').doc(orderData.id).update({'createdAt': dates}).then(() => {
-
-                        console.log('Provided document has been updated in Firestore');
-
-                    }, (error) => {
-
-                        console.log('Error: ' + error);
-
-                    });
-
-                }
-
-
-            })
-
-            if (currencyAtRight) {
-                totalEarning = parseFloat(totalEarning).toFixed(decimal_degits) + "" + currentCurrency;
-                adminCommission = parseFloat(adminCommission).toFixed(decimal_degits) + "" + currentCurrency;
-            } else {
-                totalEarning = currentCurrency + "" + parseFloat(totalEarning).toFixed(decimal_degits);
-                adminCommission = currentCurrency + "" + parseFloat(adminCommission).toFixed(decimal_degits);
+                jQuery("#data-table_processing").hide();
             }
-
-            $("#earnings_count").append(totalEarning);
-            $("#earnings_count_graph").append(totalEarning);
-            $("#admincommission_count_graph").append(adminCommission);
-            $("#admincommission_count").append(adminCommission);
-            $("#total_earnings_header").text(totalEarning);
-            $(".earnings_over_time").append(totalEarning);
-            var data = [v01, v02, v03, v04, v05, v06, v07, v08, v09, v10, v11, v12];
-            var labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            var $salesChart = $('#sales-chart');
-            var salesChart = renderChart($salesChart, data, labels);
-            setCommision();
-        })
-        jQuery("#data-table_processing").hide();
-
+        });
     }
 
-    function buildHTML(snapshots) {
+    function buildVendorHTML(vendors) {
         var html = '';
-        var count = 1;
-        var rating = 0;
-        snapshots.docs.forEach((listval) => {
-            val = listval.data();
-            val.id = listval.id;
+        vendors.forEach((val) => {
             var route = '<?php echo route("admin.vendors.edit", ":id");?>';
             route = route.replace(':id', val.id);
 
             var routeview = '<?php echo route("admin.vendors.view", ":id");?>';
             routeview = routeview.replace(':id', val.id);
 
-            html = html + '<tr>';
-            if (val.photo == '' && val.photo == null) {
-
-                html = html + '<td class="text-center"><img class="img-circle img-size-32 mr-2" style="width:60px;height:60px;" src="' + placeholderImage + '" alt="image"></td>';
+            html += '<tr>';
+            if (!val.photo || val.photo == '') {
+                html += '<td class="text-center"><img class="img-circle img-size-32 mr-2" style="width:60px;height:60px;" src="' + placeholderImage + '" alt="image"></td>';
             } else {
-                html = html + '<td class="text-center"><img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-circle img-size-32 mr-2" style="width:60px;height:60px;" src="' + val.photo + '" alt="image"></td>';
+                html += '<td class="text-center"><img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-circle img-size-32 mr-2" style="width:60px;height:60px;" src="' + val.photo + '" alt="image"></td>';
             }
 
-            html = html + '<td data-url="' + routeview + '" class="redirecttopage">' + val.title + '</td>';
+            html += '<td data-url="' + routeview + '" class="redirecttopage">' + val.title + '</td>';
 
-            if (val.hasOwnProperty('reviewsCount') && val.reviewsCount != 0) {
-                rating = Math.round(parseFloat(val.reviewsSum) / parseInt(val.reviewsCount));
-            } else {
-                rating = 0;
+            var rating = 0;
+            if (val.reviews_count && val.reviews_count > 0) {
+                rating = Math.round(parseFloat(val.reviews_sum) / parseInt(val.reviews_count));
             }
 
-            html = html + '<td><ul class="rating" data-rating="' + rating + '">';
-            html = html + '<li class="rating__item"></li>';
-            html = html + '<li class="rating__item"></li>';
-            html = html + '<li class="rating__item"></li>';
-            html = html + '<li class="rating__item"></li>';
-            html = html + '<li class="rating__item"></li>';
-            html = html + '</ul></td>';
-            html = html + '<td><a href="' + route + '" > <span class="fa fa-edit"></span></a></td>';
-            html = html + '</tr>';
-
-            rating = 0;
-            count++;
+            html += '<td><ul class="rating" data-rating="' + rating + '">';
+            for (let i = 0; i < 5; i++) {
+                html += '<li class="rating__item"></li>';
+            }
+            html += '</ul></td>';
+            html += '<td><a href="' + route + '" > <span class="fa fa-edit"></span></a></td>';
+            html += '</tr>';
         });
         return html;
     }
 
-
-    async function buildRecentPayoutsHTML(snapshots) {
-        
-        var intRegex = /^\d+$/;
-        var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
-
+    async function buildRecentPayoutsHTML(payouts) {
         var html = '';
-        var count = 1;
         
-        snapshots.docs.forEach((listval) => {
-
-            val = listval.data();
-            val.id = listval.id;
-            getStoreName(val.vendorID);
-            
-            var price = val.amount;
-            if (intRegex.test(price) || floatRegex.test(price)) {
-                price = parseFloat(price).toFixed(2);
-            } else {
-                price = 0;
-            }
+        payouts.forEach((val) => {
+            var price = val.amount || 0;
+            price = parseFloat(price).toFixed(2);
 
             if (currencyAtRight) {
                 price_val = parseFloat(price).toFixed(decimal_degits) + "" + currentCurrency;
@@ -706,81 +511,58 @@
                 price_val = currentCurrency + "" + parseFloat(price).toFixed(decimal_degits);
             }
 
-            html = html + '<tr class="payout_'+val.id+'">';
+            html += '<tr class="payout_'+val.id+'">';
             
             var route = '{{route("admin.vendors.view",":id")}}';
-            route = route.replace(':id', val.vendorID);   
-            html = html + '<td data-url="'+route+'" class="redirecttopage restname_'+val.vendorID+'" ></td>';
+            route = route.replace(':id', val.vendor_id);   
+            html += '<td data-url="'+route+'" class="redirecttopage">' + (val.vendor ? val.vendor.title : '') + '</td>';
             
-            html = html + '<td class="text-red">(' + price_val + ')</td>';
-            var date = val.paidDate.toDate().toDateString();
-            var time = val.paidDate.toDate().toLocaleTimeString('en-US');
-            html = html + '<td class="dt-time">' + date + ' ' + time + '</td>';
+            html += '<td class="text-red">(' + price_val + ')</td>';
+            var date = new Date(val.paid_date).toDateString();
+            var time = new Date(val.paid_date).toLocaleTimeString('en-US');
+            html += '<td class="dt-time">' + date + ' ' + time + '</td>';
 
-            if (val.note != undefined && val.note != '') {
-                html = html + '<td>' + val.note + '</td>';
+            if (val.note) {
+                html += '<td>' + val.note + '</td>';
             } else {
-                html = html + '<td></td>';
+                html += '<td></td>';
             }
         
-            html = html + '</tr>';
+            html += '</tr>';
         });
 
         return html;
     }
 
-    function getStoreName(vendorId) {
-        database.collection('vendors').doc(vendorId).get().then(async function (snapshots) {
-            if(snapshots.exists){
-                var data = snapshots.data();
-                $(".restname_"+vendorId).text(data.title);
-            }
-        });
-    }
-    
-    function buildOrderHTML(snapshots) {
+    function buildOrderHTML(orders) {
         var html = '';
-        var count = 1;
-        snapshots.docs.forEach((listval) => {
-            val = listval.data();
-            val.id = listval.id;
+        orders.forEach((val) => {
             var route = '<?php echo route("admin.orders.show", ":id"); ?>';
             route = route.replace(':id', val.id);
 
             var vendorroute = '<?php echo route("admin.vendors.view", ":id");?>';
-            vendorroute = vendorroute.replace(':id', val.vendorID);
+            vendorroute = vendorroute.replace(':id', val.vendor_id);
 
-            html = html + '<tr>';
+            html += '<tr>';
+            html += '<td data-url="' + route + '" class="redirecttopage">' + val.id + '</td>';
 
-            html = html + '<td data-url="' + route + '" class="redirecttopage">' + val.id + '</td>';
+            var quantity = 0;
+            if (val.products && Array.isArray(val.products)) {
+                val.products.forEach((product) => {
+                    quantity += parseInt(product.quantity || 0);
+                });
+            }
 
-            var price = 0; 
-            
-                var quan = 0;
-            val.products.forEach((product)=> {
+            html += '<td data-url="' + vendorroute + '" class="redirecttopage">' + (val.vendor ? val.vendor.title : '') + '</td>';
 
+            var price = buildHTMLProductstotal(val);
 
-
-                if(product.quantity != 0){
-                    
-
-                    quan = quan + product.quantity;
-            
-                }
-            })
-
-            html = html + '<td data-url="' + vendorroute + '" class="redirecttopage">' + val.vendor.title + '</td>';
-
-            var price =  buildHTMLProductstotal(val);
-
-            html = html + '<td data-url="' + route + '" class="redirecttopage">' + price + '</td>';
-            html = html + '<td data-url="' + route + '" class="redirecttopage"><i class="fa fa-shopping-cart"></i> ' + quan + '</td>';
-            html = html + '</a></tr>';
-            count++;
+            html += '<td data-url="' + route + '" class="redirecttopage">' + price + '</td>';
+            html += '<td data-url="' + route + '" class="redirecttopage"><i class="fa fa-shopping-cart"></i> ' + quantity + '</td>';
+            html += '</tr>';
         });
         return html;
     }
-
 
     function renderChart(chartNode, data, labels) {
         var ticksStyle = {
@@ -852,119 +634,48 @@
     });
 
 
-     function buildHTMLProductstotal(snapshotsProducts) {
-
-        var adminCommission = snapshotsProducts.adminCommission;
-        var discount = snapshotsProducts.discount;
-        var couponCode = snapshotsProducts.couponCode;
-        var extras = snapshotsProducts.extras;
-        var extras_price = snapshotsProducts.extras_price;
-        var rejectedByDrivers = snapshotsProducts.rejectedByDrivers;
-        var takeAway = snapshotsProducts.takeAway;
-        var tip_amount = snapshotsProducts.tip_amount;
-        var status = snapshotsProducts.status;
-        var products = snapshotsProducts.products;
-        var deliveryCharge = snapshotsProducts.deliveryCharge;
-        var totalProductPrice = 0;
-        var total_price = 0;
-        var specialDiscount = snapshotsProducts.specialDiscount;
-
+     function buildHTMLProductstotal(order) {
         var intRegex = /^\d+$/;
         var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
-        if (products) {
+        var adminCommission = order.admin_commission || 0;
+        var discount = order.discount || 0;
+        var deliveryCharge = order.delivery_charge || 0;
+        var tipAmount = order.tip_amount || 0;
+        var products = order.products || [];
+        var taxAmount = order.tax_amount || 0;
 
+        var totalProductPrice = 0;
+        var total_price = 0;
+
+        if (products && Array.isArray(products)) {
             products.forEach((product) => {
-
-                var val = product;
-                if (val.price) {
-                    price_item = parseFloat(val.price).toFixed(2);
-
-                    extras_price_item = 0;
-                    if (val.extras_price && !isNaN(extras_price_item) && !isNaN(val.quantity)) {
-                        extras_price_item = (parseFloat(val.extras_price) * parseInt(val.quantity)).toFixed(2);
-                    }
-                    if (!isNaN(price_item) && !isNaN(val.quantity)) {
-                        totalProductPrice = parseFloat(price_item) * parseInt(val.quantity);
-                    }
-                    var extras_price = 0;
-                    if (parseFloat(extras_price_item) != NaN && val.extras_price != undefined) {
-                        extras_price = extras_price_item;
-                    }
-                    totalProductPrice = parseFloat(extras_price) + parseFloat(totalProductPrice);
-                    totalProductPrice = parseFloat(totalProductPrice).toFixed(2);
-                    if (!isNaN(totalProductPrice)) {
-                        total_price += parseFloat(totalProductPrice);
-                    }
-
-
-                }
-
+                var productPrice = parseFloat(product.price || 0) * parseInt(product.quantity || 0);
+                var extrasPrice = parseFloat(product.extras_price || 0) * parseInt(product.quantity || 0);
+                totalProductPrice = productPrice + extrasPrice;
+                total_price += totalProductPrice;
             });
         }
 
         if (intRegex.test(discount) || floatRegex.test(discount)) {
-
             discount = parseFloat(discount).toFixed(decimal_degits);
             total_price -= parseFloat(discount);
-
-            if (currencyAtRight) {
-                discount_val = discount + "" + currentCurrency;
-            } else {
-                discount_val = currentCurrency + "" + discount;
-            }
-
-        }
-        var special_discount = 0;
-        if (specialDiscount != undefined) {
-            special_discount = parseFloat(specialDiscount.special_discount).toFixed(2);
-
-            total_price = total_price - special_discount;
-        }
-        var total_item_price = total_price;
-        var tax = 0;
-        taxlabel = '';
-        taxlabeltype = '';
-
-        if (snapshotsProducts.hasOwnProperty('taxSetting')) {
-            var total_tax_amount = 0;
-            for (var i = 0; i < snapshotsProducts.taxSetting.length; i++) {
-                var data = snapshotsProducts.taxSetting[i];
-
-                if (data.type && data.tax) {
-                    if (data.type == "percentage") {
-                        tax = (data.tax * total_price) / 100;
-                        taxlabeltype = "%";
-                    } else {
-                        tax = data.tax;
-                        taxlabeltype = "fix";
-                    }
-                    taxlabel = data.title;
-                }
-                total_tax_amount += parseFloat(tax);
-            }
-            total_price = parseFloat(total_price) + parseFloat(total_tax_amount);
         }
 
+        if (!isNaN(taxAmount)) {
+            total_price += parseFloat(taxAmount);
+        }
 
-        if ((intRegex.test(deliveryCharge) || floatRegex.test(deliveryCharge)) && !isNaN(deliveryCharge)) {
-
+        if (intRegex.test(deliveryCharge) || floatRegex.test(deliveryCharge)) {
             deliveryCharge = parseFloat(deliveryCharge).toFixed(decimal_degits);
             total_price += parseFloat(deliveryCharge);
-
-            if (currencyAtRight) {
-                deliveryCharge_val = deliveryCharge + "" + currentCurrency;
-            } else {
-                deliveryCharge_val = currentCurrency + "" + deliveryCharge;
-            }  
         }
 
-        if (intRegex.test(tip_amount) || floatRegex.test(tip_amount) && !isNaN(tip_amount)) {
-
-            tip_amount = parseFloat(tip_amount).toFixed(decimal_degits);
-            total_price += parseFloat(tip_amount);
-            total_price = parseFloat(total_price).toFixed(decimal_degits);
+        if (intRegex.test(tipAmount) || floatRegex.test(tipAmount)) {
+            tipAmount = parseFloat(tipAmount).toFixed(decimal_degits);
+            total_price += parseFloat(tipAmount);
         }
+
         if (currencyAtRight) {
             var total_price_val = parseFloat(total_price).toFixed(decimal_degits) + "" + currentCurrency;
         } else {
@@ -974,7 +685,6 @@
     }
 
     function setVisitors() {
-
         const data = {
             labels: [
                 "{{trans('lang.dashboard_total_stores')}}",
@@ -1004,7 +714,6 @@
     }
 
     function setCommision() {
-
         const data = {
             labels: [
                 "{{trans('lang.dashboard_total_earnings')}}",
@@ -1034,6 +743,18 @@
                 }
             }
         })
+    }
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length);
+            }
+        }
+        return '';
     }
 
 </script>

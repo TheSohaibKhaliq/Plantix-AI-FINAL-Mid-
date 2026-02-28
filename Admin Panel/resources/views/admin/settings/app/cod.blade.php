@@ -90,294 +90,78 @@
 </div>
 @endsection
 
-
-
-@endsection
-
-
-
 @section('scripts')
+<script>
+    $(document).ready(function () {
+        jQuery("#data-table_processing").show();
 
+        // Fetch payment settings from backend API
+        $.ajax({
+            url: '{{ route("api.admin.settings.payment-methods") }}',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                if (response && response.data) {
+                    var paymentSettings = response.data;
 
-
-    <script>
-
-        var database = firebase.firestore();
-
-        var stripeData = database.collection('settings').doc('stripeSettings');
-
-        var ref = database.collection('settings').doc('CODSettings');
-
-        var razorpayData = database.collection('settings').doc('razorpaySettings');
-
-        var paypalData = database.collection('settings').doc('paypalSettings');
-
-        var paytmData = database.collection('settings').doc('PaytmSettings');
-
-        var walletData = database.collection('settings').doc('walletSettings');
-
-        var payFastSettings = database.collection('settings').doc('payFastSettings');
-
-        var payStackSettings = database.collection('settings').doc('payStack');
-
-        var flutterWaveSettings = database.collection('settings').doc('flutterWave');
-
-        var MercadopagoSettings = database.collection('settings').doc('MercadoPago');
-
-        var xenditSettings = database.collection('settings').doc('xendit_settings');
-        
-        var orangePaySettings = database.collection('settings').doc('orange_money_settings');
-
-        var midtransSettings = database.collection('settings').doc('midtrans_settings');
-
-
-        $(document).ready(function () {
-
-            jQuery("#data-table_processing").show();
-
-            ref.get().then(async function (snapshots) {
-
-                var cod = snapshots.data();
-
-
-
-                if (cod == undefined) {
-
-                    database.collection('settings').doc('CODSettings').set({}).then(function (result) {
-
-                        location.reload();
-
-                    });
-
-                }
-
-
-
-                try {
-
-                    if (cod.isEnabled) {
-
+                    // Update COD status
+                    if (paymentSettings.cod && paymentSettings.cod.is_enabled) {
                         $(".enable_cod").prop('checked', true);
-
                         jQuery(".cod_active_label span").addClass('badge-success');
-
                         jQuery(".cod_active_label span").text('Active');
-
                     }
 
-
-
-                    stripeData.get().then(async function (stripeSnapshots) {
-
-                        var stripe = stripeSnapshots.data();
-
-                        if (stripe.isEnabled) {
-
-                            jQuery(".stripe_active_label span").addClass('badge-success');
-
-                            jQuery(".stripe_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-                    razorpayData.get().then(async function (razorpaySnapshots) {
-
-                        var razorPay = razorpaySnapshots.data();
-
-                        if (razorPay.isEnabled) {
-
-                            jQuery(".razorpay_active_label span").addClass('badge-success');
-
-                            jQuery(".razorpay_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-                    paypalData.get().then(async function (paypalSnapshots) {
-
-                        var paypal = paypalSnapshots.data();
-
-                        if (paypal.isEnabled) {
-
-                            jQuery(".paypal_active_label span").addClass('badge-success');
-
-                            jQuery(".paypal_active_label span").text('Active');
-
-                        }
-
-                    })
-
-                    paytmData.get().then(async function (codSnapshots) {
-
-                        var paytm = codSnapshots.data();
-
-                        if (paytm.isEnabled) {
-
-                            jQuery(".paytm_active_label span").addClass('badge-success');
-
-                            jQuery(".paytm_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-                    walletData.get().then(async function (walletSnapshots) {
-
-                        var wallet = walletSnapshots.data();
-
-                        if (wallet.isEnabled) {
-
-                            jQuery(".wallet_active_label span").addClass('badge-success');
-
-                            jQuery(".wallet_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-                    payFastSettings.get().then(async function (payFastSnapshots) {
-
-                        var payFast = payFastSnapshots.data();
-
-                        if (payFast.isEnable) {
-
-                            jQuery(".payfast_active_label span").addClass('badge-success');
-
-                            jQuery(".payfast_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-                    payStackSettings.get().then(async function (payStackSnapshots) {
-
-                        var payStack = payStackSnapshots.data();
-
-                        if (payStack.isEnable) {
-
-                            jQuery(".paystack_active_label span").addClass('badge-success');
-
-                            jQuery(".paystack_active_label span").text('Active');
-
-                        }
-
-                    })
-
-
-
-
-
-                    flutterWaveSettings.get().then(async function (flutterWaveSnapshots) {
-
-                        var flutterWave = flutterWaveSnapshots.data();
-
-                        if (flutterWave.isEnable) {
-
-                            jQuery(".flutterWave_active_label span").addClass('badge-success');
-
-                            jQuery(".flutterWave_active_label span").text('Active');
-
-                        }
-
-                    })
-
-                    MercadopagoSettings.get().then(async function (mercadopagoSnapshots) {
-
-                        var mercadopago = mercadopagoSnapshots.data();
-
-                        if (mercadopago.isEnabled) {
-
-                            jQuery(".mercadopago_active_label span").addClass('badge-success');
-
-                            jQuery(".mercadopago_active_label span").text('Active');
-
-                        }
-
-
-
-                    })
-
-                    xenditSettings.get().then(async function (xenditSnapshots) {
-                        var xendit = xenditSnapshots.data();
-                        if (xendit.enable) {
-                            jQuery(".xendit_active_label span").addClass('badge-success');
-                            jQuery(".xendit_active_label span").text('Active');
-                        }
-                    })
-
-                    orangePaySettings.get().then(async function (orangePaySnapshots) {
-                        var orangePay = orangePaySnapshots.data();
-                        if (orangePay.enable) {
-                            jQuery(".orangepay_active_label span").addClass('badge-success');
-                            jQuery(".orangepay_active_label span").text('Active');
-                        }
-                    })
-
-                    midtransSettings.get().then(async function (midtransSnapshots) {
-                        var midtrans = midtransSnapshots.data();
-                        if (midtrans.enable) {
-                            jQuery(".midtrans_active_label span").addClass('badge-success');
-                            jQuery(".midtrans_active_label span").text('Active');
-                        }
-                    })
-                    
-                } catch (error) {
-
-
-
+                    // Update Stripe status
+                    if (paymentSettings.stripe && paymentSettings.stripe.is_enabled) {
+                        jQuery(".stripe_active_label span").addClass('badge-success');
+                        jQuery(".stripe_active_label span").text('Active');
+                    }
                 }
-
-
-
                 jQuery("#data-table_processing").hide();
+            },
+            error: function(xhr) {
+                jQuery("#data-table_processing").hide();
+                console.log('Error loading payment settings', xhr);
+            }
+        });
 
+        $(".edit-form-btn").click(function () {
+            var isCODEnabled = $(".enable_cod").is(":checked");
+            jQuery("#data-table_processing").show();
 
+            $.ajax({
+                url: '{{ route("api.admin.settings.update") }}',
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie('token'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    'cod_enabled': isCODEnabled
+                },
+                success: function(result) {
+                    window.location.href = '{{ url("settings/payment/cod") }}';
+                },
+                error: function(xhr) {
+                    jQuery("#data-table_processing").hide();
+                    console.log('Error updating settings', xhr);
+                    alert('Failed to save settings. Please try again.');
+                }
+            });
+        });
+    });
 
-            })
-
-
-
-            $(".edit-form-btn").click(function () {
-
-
-
-                var isCODEnabled = $(".enable_cod").is(":checked");
-
-                database.collection('settings').doc("CODSettings").update({'isEnabled': isCODEnabled}).then(function (result) {
-
-
-
-                    window.location.href = '{{ url("settings/payment/cod")}}';
-
-
-
-                });
-
-
-
-            })
-
-
-
-        })
-
-
-
-    </script>
-
-
-
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+</script>
 @endsection
-

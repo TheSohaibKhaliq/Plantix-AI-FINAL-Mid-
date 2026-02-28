@@ -122,10 +122,8 @@
 
 @section('scripts')
 <script>
-	var database = firebase.firestore();
-	var createdAt = firebase.firestore.FieldValue.serverTimestamp();
-	var photo = "";
-	var fileName=''; 
+	var photo = null;
+	var photoFile = null;
 
 	$(".save-form-btn").click(function () {
 		var userFirstName = $(".user_first_name").val();
@@ -134,7 +132,6 @@
 		var password = $(".user_password").val();
 		var userPhone = $(".user_phone").val();
 		var active = $(".user_active").is(":checked");
-		var id = "<?php echo uniqid(); ?>";
 
 		$(".error_top").hide();
 
@@ -155,70 +152,58 @@
 			window.scrollTo(0, 0);
 		} else {
             jQuery("#data-table_processing").show();
-			firebase.auth().createUserWithEmailAndPassword(email, password)
-				.then(function (firebaseUser) {
-					var user_id = firebaseUser.user.uid;
-                    storeImageData().then(IMG => {
-                        database.collection('users').doc(user_id).set({
-                            'appIdentifier':"web",
-                            'firstName': userFirstName,
-                            'lastName': userLastName, 
-                            'email': email,
-                            'phoneNumber': userPhone, 
-                            'profilePictureURL': IMG,
-                            'role': 'customer', 
-                            'shippingAddress': '',
-                            'active': active, 
-                            'id': user_id, 
-                            'createdAt': createdAt,
-                            'wallet_amount': 0
-                        }).then(function (result) {
-                            jQuery("#data-table_processing").hide();
-                            window.location.href = '{{ route("admin.users")}}';
-                        });           
-                    }).catch(function (error) {
-                        jQuery("#data-table_processing").hide();
-                        $(".error_top").show().html("<p>" + error + "</p>");
-                    })
-		        }).catch(function (error) {
+
+			// Prepare form data for file upload
+			var formData = new FormData();
+			formData.append('first_name', userFirstName);
+			formData.append('last_name', userLastName);
+			formData.append('email', email);
+			formData.append('password', password);
+			formData.append('phone_number', userPhone);
+			formData.append('is_active', active ? 1 : 0);
+			if (photoFile) {
+				formData.append('profile_picture', photoFile);
+			}
+
+			// Create user via backend API
+			$.ajax({
+				url: '{{ route("api.admin.users.store") }}',
+				method: 'POST',
+				headers: {
+					'Authorization': 'Bearer ' + getCookie('token'),
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				processData: false,
+				contentType: false,
+				data: formData,
+				success: function(response) {
 					jQuery("#data-table_processing").hide();
-					$(".error_top").show().html("<p>" + error + "</p>");
-				});
+					window.location.href = '{{ route("admin.users")}}';
+				},
+				error: function(xhr) {
+					jQuery("#data-table_processing").hide();
+					var message = 'Error creating user';
+					if (xhr.responseJSON && xhr.responseJSON.message) {
+						message = xhr.responseJSON.message;
+					}
+					$(".error_top").show().html("<p>" + message + "</p>");
+				}
+			});
 		}
 	})
 
-	var storageRef = firebase.storage().ref('images');
-    async function storeImageData() {
-        var newPhoto = '';
-        try {
-			if(photo!=""){
-                photo = photo.replace(/^data:image\/[a-z]+;base64,/, "")
-                var uploadTask = await storageRef.child(fileName).putString(photo, 'base64', {contentType: 'image/jpg'});
-                var downloadURL = await uploadTask.ref.getDownloadURL();
-                newPhoto = downloadURL;
-                photo = downloadURL;
-			}
-        } catch (error) {
-            console.log("ERR ===", error);
-        }
-        return newPhoto;
-    }
-
 	function handleFileSelect(evt) {
 		var f = evt.target.files[0];
+		if (!f) return;
+
 		var reader = new FileReader();
+		photoFile = f;
 
 		reader.onload = (function (theFile) {
 			return function (e) {
 				var filePayload = e.target.result;
-				var val = f.name;
-				var ext = val.split('.')[1];
-				var filename = (f.name).replace(/C:\\fakepath\\/i, '')
-				var timestamp = Number(new Date());
-				var finalFilename = filename.split('.')[0] + "_" + timestamp + '.' + ext;
-				photo = filePayload;
-                fileName = finalFilename;
-				$(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + photo + '" alt="image">');
+				$(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + filePayload + '" alt="image">');
+				$("#uploding_image").text('File selected: ' + f.name);
 			};
 		})(f);
 		reader.readAsDataURL(f);
@@ -242,6 +227,18 @@
 		    document.getElementById(msg).innerHTML="";
 		    return true;
 		}
+	}
+
+	function getCookie(name) {
+		const nameEQ = name + "=";
+		const cookies = document.cookie.split(';');
+		for (let cookie of cookies) {
+			cookie = cookie.trim();
+			if (cookie.indexOf(nameEQ) === 0) {
+				return cookie.substring(nameEQ.length);
+			}
+		}
+		return '';
 	}
 </script>
 @endsection

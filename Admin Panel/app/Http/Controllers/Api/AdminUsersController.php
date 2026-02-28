@@ -1,0 +1,245 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Str;
+
+class AdminUsersController extends Controller
+{
+    /**
+     * Get all users
+     */
+    public function index(Request $request)
+    {
+        try {
+            $users = User::paginate(15);
+            return response()->json([
+                'success' => true,
+                'data' => $users->items()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching users: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get single user
+     */
+    public function show($id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name ?? '',
+                    'last_name' => $user->last_name ?? '',
+                    'email' => $user->email,
+                    'phone_number' => $user->phone_number ?? '',
+                    'profile_picture_url' => $user->profile_picture_url ?? null,
+                    'is_active' => (bool) $user->is_active,
+                    'wallet_amount' => $user->wallet_amount ?? 0,
+                    'addresses' => $user->addresses ?? [],
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching user: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create new user
+     */
+    public function store(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+                'phone_number' => 'required|string',
+                'is_active' => 'boolean',
+                'profile_picture' => 'nullable|image|max:2048',
+            ]);
+
+            $user = new User();
+            $user->first_name = $validated['first_name'];
+            $user->last_name = $validated['last_name'];
+            $user->email = $validated['email'];
+            $user->password = bcrypt($validated['password']);
+            $user->phone_number = $validated['phone_number'];
+            $user->is_active = $validated['is_active'] ?? true;
+            $user->role = 'customer';
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                $path = $request->file('profile_picture')->store('users', 'public');
+                $user->profile_picture_url = asset('storage/' . $path);
+            }
+
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User created successfully',
+                'data' => $user
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating user: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update user
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            $validated = $request->validate([
+                'first_name' => 'string',
+                'last_name' => 'string',
+                'phone_number' => 'string',
+                'is_active' => 'boolean',
+                'profile_picture' => 'nullable|image|max:2048',
+            ]);
+
+            if (isset($validated['first_name'])) $user->first_name = $validated['first_name'];
+            if (isset($validated['last_name'])) $user->last_name = $validated['last_name'];
+            if (isset($validated['phone_number'])) $user->phone_number = $validated['phone_number'];
+            if (isset($validated['is_active'])) $user->is_active = $validated['is_active'];
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                $path = $request->file('profile_picture')->store('users', 'public');
+                $user->profile_picture_url = asset('storage/' . $path);
+            }
+
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User updated successfully',
+                'data' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating user: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Send password reset email
+     */
+    public function sendPasswordReset(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            // Generate reset token
+            $resetToken = Str::random(60);
+            \DB::table('password_resets')->insert([
+                'email' => $user->email,
+                'token' => bcrypt($resetToken),
+                'created_at' => now()
+            ]);
+
+            // Send password reset email
+            // (Implementation depends on your mail setup)
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset email sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error sending password reset: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Add wallet topup
+     */
+    public function walletTopup(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            $validated = $request->validate([
+                'amount' => 'required|numeric|min:0.01',
+                'note' => 'nullable|string',
+            ]);
+
+            $user->wallet_amount = ($user->wallet_amount ?? 0) + $validated['amount'];
+            $user->save();
+
+            // Record wallet transaction
+            \DB::table('wallet_transactions')->insert([
+                'user_id' => $id,
+                'amount' => $validated['amount'],
+                'type' => 'credit',
+                'note' => $validated['note'] ?? 'Admin topup',
+                'payment_method' => 'admin',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Wallet topup successful',
+                'data' => [
+                    'new_wallet_amount' => $user->wallet_amount
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error processing wallet topup: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+}

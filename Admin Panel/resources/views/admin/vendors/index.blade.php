@@ -108,7 +108,6 @@
 
 @section('scripts')
 <script type="text/javascript">
-    var database = firebase.firestore();
     var type = "{{$type}}";
     var user_permissions = '<?php echo @session("admin_permissions") ?>';
     user_permissions = Object.values(JSON.parse(user_permissions || "[]"));
@@ -122,20 +121,21 @@
         checkDeletePermission = true;
     }
 
-    var ref = database.collection('users').where("role", "==", "vendor").orderBy('createdAt', 'desc');
-    if (type == 'pending') {
-        ref = database.collection('users').where("role", "==", "vendor").where("isDocumentVerify", "==", false).orderBy('createdAt', 'desc');
-    } else if (type == 'approved') {
-        ref = database.collection('users').where("role", "==", "vendor").where("isDocumentVerify", "==", true).orderBy('createdAt', 'desc');
+    var placeholderImage = '{{ asset("images/placeholder.png") }}';
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+        for(let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if(cookie.indexOf(nameEQ) === 0) {
+                return decodeURIComponent(cookie.substring(nameEQ.length));
+            }
+        }
+        return null;
     }
 
-    var placeholderImage = '';
-
     $(document).ready(function () {
-        database.collection('settings').doc('placeHolderImage').get().then(async function (snapshotsimage) {
-            placeholderImage = snapshotsimage.data().image;
-        });
-
         const table = $('#userTable').DataTable({
             pageLength: 10,
             processing: false,
@@ -149,56 +149,49 @@
                 const orderColumnIndex = data.order[0].column;
                 const orderDirection = data.order[0].dir;
                 
-                // Adjusted for redesigned header indexes
                 const orderableColumns = (checkDeletePermission) ? 
-                    ['','','fullName', 'email', 'createdAt','','',''] : 
-                    ['','fullName', 'email', 'createdAt','','',''];
+                    ['','','first_name', 'email', 'created_at','','',''] : 
+                    ['','first_name', 'email', 'created_at','','',''];
                 
                 const orderByField = orderableColumns[orderColumnIndex];
 
-                ref.get().then(async function (querySnapshot) {
-                    if (querySnapshot.empty) {
-                        callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
-                        return;
-                    }
-
-                    let filteredRecords = [];
-                    querySnapshot.forEach(function (doc) {
-                        let childData = doc.data();
-                        childData.id = doc.id;
-                        childData.fullName = (childData.firstName || '') + ' ' + (childData.lastName || '');
-
-                        if (searchValue) {
-                            var date = childData.createdAt ? childData.createdAt.toDate().toDateString() : '';
-                            if (childData.fullName.toLowerCase().includes(searchValue) ||
-                                childData.email.toLowerCase().includes(searchValue) ||
-                                (childData.phoneNumber && childData.phoneNumber.toString().includes(searchValue)) ||
-                                date.toLowerCase().includes(searchValue)) 
-                            {
-                                filteredRecords.push(childData);
-                            }
+                $.ajax({
+                    url: '/api/admin/vendors-list',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('token')
+                    },
+                    data: {
+                        type: type,
+                        search: searchValue,
+                        page: Math.floor(start / length) + 1,
+                        limit: length,
+                        orderBy: orderByField || 'created_at',
+                        orderDir: orderDirection
+                    },
+                    success: function(response) {
+                        if (response.success && response.data) {
+                            let records = [];
+                            response.data.forEach(async function(vendor) {
+                                records.push(await buildHTML(vendor));
+                            });
+                            
+                            setTimeout(() => {
+                                callback({
+                                    draw: data.draw,
+                                    recordsTotal: response.meta.total,
+                                    recordsFiltered: response.meta.total,
+                                    data: records
+                                });
+                            }, 100);
                         } else {
-                            filteredRecords.push(childData);
+                            callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
                         }
-                    });
-
-                    filteredRecords.sort((a, b) => {
-                        let aVal = a[orderByField] || '';
-                        let bVal = b[orderByField] || '';
-                        if (orderByField === 'createdAt') {
-                            aVal = a.createdAt ? a.createdAt.toDate().getTime() : 0;
-                            bVal = b.createdAt ? b.createdAt.toDate().getTime() : 0;
-                        }
-                        return orderDirection === 'asc' ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
-                    });
-
-                    const totalRecords = filteredRecords.length;
-                    const paginatedRecords = filteredRecords.slice(start, start + length);
-                    let records = [];
-
-                    for (const childData of paginatedRecords) { records.push(await buildHTML(childData)); }
-
-                    callback({ draw: data.draw, recordsTotal: totalRecords, recordsFiltered: totalRecords, data: records });
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching vendors', xhr);
+                        callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
+                    }
                 });
             },
             order: (checkDeletePermission) ? [[2, 'desc']] : [[1, 'desc']],
@@ -218,13 +211,42 @@
         $(document).on("click", ".form-switch input", function (e) {
             var ischeck = $(this).is(':checked');
             var id = this.id;
-            database.collection('users').doc(id).update({ 'active': ischeck, 'isActive': ischeck });
+            $.ajax({
+                url: '/api/admin/vendors/' + id + '/status',
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie('token'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { is_active: ischeck },
+                success: function(response) {
+                    console.log('Vendor status updated');
+                },
+                error: function(xhr) {
+                    console.error('Error updating vendor status', xhr);
+                    alert('Failed to update vendor status');
+                }
+            });
         });
 
         $(document).on("click", ".delete-btn", function (e) {
             if (confirm("CRITICAL: Decommission this expert? This will revoke all platform access and remove their entry from the ledger.")) {
                 var id = $(this).data('id');
-                database.collection('users').doc(id).delete().then(() => window.location.reload());
+                $.ajax({
+                    url: '/api/admin/vendors/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error('Error deleting vendor', xhr);
+                        alert('Failed to delete vendor');
+                    }
+                });
             }
         });
 
@@ -232,8 +254,19 @@
             if ($('#userTable .is_open:checked').length) {
                 if (confirm("CRITICAL: Bulk decommission selected partners? This action is non-reversible.")) {
                     let promises = [];
-                    $('#userTable .is_open:checked').each(function () { promises.push(database.collection('users').doc($(this).attr('dataId')).delete()); });
-                    Promise.all(promises).then(() => window.location.reload());
+                    $('#userTable .is_open:checked').each(function () { 
+                        promises.push(
+                            $.ajax({
+                                url: '/api/admin/vendors/' + $(this).attr('dataId'),
+                                method: 'DELETE',
+                                headers: {
+                                    'Authorization': 'Bearer ' + getCookie('token'),
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            })
+                        );
+                    });
+                    Promise.all(promises).then(() => location.reload());
                 }
             } else { alert("Select at least one partner for bulk decommissioning."); }
         });
@@ -249,22 +282,22 @@
         }
 
         // Expert Profile
-        var profilePic = val.profilePictureURL || placeholderImage;
+        var profilePic = val.profile_picture_url || placeholderImage;
         html.push('<td style="padding: 24px 32px;"><div style="display:flex; align-items:center; gap:16px;">' +
             '<div style="position:relative;"><img src="' + profilePic + '" onerror="this.src=\'' + placeholderImage + '\'" style="width:52px; height:52px; border-radius:14px; object-fit:cover; border:2px solid var(--agri-bg);">' +
-            (val.isDocumentVerify ? '<div style="position:absolute; bottom:-4px; right:-4px; background:var(--agri-primary); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; border:2px solid white;"><i class="fas fa-check"></i></div>' : '') +
+            (val.is_document_verified ? '<div style="position:absolute; bottom:-4px; right:-4px; background:var(--agri-primary); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; border:2px solid white;"><i class="fas fa-check"></i></div>' : '') +
             '</div>' +
-            '<div><div style="font-weight:800; color:var(--agri-text-heading); font-size:15px;">' + (val.firstName || '') + ' ' + (val.lastName || '') + '</div>' +
+            '<div><div style="font-weight:800; color:var(--agri-text-heading); font-size:15px;">' + (val.first_name || '') + ' ' + (val.last_name || '') + '</div>' +
             '<div style="font-size:10px; font-weight:800; color:var(--agri-primary); text-transform:uppercase;">' + (val.role || 'Partner') + ' NODE</div></div></div></td>');
 
         // Contact Details
         html.push('<td style="padding: 24px 32px;"><div style="font-size:13px; color:var(--agri-text-heading); font-weight:700;">' + (val.email || '—') + '</div>' +
-            '<div style="font-size:12px; color:var(--agri-text-muted); font-weight:600; margin-top:2px;"><i class="fas fa-phone-alt me-2" style="font-size:10px;"></i>' + (val.phoneNumber || 'N/A') + '</div></td>');
+            '<div style="font-size:12px; color:var(--agri-text-muted); font-weight:600; margin-top:2px;"><i class="fas fa-phone-alt me-2" style="font-size:10px;"></i>' + (val.phone_number || 'N/A') + '</div></td>');
 
         // Joined Date
         var dateStr = '—';
-        if (val.createdAt) {
-            var d = val.createdAt.toDate();
+        if (val.created_at) {
+            var d = new Date(val.created_at);
             dateStr = '<div style="font-weight:700; font-size:13px; color:var(--agri-text-heading);">' + d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) + '</div>' +
                       '<div style="font-size:11px; color:var(--agri-text-muted); font-weight:600;">' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + '</div>';
         }
@@ -272,7 +305,7 @@
 
         // Verification Audit
         var docUrl = "{{route('admin.vendors.document', ':id')}}".replace(':id', id);
-        var auditStatus = val.isDocumentVerify ? 
+        var auditStatus = val.is_document_verified ? 
             '<span style="background:var(--agri-primary-light); color:var(--agri-primary); padding:6px 16px; border-radius:12px; font-size:10px; font-weight:900;">AUDIT PASSED</span>' :
             '<span style="background:#FFFBEB; color:#B45309; padding:6px 16px; border-radius:12px; font-size:10px; font-weight:900;">PENDING AUDIT</span>';
 
@@ -281,14 +314,14 @@
             '<a href="' + docUrl + '" style="font-size:11px; font-weight:800; color:var(--agri-primary); text-decoration:none; text-transform:uppercase; letter-spacing:0.5px;">Review Credentials <i class="fas fa-arrow-right ms-1"></i></a></td>');
 
         // Operational Status
-        var statusBadge = val.active ? 
+        var statusBadge = val.is_active ? 
             '<span style="background:var(--agri-primary-light); color:var(--agri-primary); padding:2px 10px; border-radius:100px; font-size:10px; font-weight:800; border:1px solid var(--agri-primary)40;">OPERATIONAL</span>' :
             '<span style="background:#F3F4F6; color:#6B7280; padding:2px 10px; border-radius:100px; font-size:10px; font-weight:800; border:1px solid #D1D5DB;">SUSPENDED</span>';
         
         html.push('<td style="padding: 24px 32px;" class="text-center">' +
             '<div style="display:flex; flex-direction:column; align-items:center; gap:8px;">' +
             statusBadge +
-            '<div class="form-check form-switch p-0 m-0"><input type="checkbox" class="form-check-input" ' + (val.active ? 'checked' : '') + ' id="' + id + '" style="width:40px; height:20px; cursor:pointer; margin:0;"></div>' +
+            '<div class="form-check form-switch p-0 m-0"><input type="checkbox" class="form-check-input" ' + (val.is_active ? 'checked' : '') + ' id="' + id + '" style="width:40px; height:20px; cursor:pointer; margin:0;"></div>' +
             '</div></td>');
 
         // Actions

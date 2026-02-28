@@ -238,33 +238,33 @@
 </section>
 
 <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-<script src="https://unpkg.com/geofirestore/dist/geofirestore.js"></script>
-<script src="https://cdn.firebase.com/libs/geofire/5.0.1/geofire.min.js"></script>
 <script src="{{ asset('js/crypto-js.js') }}"></script>
 <script src="{{ asset('js/jquery.cookie.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.js') }}"></script>
 
 <script type="text/javascript">
-
-    var database = firebase.firestore();
-    var ref = database.collection('settings').doc("globalSettings");
+    
     $(document).ready(function () {
-        ref.get().then(async function (snapshots) {
-            var globalSettings = snapshots.data();
-            setCookie('application_name', globalSettings.applicationName, 365);
-            setCookie('meta_title', globalSettings.meta_title, 365);
-            setCookie('favicon', globalSettings.favicon, 365);
-            admin_panel_color = globalSettings.admin_panel_color;
-            setCookie('admin_panel_color', admin_panel_color, 365);
-            $('.login-register').css({'background-color': admin_panel_color});
-            document.title = globalSettings.meta_title;
-            var favicon = '<?php echo @$_COOKIE['favicon'] ?>';
-        })
+        // Fetch global settings from backend API
+        $.ajax({
+            url: '{{ route("api.admin.settings.global") }}',
+            method: 'GET',
+            success: function(response) {
+                if (response && response.data) {
+                    var globalSettings = response.data;
+                    setCookie('application_name', globalSettings.application_name, 365);
+                    setCookie('meta_title', globalSettings.meta_title, 365);
+                    setCookie('favicon', globalSettings.favicon, 365);
+                    var admin_panel_color = globalSettings.admin_panel_color || '#2EC7D9';
+                    setCookie('admin_panel_color', admin_panel_color, 365);
+                    $('.login-register').css({'background-color': admin_panel_color});
+                    document.title = globalSettings.meta_title || 'Login';
+                }
+            },
+            error: function(err) {
+                console.log('Error loading global settings', err);
+            }
+        });
     });
 
     function setCookie(cname, cvalue, exdays) {

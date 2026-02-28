@@ -162,35 +162,46 @@
 @section('scripts')
 <script>
     var id = "<?php echo $id; ?>";
-    var database = firebase.firestore();
-    var ref = database.collection('users').where("id", "==", id);
     var currentCurrency = '';
     var currencyAtRight = false;
     var decimal_degits = 0;
-    var photo = "";
-    var storageRef = firebase.storage().ref('images');
-    var storage = firebase.storage();
-    var fileName = "";
-    var userImageFile = '';
+    var photoFile = null;
+    var currentImageUrl = '';
     var placeholderImage = '';
 
-    database.collection('settings').doc('placeHolderImage').get().then(async function(snapshotsimage) {
-        placeholderImage = snapshotsimage.data().image;
-    });
-
-    database.collection('currencies').where('isActive', '==', true).get().then(async function(snapshots) {
-        var currencyData = snapshots.docs[0].data();
-        currentCurrency = currencyData.symbol;
-        currencyAtRight = currencyData.symbolAtRight;
-        decimal_degits = currencyData.decimal_degits || 0;
+    // Fetch currency settings from API
+    $.ajax({
+        url: '{{ route("api.admin.settings.currency") }}',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + getCookie('token')
+        },
+        success: function(response) {
+            if (response && response.data) {
+                currentCurrency = response.data.symbol;
+                currencyAtRight = response.data.symbolAtRight;
+                decimal_degits = response.data.decimal_degits || 0;
+            }
+        }
     });
 
     $("#send_mail").click(function() {
         if ($("#reset_password").is(":checked")) {
             var email = $(".user_email").val();
-            firebase.auth().sendPasswordResetEmail(email).then(() => {
-                alert('{{trans("lang.mail_sent")}}');
-            }).catch((error) => { console.log('Error:', error); });
+            $.ajax({
+                url: '{{ route("api.admin.users.send-password-reset", ":id") }}'.replace(':id', id),
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie('token'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert('{{trans("lang.mail_sent")}}');
+                },
+                error: function(xhr) {
+                    alert('{{trans("lang.mail_send_error")}}');
+                }
+            });
         } else {
             alert('{{trans("lang.mail_send_error")}}');
         }
@@ -198,36 +209,59 @@
 
     $(document).ready(function() {
         jQuery("#data-table_processing").show();
-        ref.get().then(async function(snapshots) {
-            var user = snapshots.docs[0].data();
-            $(".user_first_name").val(user.firstName);
-            $(".user_last_name").val(user.lastName);
-            $(".user_email").val(user.email || "");
-            $(".user_phone").val(user.phoneNumber || "");
+        
+        // Fetch user data
+        $.ajax({
+            url: '{{ route("api.admin.users.show", ":id") }}'.replace(':id', id),
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('token')
+            },
+            success: function(response) {
+                if (response && response.data) {
+                    var user = response.data;
+                    $(".user_first_name").val(user.first_name || '');
+                    $(".user_last_name").val(user.last_name || '');
+                    $(".user_email").val(user.email || '');
+                    $(".user_phone").val(user.phone_number || '');
 
-            if (user.profilePictureURL != '' && user.profilePictureURL != null) {
-                photo = user.profilePictureURL;
-                userImageFile = user.profilePictureURL;
-                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + photo + '" alt="image">');
-            } else {
-                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + placeholderImage + '" alt="image">');
+                    if (user.profile_picture_url && user.profile_picture_url != '') {
+                        currentImageUrl = user.profile_picture_url;
+                        $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + user.profile_picture_url + '" alt="image">');
+                    } else {
+                        $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + placeholderImage + '" alt="image">');
+                    }
+
+                    if (user.is_active) $(".user_active").prop('checked', true);
+
+                    var wallet_amount = user.wallet_amount || 0;
+                    if (currencyAtRight) {
+                        wallet_amount = parseFloat(wallet_amount).toFixed(decimal_degits) + currentCurrency;
+                    } else {
+                        wallet_amount = currentCurrency + parseFloat(wallet_amount).toFixed(decimal_degits);
+                    }
+                    $("#wallet_amount").text(wallet_amount);
+
+                    // Fetch user's orders count
+                    $.ajax({
+                        url: '{{ route("api.admin.dashboard.user-orders") }}?user_id=' + id,
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + getCookie('token')
+                        },
+                        success: function(orderResponse) {
+                            if (orderResponse && orderResponse.data) {
+                                $("#total_orders").text(orderResponse.data.count || 0);
+                            }
+                        }
+                    });
+                }
+                jQuery("#data-table_processing").hide();
+            },
+            error: function(xhr) {
+                jQuery("#data-table_processing").hide();
+                $(".error_top").show().html("<p>Error loading user data</p>");
             }
-
-            if (user.active) $(".user_active").prop('checked', true);
-
-            var wallet_amount = user.wallet_amount || 0;
-            if (currencyAtRight) {
-                wallet_amount = parseFloat(wallet_amount).toFixed(decimal_degits) + currentCurrency;
-            } else {
-                wallet_amount = currentCurrency + parseFloat(wallet_amount).toFixed(decimal_degits);
-            }
-            $("#wallet_amount").text(wallet_amount);
-
-            database.collection('restaurant_orders').where("authorID", "==", id).get().then(async function(snapshotsorder) {
-                $("#total_orders").text(snapshotsorder.size);
-            });
-
-            jQuery("#data-table_processing").hide();
         });
 
         $(".edit-form-btn").click(function() {
@@ -244,55 +278,56 @@
                 window.scrollTo(0, 0);
             } else {
                 jQuery("#data-table_processing").show();
-                storeImageData().then(IMG => {
-                    database.collection('users').doc(id).update({
-                        'firstName': userFirstName,
-                        'lastName': userLastName,
-                        'phoneNumber': userPhone,
-                        'active': active,
-                        'profilePictureURL': IMG
-                    }).then(() => {
+
+                // Prepare form data
+                var formData = new FormData();
+                formData.append('first_name', userFirstName);
+                formData.append('last_name', userLastName);
+                formData.append('phone_number', userPhone);
+                formData.append('is_active', active ? 1 : 0);
+                if (photoFile) {
+                    formData.append('profile_picture', photoFile);
+                }
+
+                // Update user via API
+                $.ajax({
+                    url: '{{ route("api.admin.users.update", ":id") }}'.replace(':id', id),
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(response) {
+                        jQuery("#data-table_processing").hide();
                         window.location.href = '{{ route("admin.users")}}';
-                    });
-                }).catch(err => {
-                    jQuery("#data-table_processing").hide();
-                    $(".error_top").show().html("<p>" + err + "</p>");
+                    },
+                    error: function(xhr) {
+                        jQuery("#data-table_processing").hide();
+                        var message = 'Error updating user';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
+                        }
+                        $(".error_top").show().html("<p>" + message + "</p>");
+                    }
                 });
             }
         });
     });
 
-    async function storeImageData() {
-        var newPhoto = photo;
-        try {
-            if (photo != userImageFile) {
-                if (userImageFile != "" && userImageFile != null) {
-                    var userOldImageUrlRef = await storage.refFromURL(userImageFile);
-                    if (userOldImageUrlRef.bucket == "<?php echo env('FIREBASE_STORAGE_BUCKET'); ?>") {
-                        await userOldImageUrlRef.delete();
-                    }
-                }
-                var base64Photo = photo.replace(/^data:image\/[a-z]+;base64,/, "");
-                var uploadTask = await storageRef.child(fileName).putString(base64Photo, 'base64', {contentType: 'image/jpg'});
-                newPhoto = await uploadTask.ref.getDownloadURL();
-            }
-        } catch (error) { console.log("ERR:", error); }
-        return newPhoto;
-    }
-
     function handleFileSelect(evt) {
         var f = evt.target.files[0];
+        if (!f) return;
+
         var reader = new FileReader();
+        photoFile = f;
+
         reader.onload = (function(theFile) {
             return function(e) {
                 var filePayload = e.target.result;
-                var val = f.name;
-                var ext = val.split('.')[1];
-                var timestamp = Number(new Date());
-                var finalFilename = val.split('.')[0] + "_" + timestamp + '.' + ext;
-                photo = filePayload;
-                fileName = finalFilename;
-                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + photo + '" alt="image">');
+                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + filePayload + '" alt="image">');
             };
         })(f);
         reader.readAsDataURL(f);
@@ -317,5 +352,14 @@
             return true;
         }
     }
-</script>
-@endsection
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length);
+            }
+        }
+        return '';
