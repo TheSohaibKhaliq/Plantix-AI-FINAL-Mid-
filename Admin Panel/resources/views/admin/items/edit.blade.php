@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -15,7 +15,7 @@
                                 href="{{route('admin.stores.view',$_GET['eid'])}}">{{trans('lang.item_plural')}}</a>
                     </li>  
                     <?php }else{ ?> 
-                    <li class="breadcrumb-item"><a href="{!! route('items') !!}">{{trans('lang.item_plural')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.products.index') !!}">{{trans('lang.item_plural')}}</a></li>
                     <?php } ?>
 
                     <li class="breadcrumb-item active">{{trans('lang.item_edit')}}</li>
@@ -287,7 +287,7 @@
                     <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
                         <a href="{{route('admin.stores.view',$_GET['eid'])}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
                     <?php }else{ ?>
-                        <a href="{!! route('items') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+                        <a href="{!! route('admin.products.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
                     <?php } ?>
                 </div>
             </div>
@@ -777,10 +777,10 @@
                         <?php }else{ ?>
                         jQuery("#data-table_processing").hide();
 
-                            window.location.href = '{{ route("items")}}';
+                            window.location.href = '{{ route("admin.items")}}';
 
                         <?php } ?>
-                        window.location.href = '{{ route("items")}}';
+                        window.location.href = '{{ route("admin.items")}}';
 
                     });
                 }).catch(err => {

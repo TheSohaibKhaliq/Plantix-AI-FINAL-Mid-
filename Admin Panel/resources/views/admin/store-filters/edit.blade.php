@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 	<div class="page-wrapper">
@@ -61,7 +61,7 @@
 
           <div class="form-group col-12 text-center btm-btn">
             <button type="button" class="btn btn-primary save_filter_btn" ><i class="fa fa-save"></i> {{ trans('lang.save')}}</button>
-            <a href="{!! route('restaurantFilters') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.storeFilters') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
           </div>
 
           </div>

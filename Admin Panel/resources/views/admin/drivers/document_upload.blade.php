@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -10,7 +10,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('drivers') !!}">{{trans('lang.driver_plural')}}</a>
+                <li class="breadcrumb-item"><a href="{!! route('admin.drivers') !!}">{{trans('lang.driver_plural')}}</a>
                 </li>
                 <li class="breadcrumb-item active">{{trans('lang.upload_document')}}</li>
             </ol>

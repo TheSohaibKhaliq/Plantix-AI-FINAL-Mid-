@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -42,7 +42,7 @@
                                         class="fa fa-list mr-2"></i>{{trans('lang.reviewattribute_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('reviewattributes.create') !!}"><i
+                                <a class="nav-link" href="{!! route('admin.reviewattributes.create') !!}"><i
                                         class="fa fa-plus mr-2"></i>{{trans('lang.reviewattribute_create')}}</a>
                             </li>
                         </ul>
@@ -243,7 +243,7 @@
         newdate = '';
 
         var id = val.id;
-        var route1 = '{{route("reviewattributes.edit",":id")}}';
+        var route1 = '{{route("admin.reviewattributes.edit",":id")}}';
         route1 = route1.replace(':id', id);
 
         html.push('<a href="' + route1 + '">' + val.title + '</a>');
@@ -262,7 +262,7 @@
         var id = this.id;
         jQuery("#data-table_processing").show();
         database.collection('review_attributes').doc(id).delete().then(function (result) {
-            window.location.href = '{{ route("reviewattributes")}}';
+            window.location.href = '{{ route("admin.reviewattributes")}}';
         });
     });
 

@@ -3,18 +3,16 @@
 @section('content')
 <div class="page-wrapper">
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor restaurantTitle">{{trans('lang.driver_plural')}}</h3>
+            <h3 class="text-themecolor restaurantTitle fw-bold"><i class="fa fa-car me-2 text-success"></i>{{trans('lang.driver_plural')}}</h3>
         </div>
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('drivers') !!}">{{trans('lang.driver_plural')}}</a></li>
-                <li class="breadcrumb-item active">{{trans('lang.restaurant_details')}}</li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.drivers') !!}">{{trans('lang.driver_plural')}}</a></li>
+                <li class="breadcrumb-item active">{{trans('lang.driver_details')}}</li>
             </ol>
         </div>
-
     </div>
 
     <div class="container-fluid">
@@ -26,35 +24,40 @@
                          style="display: none;">
                         Processing...
                     </div>
-                    <div class="menu-tab">
+                    <div class="menu-tab custom-scroll-tab">
 
-                        <ul>
-                            <li class="active">
-                                <a href="{{route('drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                        <ul class="nav nav-tabs fw-semibold">
+                            <li class="nav-item">
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{{route('admin.drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                             </li>
-                            <li>
-                                <a href="{{route('orders')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{{route('admin.orders.index')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
                             </li>
-                            <li>
-                                <a href="{{route('driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{{route('admin.driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                             </li>
-                            <li>
-                                <a href="{{route('payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{{route('admin.payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
                             </li>
-                            <li>
-                                <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
                             </li>
 
                         </ul>
 
                     </div>
 
-                    <div class="row restaurant_payout_create driver_details">
-                        <div class="restaurant_payout_create-inner">
+                    <div class="card border-0 shadow-sm mt-4" style="border-radius:16px;">
+                        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-info-circle me-2 text-primary"></i>{{trans('lang.driver_details')}}</h5>
                             <a href="javascript:void(0)" data-toggle="modal" data-target="#addWalletModal"
-                               class="add-wallate btn btn-success"><i class="fa fa-plus"></i> Add Wallet Amount</a>
-                            <fieldset>
-                                <legend>{{trans('lang.driver_details')}}</legend>
+                               class="btn btn-sm btn-success rounded-pill fw-bold px-3 shadow-sm">
+                                <i class="fa fa-plus me-1"></i> Add Wallet Amount
+                            </a>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="restaurant_payout_create driver_details">
+                                <div class="restaurant_payout_create-inner">
 
                                 <div class="form-group row width-50">
                                     <label class="col-3 control-label">{{trans('lang.first_name')}}</label>
@@ -98,68 +101,74 @@
                                     </div>
                                 </div>
 
+                                </div>
+                            </div>
                         </div>
-
-                        </fieldset>
                     </div>
                 </div>
 
 
-                <div class="row restaurant_payout_create restaurant_details">
-                    <div class="restaurant_payout_create-inner">
-                        <fieldset>
-                            <legend>{{trans('lang.bankdetails')}}</legend>
-                            <div class="form-group row width-50">
-                                <label class="col-4 control-label">{{
-                                    trans('lang.bank_name')}}</label>
-                                <div class="col-7">
-                                    <span class="bank_name"></span>
-                                </div>
+                <div class="card border-0 shadow-sm mt-4" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-bank me-2 text-primary"></i>{{trans('lang.bankdetails')}}</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="restaurant_payout_create restaurant_details">
+                            <div class="restaurant_payout_create-inner">
+                                <fieldset>
+                                    <div class="form-group row width-50">
+                                        <label class="col-4 control-label fw-semibold">{{
+                                            trans('lang.bank_name')}}</label>
+                                        <div class="col-7">
+                                            <span class="bank_name text-muted"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row width-50">
+                                        <label class="col-4 control-label fw-semibold">{{
+                                            trans('lang.branch_name')}}</label>
+                                        <div class="col-7">
+                                            <span class="branch_name text-muted"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row width-50">
+                                        <label class="col-4 control-label fw-semibold">{{
+                                            trans('lang.holer_name')}}</label>
+                                        <div class="col-7">
+                                            <span class="holer_name text-muted"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row width-50">
+                                        <label class="col-4 control-label fw-semibold">{{
+                                            trans('lang.account_number')}}</label>
+                                        <div class="col-7">
+                                            <span class="account_number text-muted"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row width-50">
+                                        <label class="col-4 control-label fw-semibold">{{
+                                            trans('lang.other_information')}}</label>
+                                        <div class="col-7">
+                                            <span class="other_information text-muted"></span>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-4 control-label">{{
-                                    trans('lang.branch_name')}}</label>
-                                <div class="col-7">
-                                    <span class="branch_name"></span>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row width-50">
-                                <label class="col-4 control-label">{{
-                                    trans('lang.holer_name')}}</label>
-                                <div class="col-7">
-                                    <span class="holer_name"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-4 control-label">{{
-                                    trans('lang.account_number')}}</label>
-                                <div class="col-7">
-                                    <span class="account_number"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-4 control-label">{{
-                                    trans('lang.other_information')}}</label>
-                                <div class="col-7">
-                                    <span class="other_information"></span>
-                                </div>
-                            </div>
-
-
-                        </fieldset>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
         </div>
-        <div class="form-group col-12 text-center btm-btn">
-            <a href="{!! route('drivers') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+        <div class="form-group col-12 text-center btm-btn mt-4">
+            <a href="{!! route('admin.drivers') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+            </a>
         </div>
 
     </div>

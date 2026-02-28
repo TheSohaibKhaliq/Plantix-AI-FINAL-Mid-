@@ -1,21 +1,18 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor restaurantTitle">{{trans('lang.store_plural')}}</h3>
+            <h3 class="text-themecolor fw-bold restaurantTitle"><i class="fa fa-eye me-2 text-success"></i>{{trans('lang.store_plural')}}</h3>
         </div>
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a
-                            href="{!! route('stores') !!}">{{trans('lang.store_plural')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.stores') !!}">{{trans('lang.store_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.store_details')}}</li>
             </ol>
         </div>
-
     </div>
 
     <div class="container-fluid">
@@ -43,110 +40,68 @@
                                 <a href="{{route('admin.stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                                <a href="{{route('admin.payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
                             </li>
                             <li id="restaurant_wallet"></li>
                         </ul>
 
                     </div>
-                    <div class="row daes-top-sec mb-3">
-
+                    <div class="row daes-top-sec mb-4">
                         <div class="col-lg-3 col-md-6">
-
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="mdi mdi-cart"></i></h3></div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="total_orders">0</h3>
-
-                                        <h5 class="text-muted m-b-0">Total Order</h5>
-
+                            <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="bg-info text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px;">
+                                        <i class="mdi mdi-cart fs-3"></i>
                                     </div>
-
+                                    <div class="ms-3">
+                                        <h3 class="m-b-0 text-info fw-bold" id="total_orders">0</h3>
+                                        <h6 class="text-muted m-b-0 text-uppercase fw-semibold" style="font-size:0.8rem;">Total Order</h6>
+                                    </div>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div class="col-lg-3 col-md-6">
-
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="mdi mdi-bank"></i></h3></div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="total_earnings">0</h3>
-
-                                        <h5 class="text-muted m-b-0">Total Earning</h5>
-
+                            <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="bg-success text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px;">
+                                        <i class="mdi mdi-bank fs-3"></i>
                                     </div>
-
+                                    <div class="ms-3">
+                                        <h3 class="m-b-0 text-success fw-bold" id="total_earnings">0</h3>
+                                        <h6 class="text-muted m-b-0 text-uppercase fw-semibold" style="font-size:0.8rem;">Total Earning</h6>
+                                    </div>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div class="col-lg-3 col-md-6">
-
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="ti-wallet"></i></h3></div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="total_payment">0</h3>
-
-                                        <h5 class="text-muted m-b-0">Total Payment</h5>
-
+                            <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="bg-warning text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px;">
+                                        <i class="ti-wallet fs-3"></i>
                                     </div>
-
+                                    <div class="ms-3">
+                                        <h3 class="m-b-0 text-warning fw-bold" id="total_payment">0</h3>
+                                        <h6 class="text-muted m-b-0 text-uppercase fw-semibold" style="font-size:0.8rem;">Total Payment</h6>
+                                    </div>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div class="col-lg-3 col-md-6">
-
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="ti-wallet"></i></h3></div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="remaining_amount">0</h3>
-
-                                        <h5 class="text-muted m-b-0">Remaining Payment</h5>
-
+                            <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                                <div class="card-body d-flex align-items-center p-3">
+                                    <div class="bg-danger text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px;">
+                                        <i class="ti-wallet fs-3"></i>
                                     </div>
-
+                                    <div class="ms-3">
+                                        <h3 class="m-b-0 text-danger fw-bold" id="remaining_amount">0</h3>
+                                        <h6 class="text-muted m-b-0 text-uppercase fw-semibold" style="font-size:0.8rem;">Remaining Payment</h6>
+                                    </div>
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
 
 
@@ -472,8 +427,8 @@
 
 
             </div>
-            <div class="form-group col-12 text-center btm-btn">
-                <a href="{!! route('stores') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+            <div class="form-group col-12 text-center btm-btn py-4">
+                <a href="{!! route('admin.stores') !!}" class="btn btn-light rounded-pill px-5 shadow-sm fw-bold border"><i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}</a>
             </div>
 
         </div>
@@ -729,7 +684,7 @@
                 } else {
                     rating = 0;
                 }
-                walletRoute = "{{route('users.walletstransaction',':id')}}";
+                walletRoute = "{{route('admin.users.walletstransaction',':id')}}";
                 walletRoute = walletRoute.replace(":id", restaurant.author);
                 $('#restaurant_wallet').append('<a href="' + walletRoute + '">{{trans("lang.wallet_transaction")}}</a>');
 
@@ -939,7 +894,7 @@
                 'phonenumber': phonenumber,
                 'categoryTitle': categoryTitle
             }).then(function (result) {
-                window.location.href = '{{ route("stores")}}';
+                window.location.href = '{{ route("admin.stores")}}';
             });
         })
 

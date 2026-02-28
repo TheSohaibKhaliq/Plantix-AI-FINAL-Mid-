@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 	<div class="page-wrapper">
@@ -60,7 +60,7 @@
 
           <div class="form-group col-12 text-center btm-btn">
             <button type="button" class="btn btn-primary save_coupon_btn" ><i class="fa fa-save"></i> {{ trans('lang.save')}}</button>
-            <a href="{!! route('restaurantFilters') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.storeFilters') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
           </div>
 
           </div>
@@ -88,7 +88,7 @@
       if(filterName != '' && RButtons.length){
         database.collection("vendor_filters").doc(id).set({'name':filterName,'options':RButtons,'id':id}).then(function(result){
 
-       window.location.href = '{{ route("restaurantFilters") }}';
+       window.location.href = '{{ route("admin.storeFilters") }}';
       })
       }else{
         alert("Filter name or filter options should not be blank");

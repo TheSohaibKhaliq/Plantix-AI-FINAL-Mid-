@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -10,7 +10,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('reviewattributes') !!}">{{trans('lang.reviewattribute_plural')}}</a>
+                <li class="breadcrumb-item"><a href="{!! route('admin.reviewattributes') !!}">{{trans('lang.reviewattribute_plural')}}</a>
                 </li>
                 <li class="breadcrumb-item active">{{trans('lang.reviewattribute_edit')}}</li>
             </ol>
@@ -46,7 +46,7 @@
         <button type="button" class="btn btn-primary edit-form-btn"><i class="fa fa-save"></i>
             {{trans('lang.save')}}
         </button>
-        <a href="{!! route('reviewattributes') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+        <a href="{!! route('admin.reviewattributes') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
     </div>
 
 </div>
@@ -83,7 +83,7 @@
             } else {
                 jQuery("#data-table_processing").show();
                 database.collection('review_attributes').doc(id).update({'title': title}).then(function (result) {
-                    window.location.href = '{{ route("reviewattributes")}}';
+                    window.location.href = '{{ route("admin.reviewattributes")}}';
                 });
             }
         });

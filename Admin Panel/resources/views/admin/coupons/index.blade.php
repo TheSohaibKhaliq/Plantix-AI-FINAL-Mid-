@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -68,35 +68,35 @@
 
                             <li>
 
-                                <a href="{{route('stores.view', $id)}}">{{trans('lang.tab_basic')}}</a>
+                                <a href="{{route('admin.stores.view', $id)}}">{{trans('lang.tab_basic')}}</a>
 
                             </li>
 
                             <li>
 
-                                <a href="{{route('stores.items', $id)}}">{{trans('lang.tab_items')}}</a>
+                                <a href="{{route('admin.products.index')}}">{{trans('lang.tab_items')}}</a>
 
                             </li>
 
                             <li>
 
-                                <a href="{{route('stores.orders', $id)}}">{{trans('lang.tab_orders')}}</a>
+                                <a href="{{route('admin.orders.index')}}">{{trans('lang.tab_orders')}}</a>
 
                             </li>
 
                             <li class="active">
 
-                                <a href="{{route('stores.coupons', $id)}}">{{trans('lang.tab_promos')}}</a>
+                                <a href="{{route('admin.stores.coupons', $id)}}">{{trans('lang.tab_promos')}}</a>
 
                             <li>
 
-                                <a href="{{route('stores.payout', $id)}}">{{trans('lang.tab_payouts')}}</a>
+                                <a href="{{route('admin.stores.payout', $id)}}">{{trans('lang.tab_payouts')}}</a>
 
                             </li>
 
                             <li>
 
-                            <a href="{{route('payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
+                            <a href="{{route('admin.payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
 
                             </li>
 
@@ -128,7 +128,7 @@
 
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="{!! route('coupons.create') !!}/{{$id}}"><i
+                                    <a class="nav-link" href="{!! route('admin.coupons.create') !!}/{{$id}}"><i
 
                                                 class="fa fa-plus mr-2"></i>{{trans('lang.coupon_create')}}</a>
 
@@ -138,7 +138,7 @@
 
                                 <li class="nav-item">
 
-                                    <a class="nav-link" href="{!! route('coupons.create') !!}"><i
+                                    <a class="nav-link" href="{!! route('admin.coupons.create') !!}"><i
 
                                                 class="fa fa-plus mr-2"></i>{{trans('lang.coupon_create')}}</a>
 
@@ -290,7 +290,7 @@
 
         var vendorData = snapshots.docs[0].data();
 
-        walletRoute = "{{route('users.walletstransaction', ':id')}}";
+        walletRoute = "{{route('admin.users.walletstransaction', ':id')}}";
 
         walletRoute = walletRoute.replace(":id", vendorData.author);
 
@@ -546,7 +546,7 @@
 
 
 
-                        var route1 = '{{route("coupons.edit", ":id")}}';
+                        var route1 = '{{route("admin.coupons.edit", ":id")}}';
 
                         route1 = route1.replace(':id', childData.id);
 
@@ -558,7 +558,7 @@
 
 
 
-                        var route_view = '{{route("stores.view", ":id")}}';
+                        var route_view = '{{route("admin.stores.view", ":id")}}';
 
                         route_view = route_view.replace(':id', childData.resturant_id);
 

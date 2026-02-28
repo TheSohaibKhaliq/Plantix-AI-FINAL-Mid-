@@ -132,6 +132,8 @@ class DatabaseSeeder extends Seeder
             AppointmentSeeder::class,           // appointments + status_history + notifications
             ForumSeeder::class,                 // forum_threads + replies + expert_responses
             ReviewSeeder::class,                // reviews (respects UNIQUE user+order)
+            // ── Must be LAST: resets admin role_id=NULL and seeds all permissions ──
+            AdminSuperUserSeeder::class,
         ]);
     }
 }

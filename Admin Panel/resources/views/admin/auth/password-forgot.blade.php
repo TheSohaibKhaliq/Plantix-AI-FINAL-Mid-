@@ -62,7 +62,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('admin.password.email') }}">
         @csrf
         <div class="mb-4">
             <label class="form-label fw-semibold">Email Address</label>

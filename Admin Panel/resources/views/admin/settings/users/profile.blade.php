@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -28,7 +28,7 @@
                 @endif
 
                   <div class="column">
-                      <form method="post" action="{{ route('users.profile.update',$user->id) }}">
+                      <form method="post" action="{{ route('admin.users.profile.update',$user->id) }}">
                         @csrf
                    
                    <div class="row restaurant_payout_create">

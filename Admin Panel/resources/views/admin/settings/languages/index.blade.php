@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -60,7 +60,7 @@
 
                             <li class="nav-item">
 
-                                <a class="nav-link" href="{!! route('settings.app.languages.create') !!}"><i
+                                <a class="nav-link" href="{!! route('admin.settings.app.languages.create') !!}"><i
 
                                             class="fa fa-plus mr-2"></i>{{trans('lang.language_create')}}</a>
 
@@ -360,7 +360,7 @@
 
                 var id = val.slug;
 
-                var route1 = '{{route("settings.app.languages.edit",":id")}}';
+                var route1 = '{{route("admin.settings.app.languages.edit",":id")}}';
 
                 route1 = route1.replace(':id', id);
 
@@ -520,7 +520,7 @@
 
             jQuery("#data-table_processing").hide();
 
-            window.location.href = '{{ route("settings.app.languages") }}';
+            window.location.href = '{{ route("admin.settings.app.languages") }}';
 
         });
 
@@ -556,7 +556,7 @@
 
                 database.collection('settings').doc('languages').update({'list': newlanguage}).then(function (result) {
                     jQuery("#data-table_processing").hide();
-                    window.location.href = '{{ route("settings.app.languages") }}';
+                    window.location.href = '{{ route("admin.settings.app.languages") }}';
                 });
             }
 

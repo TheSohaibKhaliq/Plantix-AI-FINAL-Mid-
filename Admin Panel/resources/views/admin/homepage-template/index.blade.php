@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -51,7 +51,7 @@
         <button type="button" class="btn btn-primary  edit-form-btn">
             <i class="fa fa-save"></i> {{ trans('lang.save')}}
         </button>
-        <a href="{!! route('dashboard') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+        <a href="{!! route('admin.dashboard') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
     </div>
 
 </div>
@@ -117,7 +117,7 @@
 
                 jQuery("#data-table_processing").show();
                 database.collection('settings').doc('homepageTemplate').update({'homepageTemplate': homepageTemplate}).then(function (result) {
-                    window.location.href = '{{ route("homepageTemplate")}}';
+                    window.location.href = '{{ route("admin.homepageTemplate")}}';
                 });
             }
         })

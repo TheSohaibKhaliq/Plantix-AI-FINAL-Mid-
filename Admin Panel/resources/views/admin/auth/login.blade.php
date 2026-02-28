@@ -100,7 +100,7 @@
     </form>
 
     <div class="text-center mt-3">
-        <a href="{{ route('home') }}" class="text-muted small">
+        <a href="{{ route('admin.home') }}" class="text-muted small">
             <i class="bi bi-arrow-left me-1"></i>Back to website
         </a>
     </div>

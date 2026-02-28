@@ -6,11 +6,15 @@
 <div class="container-fluid">
 
     {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h4 mb-0">Products</h2>
-        <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus me-1"></i> Add Product
-        </a>
+    <div class="row page-titles border-bottom pb-3 mb-4">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor fw-bold mb-0"><i class="fa fa-box me-2 text-success"></i>Products</h3>
+        </div>
+        <div class="col-md-7 align-self-center d-flex justify-content-end align-items-center">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold">
+                <i class="fas fa-plus me-1"></i> Add Product
+            </a>
+        </div>
     </div>
 
     {{-- Flash Messages --}}
@@ -22,8 +26,8 @@
     @endif
 
     {{-- Filters --}}
-    <div class="card mb-4">
-        <div class="card-body">
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
             <form method="GET" action="{{ route('admin.products.index') }}" class="row g-2">
                 <div class="col-md-3">
                     <input type="text" name="search" class="form-control form-control-sm"
@@ -73,16 +77,16 @@
                         <option value="0" @selected(($filters['is_featured'] ?? '') === '0')>No</option>
                     </select>
                 </div>
-                <div class="col-md-1 d-flex gap-1">
-                    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary btn-sm">Clear</a>
+                <div class="col-md-1 d-flex flex-column justify-content-end gap-2">
+                    <button type="submit" class="btn btn-success w-100 rounded shadow-sm fw-bold">Filter</button>
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-light border w-100 rounded shadow-sm fw-bold text-muted">Clear</a>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Table --}}
-    <div class="card">
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -153,11 +157,11 @@
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('admin.products.show', $product->id) }}"
-                                       class="btn btn-info btn-sm" title="View">
+                                       class="btn btn-info btn-sm rounded-pill text-white shadow-sm" title="View">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="{{ route('admin.products.edit', $product->id) }}"
-                                       class="btn btn-warning btn-sm" title="Edit">
+                                       class="btn btn-warning btn-sm rounded-pill text-white shadow-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST"
@@ -166,7 +170,7 @@
                                           onsubmit="return confirm('Delete this product?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                        <button type="submit" class="btn btn-danger btn-sm rounded-pill shadow-sm" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -182,7 +186,7 @@
             </div>
         </div>
         @if($products->hasPages())
-            <div class="card-footer">
+            <div class="card-footer bg-white border-top py-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
                 {{ $products->appends($filters)->links() }}
             </div>
         @endif

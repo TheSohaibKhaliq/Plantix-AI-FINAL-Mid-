@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -231,7 +231,7 @@
                     $(".success_top").show();
                     $(".success_top").html("");
                     window.scrollTo(0, 0);
-                    window.location.href = '{{ route("gift-card.index")}}';
+                    window.location.href = '{{ route("admin.gift-card.index")}}';
                 }).catch(function (error) {
                     $(".error_top").show();
                     $(".error_top").html("");
@@ -248,7 +248,7 @@
                         $(".success_top").show();
                         $(".success_top").html("");
                         window.scrollTo(0, 0);
-                        window.location.href = '{{ route("gift-card.index")}}';
+                        window.location.href = '{{ route("admin.gift-card.index")}}';
                     }).catch(function (error) {
                         $(".error_top").show();
                         $(".error_top").html("");

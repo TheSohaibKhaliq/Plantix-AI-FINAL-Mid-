@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -45,7 +45,7 @@
 
 	<div class="form-group col-12 text-center btm-btn" >
 		<button type="button" class="btn btn-primary  edit-form-btn" ><i class="fa fa-save"></i> {{ trans('lang.save')}}</button>
-		<a href="{!! route('users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+		<a href="{!! route('admin.users') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
 	</div>
 
 </div>
@@ -99,7 +99,7 @@ $('#terms_and_conditions').summernote({
 	        window.scrollTo(0, 0);
 	  	}else{
 	        database.collection('settings').doc('termsAndConditions').update({'termsAndConditions':terms_and_conditions}).then(function(result) {
-					window.location.href = '{{ route("termsAndConditions")}}';
+					window.location.href = '{{ route("admin.termsAndConditions")}}';
 	        })
 	    }
 	})

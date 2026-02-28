@@ -6,7 +6,7 @@
 <div class="row g-4 mb-4">
     {{-- Stats cards --}}
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"
                      style="width:50px;height:50px;background:#e8f5e9">
@@ -20,10 +20,10 @@
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:50px;height:50px;background:#fff3e0">
+                     style="width:50px;height:50px;background:#fff8e1">
                     <i class="bi bi-hourglass-split text-warning fs-4"></i>
                 </div>
                 <div>
@@ -34,11 +34,11 @@
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:50px;height:50px;background:#e3f2fd">
-                    <i class="bi bi-calendar-event text-info fs-4"></i>
+                     style="width:50px;height:50px;background:#e8f5e9">
+                    <i class="bi bi-calendar-event text-success fs-4"></i>
                 </div>
                 <div>
                     <div class="text-muted small">Upcoming</div>
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"
                      style="width:50px;height:50px;background:#e8f5e9">

@@ -48,7 +48,7 @@ class AdminOrderController extends Controller
     {
         $order = Order::with([
             'user', 'vendor', 'driver', 'coupon',
-            'admin.items.product', 'statusHistory.changedBy', 'returnRequest.reason', 'refund',
+            'items.product', 'statusHistory.changedBy', 'returnRequest.reason', 'refund',
         ])->findOrFail($id);
 
         return view('admin.orders.show', compact('order'));

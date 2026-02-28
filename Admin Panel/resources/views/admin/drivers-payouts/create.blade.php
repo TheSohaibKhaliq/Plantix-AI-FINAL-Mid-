@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -140,11 +140,11 @@
 
         <?php if ($id != '') { ?>
 
-            <a href="{!! route('driver.payout',$id) !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.driver.payout',$id) !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
         <?php } else { ?>
 
-            <a href="{!! route('driversPayouts') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+            <a href="{!! route('admin.driversPayouts') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
         <?php } ?>
 
@@ -576,7 +576,7 @@
 
                     if (sendEmailStatus) {
 
-                        window.location.href = "{{ route('driversPayouts') }}";
+                        window.location.href = "{{ route('admin.driversPayouts') }}";
 
                     }
 

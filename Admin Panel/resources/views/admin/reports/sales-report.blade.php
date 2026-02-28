@@ -2,9 +2,9 @@
  
 @section('content')
     <div class="page-wrapper">
-        <div class="row page-titles">
+        <div class="row page-titles mb-4 pb-3 border-bottom">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">{{trans('lang.reports_sale')}}</h3>
+                <h3 class="text-themecolor fw-bold"><i class="fa fa-chart-bar text-success me-2"></i>{{trans('lang.reports_sale')}}</h3>
             </div>
 
             <div class="col-md-7 align-self-center">
@@ -17,49 +17,50 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="card  pb-4">
-
-                <div class="card-body">
+            <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-chart-line me-2 text-primary"></i>{{trans('lang.reports_sale')}}</h5>
+                </div>
+                <div class="card-body p-4">
                     <div id="data-table_processing" class="dataTables_processing panel panel-default"
                          style="display: none;">{{trans('lang.processing')}}</div>
-                    <div class="error_top"></div>
+                    <div class="error_top alert alert-danger rounded border-0 shadow-sm" style="display:none"></div>
 
                     <div class="row restaurant_payout_create">
                         <div class="restaurant_payout_create-inner">
                             <fieldset>
-                                <legend>{{trans('lang.reports_sale')}}</legend>
 
                                 <div class="form-group row width-50">
-                                    <label class="col-3 control-label">{{trans('lang.select_store')}}</label>
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.select_store')}}</label>
                                     <div class="col-7">
-                                        <select class="form-control restaurant">
+                                        <select class="form-control restaurant shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
                                             <option value="">{{trans('lang.all')}}</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row width-50">
-                                    <label class="col-3 control-label">{{trans('lang.select_driver')}}</label>
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.select_driver')}}</label>
                                     <div class="col-7">
-                                        <select class="form-control driver">
+                                        <select class="form-control driver shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
                                             <option value="">{{trans('lang.all')}}</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="form-group row width-50">
-                                    <label class="col-3 control-label">{{trans('lang.select_user')}}</label>
+                                <div class="form-group row width-50 mt-3">
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.select_user')}}</label>
                                     <div class="col-7">
-                                        <select class="form-control customer">
+                                        <select class="form-control customer shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
                                             <option value="">{{trans('lang.all')}}</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="form-group row width-50">
-                                    <label class="col-3 control-label">{{trans('lang.select_category')}}</label>
+                                <div class="form-group row width-50 mt-3">
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.select_category')}}</label>
                                     <div class="col-7">
-                                        <select class="form-control category">
+                                        <select class="form-control category shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
                                             <option value="">{{trans('lang.all')}}</option>
                                         </select>
                                     </div>
@@ -75,22 +76,22 @@
                                      </div>
                                  </div>--}}
 
-                                <div class="form-group row width-100">
-                                    <label class="col-3 control-label">{{trans('lang.select_date')}}</label>
+                                <div class="form-group row width-100 mt-3">
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.select_date')}}</label>
                                     <div class="col-7">
-                                        <div id="reportrange"
-                                             style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                            <i class="fa fa-calendar"></i>&nbsp;
-                                            <span></span> <i class="fa fa-caret-down"></i>
+                                        <div id="reportrange" class="shadow-sm rounded-pill border-0 d-flex align-items-center"
+                                             style="background: #f8f9fa; cursor: pointer; padding: 10px 20px; width: 100%">
+                                            <i class="fa fa-calendar text-primary me-2"></i>&nbsp;
+                                            <span class="flex-grow-1"></span> <i class="fa fa-caret-down text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="form-group row width-100">
-                                    <label class="col-3 control-label">{{trans('lang.file_format')}}<span
+                                <div class="form-group row width-100 mt-3">
+                                    <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.file_format')}}<span
                                                 class="required-field"></span></label>
                                     <div class="col-7">
-                                        <select class="form-control file_format">
+                                        <select class="form-control file_format shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
                                             <option value="">{{trans('lang.file_format')}}</option>
                                             <option value="csv">{{trans('lang.csv')}}</option>
                                             <option value="pdf">{{trans('lang.pdf')}}</option>
@@ -102,9 +103,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-12 text-center btm-btn">
-                        <button type="submit" class="btn btn-primary do-not-download"><i
-                                    class="fa fa-save"></i> {{ trans('lang.download')}}</button>
+                    <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3 mt-4" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                        <button type="submit" class="btn btn-success rounded-pill px-5 shadow-sm fw-bold do-not-download">
+                            <i class="fa fa-download me-2"></i> {{ trans('lang.download')}}
+                        </button>
                     </div>
 
                 </div>

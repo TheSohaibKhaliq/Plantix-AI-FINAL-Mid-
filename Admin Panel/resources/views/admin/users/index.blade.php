@@ -30,103 +30,96 @@
 
 
     <div class="container-fluid">
-
         <div class="row">
-
             <div class="col-12">
-
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
+                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <ul class="nav nav-tabs card-header-tabs border-bottom-0 fw-semibold m-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
-                                        class="fa fa-list mr-2"></i>{{trans('lang.admin_table')}}</a>
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{!! url()->current() !!}">
+                                    <i class="fa fa-list me-2"></i>{{trans('lang.admin_table')}}
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('admin.users.create') !!}"><i
-                                        class="fa fa-plus mr-2"></i>{{trans('lang.create_admin')}}</a>
+                                <a class="nav-link text-muted" href="{!! route('admin.users.create') !!}">
+                                    <i class="fa fa-plus me-2"></i>{{trans('lang.create_admin')}}
+                                </a>
                             </li>
-
                         </ul>
                     </div>
-                    <div class="card-body">
-
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
-                            style="display: none;">Processing...
-                        </div>
-
-                        <div class="table-responsive m-t-10">
-
-                            <table id="adminTable"
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
-                                cellspacing="0" width="100%">
-
-                                <thead>
-
+                    <div class="card-body p-0">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">Processing...</div>
+                        <div class="table-responsive">
+                            <table id="adminTable" class="table table-hover align-middle mb-0" cellspacing="0" width="100%">
+                                <thead class="table-light">
                                     <tr>
                                         <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
-                                        <th class="delete-all"><input type="checkbox" id="is_active"><label
-                                                class="col-3 control-label" for="is_active">
-                                                <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i
-                                                        class="fa fa-trash"></i> {{trans('lang.all')}}</a></label></th>
+                                        <th class="delete-all ps-4" style="width: 50px;">
+                                            <div class="form-check m-0">
+                                                <input type="checkbox" id="is_active" class="form-check-input">
+                                                <label class="form-check-label d-none" for="is_active"></label>
+                                            </div>
+                                            <a id="deleteAll" class="do_not_delete text-danger small mt-1 d-block" href="javascript:void(0)" style="font-size: 0.70rem; text-decoration: none;">
+                                                <i class="fa fa-trash"></i> {{trans('lang.all')}}
+                                            </a>
+                                        </th>
                                         <?php } ?>
-                                        <th>{{trans('lang.name')}}</th>
-                                        <th>{{trans('lang.email')}}</th>
-                                        <th>{{trans('lang.role')}}</th>
-                                        <th>{{trans('lang.actions')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.name')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.email')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.role')}}</th>
+                                        <th class="text-end pe-4 fw-medium text-muted text-uppercase small">{{trans('lang.actions')}}</th>
                                     </tr>
-
                                 </thead>
-
                                 <tbody id="append_list1">
                                     @foreach($users as $user)
                                     <tr>
                                         <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
-                                        <td class="delete-all"><input type="checkbox" id="is_open_{{$user->id}}"
-                                                class="is_open" dataid="{{$user->id}}"><label
-                                                class="col-3 control-label" for="is_open_{{$user->id}}"></label>
+                                        <td class="delete-all ps-4">
+                                            <div class="form-check m-0">
+                                                <input type="checkbox" id="is_open_{{$user->id}}" class="is_open form-check-input" dataid="{{$user->id}}">
+                                            </div>
                                         </td>
                                         <?php } ?>
 
                                         <td>
-                                            <a href="{{route('admin.users.edit', ['id' => $user->id])}}">{{
-                                                $user->name}}</a>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">
+                                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                                </div>
+                                                <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="text-decoration-none fw-bold text-dark hover-text-primary">
+                                                    {{ $user->name }}
+                                                </a>
+                                            </div>
                                         </td>
-
                                         <td>
-                                            {{ $user->email}}
+                                            <span class="text-muted small"><i class="fa fa-envelope-o me-1"></i>{{ $user->email }}</span>
                                         </td>
-
                                         <td>
-                                            {{ $user->roleName}}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 shadow-sm fs-6">
+                                                {{ $user->roleName }}
+                                            </span>
                                         </td>
-                                        
-                                        <td class="action-btn">
-                                            <a href="{{route('admin.users.edit', ['id' => $user->id])}}"><i
-                                                    class="fa fa-edit"></i></a>
+                                        <td class="action-btn text-end pe-4">
+                                            <a href="{{route('admin.users.edit', ['id' => $user->id])}}" class="btn btn-sm btn-outline-success rounded-pill px-3 shadow-sm me-1">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
                                              @if($user->id != 1)
-                                            <?php if (in_array('admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
-                                            <a href="{{route('admin.users.delete', ['id' => $user->id])}}" class="delete-btn"><i
-                                                    class="fa fa-trash"></i></a>
+                                            <?php if (in_array('admin.admin.users.delete', json_decode(@session('admin_permissions'),true))) { ?>
+                                            <a href="{{route('admin.admin.users.delete', ['id' => $user->id])}}" class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm delete-btn">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                              <?php } ?>     
                                              @endif  
                                         </td>
                                     </tr>
                                     @endforeach
-
                                 </tbody>
-
                             </table>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
 </div>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -7,62 +7,34 @@
 <div class="page-wrapper">
 
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{trans('lang.document_plural')}}</h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-file-text-o me-2 text-success"></i>{{trans('lang.document_plural')}}</h3>
         </div>
-
-
-
         <div class="col-md-7 align-self-center">
-
             <ol class="breadcrumb">
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
-                <li class="breadcrumb-item"><a href="{!! route('documents') !!}">{{trans('lang.document_plural')}}</a>
-
-                </li>
-
+                <li class="breadcrumb-item"><a href="{!! route('admin.documents') !!}">{{trans('lang.document_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.document_create')}}</li>
-
             </ol>
-
         </div>
-
     </div>
 
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-plus-circle me-2 text-primary"></i>{{trans('lang.document_create')}}</h5>
+                </div>
+                <div class="card-body p-4">
 
+                    <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">
+                        {{trans('lang.processing')}}
+                    </div>
+                    <div class="alert alert-danger error_top rounded border-0 shadow-sm mb-4" style="display:none"></div>
 
-    <div class="card-body">
-
-
-
-        <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
-
-            {{trans('lang.processing')}}
-
-        </div>
-
-        <div class="error_top" style="display:none"></div>
-
-
-
-        <div class="row restaurant_payout_create">
-
-
-
-            <div class="restaurant_payout_create-inner">
-
-
-
-                <fieldset>
-
-                    <legend>{{trans('lang.document_create')}}</legend>
-
-
+                    <div class="restaurant_payout_create">
+                        <div class="restaurant_payout_create-inner">
+                            <fieldset>
 
                     <div class="form-group row width-50">
 
@@ -142,37 +114,23 @@
 
 
 
-                </fieldset>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                    <a href="{!! route('admin.documents') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                        <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                    </a>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold save-form-btn">
+                        <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
+                    </button>
+                </div>
 
             </div>
-
-
-
         </div>
-
-
-
     </div>
-
-
-
-    <div class="form-group col-12 text-center btm-btn">
-
-        <button type="button" class="btn btn-primary save-form-btn"><i class="fa fa-save"></i> {{
-
-            trans('lang.save')}}
-
-        </button>
-
-        <a href="{!! route('documents') !!}" class="btn btn-default"><i
-
-                class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
-
-    </div>
-
-
-
-</div>
 
 
 
@@ -300,7 +258,7 @@
 
                                     jQuery("#data-table_processing").hide();
 
-                                    window.location.href = '{{ route("documents")}}';
+                                    window.location.href = '{{ route("admin.documents")}}';
 
                                 }
 
@@ -326,7 +284,7 @@
 
                                     jQuery("#data-table_processing").hide();
 
-                                    window.location.href = '{{ route("documents")}}';
+                                    window.location.href = '{{ route("admin.documents")}}';
 
                                 }
 

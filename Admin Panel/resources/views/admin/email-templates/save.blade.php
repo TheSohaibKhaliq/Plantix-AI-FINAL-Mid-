@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -204,7 +204,7 @@
                                 $(".success_top").html("");
                                 $(".success_top").append("<p>{{trans('lang.email_templates_created_success')}}</p>");
                                 window.scrollTo(0, 0);
-                                window.location.href = '{{ route("email-templates.index")}}';
+                                window.location.href = '{{ route("admin.email-templates.index")}}';
                             }).catch(function (error) {
                                 $(".error_top").show();
                                 $(".error_top").html("");
@@ -224,7 +224,7 @@
                                 $(".success_top").append("<p>{{trans('lang.email_templates_updated_success')}}</p>");
                                 window.scrollTo(0, 0);
 
-                                window.location.href = '{{ route("email-templates.index")}}';
+                                window.location.href = '{{ route("admin.email-templates.index")}}';
                             }).catch(function (error) {
                                 $(".error_top").show();
                                 $(".error_top").html("");

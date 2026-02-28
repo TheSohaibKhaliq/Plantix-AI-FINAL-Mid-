@@ -1,24 +1,21 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
 
 
-    <div class="row page-titles">
-
+    <div class="row page-titles mb-4 pb-3 border-bottom">
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{ trans('lang.driver')}} {{trans('lang.payment_plural')}}</h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-car text-success me-2"></i>{{ trans('lang.driver')}} {{trans('lang.payment_plural')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                 <li class="breadcrumb-item active">{{ trans('lang.driver')}} {{trans('lang.payment_plural')}}</li>
             </ol>
         </div>
+    </div>
 
         <div>
 
@@ -32,9 +29,11 @@
 
             <div class="col-12">
 
-                <div class="card">
-
-                    <div class="card-body">
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0 fw-bold text-success"><i class="fa fa-list me-2"></i>{{trans('lang.payment_table')}}</h5>
+                    </div>
+                    <div class="card-body p-4">
                         <div id="data-table_processing" class="dataTables_processing panel panel-default"
                             style="display: none;">
                             {{ trans('lang.processing')}}
@@ -44,7 +43,7 @@
 
 
                             <table id="driverPaymentTable"
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
+                                class="display nowrap table table-hover table-bordered"
                                 cellspacing="0" width="100%">
 
                                 <thead>
@@ -280,7 +279,7 @@
 
         newdate = '';
         var id = val.id;
-        var route1 = '{{route("drivers.view", ":id")}}';
+        var route1 = '{{route("admin.drivers.view", ":id")}}';
         route1 = route1.replace(':id', id);
 
         var data = {};

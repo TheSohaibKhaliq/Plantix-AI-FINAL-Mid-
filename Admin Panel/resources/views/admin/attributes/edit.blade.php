@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -11,7 +11,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                     <li class="breadcrumb-item"><a
-                                href="{!! route('attributes') !!}">{{trans('lang.item_attribute_plural')}}</a></li>
+                                href="{!! route('admin.attributes') !!}">{{trans('lang.item_attribute_plural')}}</a></li>
                     <li class="breadcrumb-item active">{{trans('lang.attribute_edit')}}</li>
                 </ol>
             </div>
@@ -44,7 +44,7 @@
         <div class="form-group col-12 text-center btm-btn">
             <button type="button" class="btn btn-primary edit-form-btn"><i
                         class="fa fa-save"></i> {{trans('lang.save')}}</button>
-            <a href="{!! route('attributes') !!}" class="btn btn-default"><i
+            <a href="{!! route('admin.attributes') !!}" class="btn btn-default"><i
                         class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
         </div>
 
@@ -82,7 +82,7 @@
                 } else {
                     jQuery("#data-table_processing").show();
                     database.collection('vendor_attributes').doc(id).update({'title': title}).then(function (result) {
-                        window.location.href = '{{ route("attributes")}}';
+                        window.location.href = '{{ route("admin.attributes")}}';
                     });
                 }
             });

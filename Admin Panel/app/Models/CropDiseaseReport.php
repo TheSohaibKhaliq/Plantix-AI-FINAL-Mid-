@@ -33,7 +33,17 @@ class CropDiseaseReport extends Model
     {
         return $this->hasOne(DiseaseSuggestion::class, 'report_id');
     }
+    // ── Scopes ────────────────────────────────────────────────────────────────
 
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeProcessed($query)
+    {
+        return $query->where('status', 'processed');
+    }
     // ── Accessors ──────────────────────────────────────────────────────────
     public function getImageUrlAttribute(): string
     {

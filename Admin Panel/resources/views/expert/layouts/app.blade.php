@@ -13,13 +13,41 @@
 
     <style>
         :root {
-            --sidebar-bg:     #0d2b1f;
-            --sidebar-text:   #a5d6a7;
-            --sidebar-active: #388e3c;
+            --sidebar-bg:     #0f3524;
+            --sidebar-text:   #c8e6c9;
+            --sidebar-active: #ffca28;
+            --sidebar-active-text: #0d2b1f;
             --sidebar-width:  260px;
             --accent:         #2e7d32;
+            --card-shadow:    0 4px 12px rgba(0,0,0,0.03);
+            --hover-shadow:   0 12px 24px rgba(0,0,0,0.08);
         }
-        body { background: #f1f5f0; font-family: 'Nunito', sans-serif; }
+        body { background: #f4f7f5; font-family: 'Nunito', sans-serif; }
+
+        /* ── Utilities & Global Overrides ─────────────────────────────── */
+        .hover-card { transition: all 0.3s ease; }
+        .hover-card:hover { transform: translateY(-5px); box-shadow: var(--hover-shadow) !important; }
+        .card { border-radius: 12px; box-shadow: var(--card-shadow) !important; }
+        .card-header { border-top-left-radius: 12px !important; border-top-right-radius: 12px !important; }
+
+        /* Global Bootstrap Overrides for Green/Yellow Theme */
+        .btn-primary, .btn-success { background-color: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+        .btn-primary:hover, .btn-success:hover { background-color: #1b5e20 !important; border-color: #1b5e20 !important; }
+        .btn-outline-primary, .btn-outline-success { color: var(--accent) !important; border-color: var(--accent) !important; }
+        .btn-outline-primary:hover, .btn-outline-success:hover { background-color: var(--accent) !important; color: #fff !important; }
+        .btn-warning { background-color: var(--sidebar-active) !important; border-color: var(--sidebar-active) !important; color: #000 !important; }
+        .btn-warning:hover { background-color: #fbc02d !important; border-color: #fbc02d !important; }
+        
+        .bg-primary, .bg-success { background-color: var(--accent) !important; }
+        .text-primary, .text-success { color: var(--accent) !important; }
+        
+        .badge.bg-primary, .badge.bg-success { background-color: var(--accent) !important; }
+        .badge.bg-warning { background-color: var(--sidebar-active) !important; color: #000 !important; }
+
+        .table-light th { background-color: #e8f5e9 !important; color: #1b5e20 !important; border-bottom: 2px solid #c8e6c9 !important; }
+        .form-control:focus, .form-select:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25) !important; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: #1b5e20; }
 
         /* ── Sidebar ──────────────────────────────────────────────────── */
         .sidebar {
@@ -34,13 +62,15 @@
         .sidebar .brand a { color: #fff; font-size: 1.15rem; font-weight: 700; text-decoration: none; }
         .sidebar .brand small { display: block; color: var(--sidebar-text); font-size: .72rem; margin-top: .2rem; }
         .sidebar .nav-link {
-            color: var(--sidebar-text); padding: .6rem 1.2rem;
-            border-radius: .35rem; margin: 2px 8px;
-            transition: background .15s;
+            color: var(--sidebar-text); padding: .75rem 1.2rem;
+            border-radius: .5rem; margin: 4px 12px;
+            transition: all .2s ease-in-out;
         }
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            background: var(--sidebar-active); color: #fff;
+            background: var(--sidebar-active); color: var(--sidebar-active-text); font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 202, 40, 0.3);
+            transform: translateX(4px);
         }
         .sidebar .nav-link i { width: 20px; }
         .sidebar .nav-section {
@@ -52,9 +82,9 @@
         /* ── Main content ─────────────────────────────────────────────── */
         .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
         .topbar {
-            background: #fff; border-bottom: 1px solid #dde5d8;
-            padding: .75rem 1.5rem;
-            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
             position: sticky; top: 0; z-index: 100;
         }
         .topbar .page-title { font-weight: 700; margin: 0; font-size: 1rem; }

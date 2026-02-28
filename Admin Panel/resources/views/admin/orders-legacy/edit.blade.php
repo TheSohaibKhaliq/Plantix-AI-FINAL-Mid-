@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -15,7 +15,7 @@
                     <li class="breadcrumb-item"><a href="{{route('admin.stores.view',$_GET['eid'])}}">{{trans('lang.order_plural')}}</a>
                     </li>
                 <?php } else { ?>
-                    <li class="breadcrumb-item"><a href="{!! route('orders') !!}">{{trans('lang.order_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.orders.index') !!}">{{trans('lang.order_plural')}}</a>
                     </li>
                 <?php } ?>
 
@@ -30,7 +30,7 @@
                 {{trans('lang.processing')}}
             </div>
             <div class="text-right print-btn pb-3">
-                <a href="{{route('vendors.orderprint',$id)}}">
+                <a href="{{route('admin.stores.view',$id)}}">
                     <button type="button" class="fa fa-print"></button>
                 </a>
             </div>
@@ -280,7 +280,7 @@
                 <a href="{{route('admin.stores.view',$_GET['eid'])}}" class="btn btn-default"><i
                             class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
             <?php } else { ?>
-                <a href="{!! route('orders') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}
+                <a href="{!! route('admin.orders.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}
                 </a>
             <?php } ?>
 
@@ -744,7 +744,7 @@
                     var vendordata = snapshotsnew.docs[0].data();
 
                     if (vendordata.id) {
-                        var route_view = '{{route("stores.view",":id")}}';
+                        var route_view = '{{route("admin.stores.view",":id")}}';
                         route_view = route_view.replace(':id', vendordata.id);
 
                         $('#resturant-view').attr('data-url', route_view);
@@ -859,7 +859,7 @@
         async function callAjax() {
             await $.ajax({
                 type: 'POST',
-                url: "<?php echo route('order-status-notification'); ?>",
+                url: "<?php echo route('admin.broadcastnotification'); ?>",
                 data: {
                     _token: '<?php echo csrf_token() ?>',
                     'fcm': manfcmTokenVendor,
@@ -870,7 +870,7 @@
                 },
                 success: function (data) {
 
-                    window.location.href = '{{ route("orders")}}';
+                    window.location.href = '{{ route("admin.orders.index")}}';
 
 
                 }
@@ -1001,7 +1001,7 @@
                            
                             await $.ajax({
                                 type: 'POST',
-                                url: "<?php echo route('order-status-notification'); ?>",
+                                url: "<?php echo route('admin.broadcastnotification'); ?>",
                                 data: {
                                     _token: '<?php echo csrf_token() ?>',
                                     'fcm': manfcmTokenVendor,
@@ -1038,17 +1038,17 @@
                                                         var newWalletAmount = wallet_amount + parseFloat(orderPaytableAmount);
                                                         database.collection('users').doc(orderCustomerId).update({'wallet_amount': parseFloat(newWalletAmount)}).then(function (result) {
                                                             <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                                                            window.location.href = "{{ route('stores.orders',$_GET['eid']) }}";
+                                                            window.location.href = "{{ route('admin.orders.index') }}";
                                                             <?php } else { ?>
-                                                            window.location.href = '{{ route("orders")}}';
+                                                            window.location.href = '{{ route("admin.orders.index")}}';
                                                             <?php } ?>
 
                                                         })
                                                     } else {
                                                         <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                                                        window.location.href = "{{ route('stores.orders',$_GET['eid']) }}";
+                                                        window.location.href = "{{ route('admin.orders.index') }}";
                                                         <?php } else { ?>
-                                                        window.location.href = '{{ route("orders")}}';
+                                                        window.location.href = '{{ route("admin.orders.index")}}';
                                                         <?php } ?>
                                                     }
                                                 });
@@ -1057,15 +1057,15 @@
                                         } else {
 
                                             <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                                            window.location.href = "{{ route('stores.orders',$_GET['eid']) }}";
+                                            window.location.href = "{{ route('admin.orders.index') }}";
                                             <?php } else { ?>
-                                            window.location.href = '{{ route("orders")}}';
+                                            window.location.href = '{{ route("admin.orders.index")}}';
                                             <?php } ?>                                        }
                                     } else {
                                         <?php if (isset($_GET['eid']) && $_GET['eid'] != '') { ?>
-                                        window.location.href = "{{ route('stores.orders',$_GET['eid']) }}";
+                                        window.location.href = "{{ route('admin.orders.index') }}";
                                         <?php } else { ?>
-                                        window.location.href = '{{ route("orders")}}';
+                                        window.location.href = '{{ route("admin.orders.index")}}';
                                         <?php } ?>
                                     }
 

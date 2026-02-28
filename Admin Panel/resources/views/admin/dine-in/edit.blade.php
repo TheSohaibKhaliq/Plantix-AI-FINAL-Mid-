@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -6,7 +6,7 @@
 
 $back_url=url()->current();
 if(isset($_GET['id'])){ 
-  $back_url=route('restaurants.booktable',$_GET['id']);
+  $back_url=route('admin.stores.booktable',$_GET['id']);
 }
 
 ?>
@@ -235,7 +235,7 @@ $(document).ready(function(){
                         if(doc.fcmToken){
                          $.ajax({
                               method: 'POST',
-                              url: '<?php echo route('sendnotification'); ?>',
+                              url: '<?php echo route('admin.sendnotification'); ?>',
                               data: {
                                   'fcm':doc.fcmToken,
                                   'type':type,

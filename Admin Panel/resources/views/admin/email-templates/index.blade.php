@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -169,7 +169,7 @@
 
                         paginatedRecords.forEach(function (childData) {
 
-                            var route1 = '{{route("email-templates.save",":id")}}';
+                            var route1 = '{{route("admin.email-templates.save",":id")}}';
                             route1 = route1.replace(":id", childData.id);
                             var type = '';
 
@@ -283,7 +283,7 @@
                 html = html + '<tr>';
                 newdate = '';
                 var id = data.id;
-                var route1 = '{{route("email-templates.save",":id")}}';
+                var route1 = '{{route("admin.email-templates.save",":id")}}';
                 route1 = route1.replace(":id", id);
 
                 var type = '';

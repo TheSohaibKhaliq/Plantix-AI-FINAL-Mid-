@@ -7,8 +7,8 @@
     <div class="col-lg-8">
 
         {{-- Basic Info --}}
-        <div class="card mb-4">
-            <div class="card-header fw-semibold">Basic Information</div>
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3 fw-bold text-success"><i class="fa fa-info-circle me-2"></i>Basic Information</div>
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">Product Name <span class="text-danger">*</span></label>
@@ -59,8 +59,8 @@
         </div>
 
         {{-- Classification --}}
-        <div class="card mb-4">
-            <div class="card-header fw-semibold">Classification</div>
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3 fw-bold text-success"><i class="fa fa-tags me-2"></i>Classification</div>
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-4">
@@ -137,8 +137,8 @@
     <div class="col-lg-4">
 
         {{-- Primary Image --}}
-        <div class="card mb-4">
-            <div class="card-header fw-semibold">Primary Image</div>
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3 fw-bold text-success"><i class="fa fa-image me-2"></i>Primary Image</div>
             <div class="card-body">
                 @isset($product)
                     @if($product->image)
@@ -156,8 +156,8 @@
         </div>
 
         {{-- Gallery --}}
-        <div class="card mb-4">
-            <div class="card-header fw-semibold">Gallery Images</div>
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3 fw-bold text-success"><i class="fa fa-images me-2"></i>Gallery Images</div>
             <div class="card-body">
                 @isset($product)
                     @if($product->images && $product->images->count())
@@ -178,8 +178,8 @@
         </div>
 
         {{-- Status Flags --}}
-        <div class="card">
-            <div class="card-header fw-semibold">Status &amp; Visibility</div>
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3 fw-bold text-success"><i class="fa fa-eye me-2"></i>Status &amp; Visibility</div>
             <div class="card-body">
                 <div class="form-check form-switch mb-2">
                     <input class="form-check-input" type="checkbox" name="is_active" id="is_active"

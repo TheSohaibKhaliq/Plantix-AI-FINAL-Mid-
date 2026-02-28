@@ -137,10 +137,10 @@ class RolesPermissionsSeeder extends Seeder
             ]);
         }
 
-        // Assign Super Admin role to admin user
-        DB::table('users')
-            ->where('role', 'admin')
-            ->update(['role_id' => $superAdminId]);
+        // NOTE: Do NOT set role_id on admin users here.
+        // admin users with role='admin' and role_id=NULL get a full super-admin
+        // bypass in PermissionMiddleware.  AdminSuperUserSeeder (run last) ensures
+        // all admin accounts have role_id=NULL.
 
         $this->command->info('RolesPermissionsSeeder: ' . DB::table('role')->count() . ' roles, ' . DB::table('permissions')->count() . ' permissions inserted.');
     }

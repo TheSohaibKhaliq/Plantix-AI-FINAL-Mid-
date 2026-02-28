@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -546,7 +546,7 @@
 
         var id = val.id;
 
-        route1 = '{{route("dynamic-notification.save",":id")}}'
+        route1 = '{{route("admin.dynamic-notification.save",":id")}}'
 
         route1 = route1.replace(":id", id);
 

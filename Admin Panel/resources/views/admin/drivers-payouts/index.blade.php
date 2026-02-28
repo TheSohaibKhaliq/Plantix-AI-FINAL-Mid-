@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -36,16 +36,16 @@
 
                         <ul>
                             <li>
-                                <a href="{{route('drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                                <a href="{{route('admin.drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('orders')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
+                                <a href="{{route('admin.orders.index')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
                             </li>
                             <li class="active">
-                                <a href="{{route('driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                                <a href="{{route('admin.driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                             </li>
                             <li>
-                                <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                                <a href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
                             </li>
 
                         </ul>
@@ -62,12 +62,12 @@
 
                             <?php if ($id != '') { ?>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{!! route('driver.payout.create',$id) !!}/"><i
+                                    <a class="nav-link" href="{!! route('admin.driver.payout.create',$id) !!}/"><i
                                             class="fa fa-plus mr-2"></i>{{trans('lang.drivers_payout_create')}}</a>
                                 </li>
                             <?php } else { ?>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{!! route('driversPayouts.create') !!}"><i
+                                    <a class="nav-link" href="{!! route('admin.driversPayouts.create') !!}"><i
                                             class="fa fa-plus mr-2"></i>{{trans('lang.drivers_payout_create')}}</a>
                                 </li>
                             <?php } ?>
@@ -325,7 +325,7 @@
         var html = [];
 
         var val = snapshots;
-        var route1 = '{{route("drivers.view", ":id")}}';
+        var route1 = '{{route("admin.drivers.view", ":id")}}';
         route1 = route1.replace(':id', val.driverID);
 
         html.push('<a  href="' + route1 + '">'+val.driverName+'</a>');
@@ -358,7 +358,7 @@
     
     async function payoutDriverfunction(driverID) {
         var payoutDriver = '';
-        var routedriver = '{{route("drivers.view", ":id")}}';
+        var routedriver = '{{route("admin.drivers.view", ":id")}}';
         routedriver = routedriver.replace(':id', driverID);
         await database.collection('users').where("id", "==", driverID).get().then(async function (snapshotss) {
             if (snapshotss.docs[0]) {

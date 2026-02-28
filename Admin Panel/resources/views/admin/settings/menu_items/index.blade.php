@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -49,7 +49,7 @@
 
                             <li class="nav-item">
 
-                                <a class="nav-link" href="{!! route('setting.banners.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.menu_items_create')}}</a>
+                                <a class="nav-link" href="{!! route('admin.setting.banners.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.menu_items_create')}}</a>
 
                             </li>
 
@@ -211,7 +211,7 @@
 
                     paginatedRecords.forEach(function (childData) {
 
-                        var route1 = '{{route("setting.banners.edit", ":id")}}';
+                        var route1 = '{{route("admin.setting.banners.edit", ":id")}}';
 
                         route1 = route1.replace(':id', childData.id);
 

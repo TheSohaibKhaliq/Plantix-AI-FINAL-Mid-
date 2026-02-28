@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -23,22 +23,22 @@
                 <div class="menu-tab d-none vendorMenuTab">
                     <ul>
                         <li>
-                            <a href="{{route('stores.view',$id)}}">{{trans(    'lang.tab_basic')}}</a>
+                            <a href="{{route('admin.stores.view',$id)}}">{{trans(    'lang.tab_basic')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.items',$id)}}">{{trans('lang.tab_items')}}</a>
+                            <a href="{{route('admin.products.index')}}">{{trans('lang.tab_items')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('stores.orders',$id)}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
+                            <a href="{{route('admin.stores.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                            <a href="{{route('admin.payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
                         </li>
                         <li id="restaurant_wallet"></li>
                     </ul>
@@ -47,19 +47,19 @@
                 <div class="menu-tab d-none driverMenuTab">
                     <ul>
                         <li >
-                            <a href="{{route('drivers.view',request()->query('driverId'))}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.drivers.view',request()->query('driverId'))}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('orders')}}?driverId={{request()->query('driverId')}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}?driverId={{request()->query('driverId')}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li >
-                            <a href="{{route('driver.payout',request()->query('driverId'))}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.driver.payout',request()->query('driverId'))}}">{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('payoutRequests.drivers.view',request()->query('driverId'))}}">{{trans('lang.tab_payout_request')}}</a>
+                            <a href="{{route('admin.payoutRequests.drivers.view',request()->query('driverId'))}}">{{trans('lang.tab_payout_request')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('users.walletstransaction',request()->query('driverId'))}}">{{trans('lang.wallet_transaction')}}</a>
+                            <a href="{{route('admin.users.walletstransaction',request()->query('driverId'))}}">{{trans('lang.wallet_transaction')}}</a>
                         </li>
 
                     </ul>
@@ -69,13 +69,13 @@
                 <div class="menu-tab d-none userMenuTab">
                     <ul>
                         <li>
-                            <a href="{{ route('users.view', request()->query('userId')) }}">{{ trans('lang.tab_basic') }}</a>
+                            <a href="{{ route('admin.users.view', request()->query('userId')) }}">{{ trans('lang.tab_basic') }}</a>
                         </li>
                         <li  class="active">
-                            <a href="{{route('orders','userId='.request()->query('userId'))}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}?userId={{request()->query('userId')}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('users.walletstransaction',request()->query('userId'))}}">{{trans('lang.wallet_transaction')}}</a>
+                            <a href="{{route('admin.users.walletstransaction',request()->query('userId'))}}">{{trans('lang.wallet_transaction')}}</a>
                         </li>
 
                     </ul>
@@ -259,7 +259,7 @@
         $('.vendorMenuTab').removeClass('d-none');
         database.collection('vendors').where("id", "==", getId).get().then(async function(snapshots) {
             var vendorData = snapshots.docs[0].data();
-            walletRoute = "{{route('users.walletstransaction',':id')}}";
+            walletRoute = "{{route('admin.users.walletstransaction',':id')}}";
             walletRoute = walletRoute.replace(":id", vendorData.author);
             $('#restaurant_wallet').append('<a href="' + walletRoute + '">{{trans("lang.wallet_transaction")}}</a>');
         });
@@ -483,10 +483,10 @@
         var vendorID = val.vendorID;
 
         var user_id = val.authorID;
-        var route1 = '{{route("orders.edit",":id")}}';
+        var route1 = '{{route("admin.orders.edit",":id")}}';
         route1 = route1.replace(':id', id);
 
-        var printRoute = '{{route("vendors.orderprint",":id")}}';
+        var printRoute = '{{route("admin.vendors.orderprint",":id")}}';
         printRoute = printRoute.replace(':id', id);
 
         <?php if($id != ''){ ?>
@@ -494,10 +494,10 @@
         printRoute = printRoute + '?eid={{$id}}';
         <?php }?>
 
-        var route_view = '{{route("stores.view",":id")}}';
+        var route_view = '{{route("admin.stores.view",":id")}}';
         route_view = route_view.replace(':id', vendorID);
 
-        var customer_view = '{{route("users.view",":id")}}';
+        var customer_view = '{{route("admin.users.view",":id")}}';
         customer_view = customer_view.replace(':id', user_id);
 
         if (checkDeletePermission) {
@@ -518,7 +518,7 @@
            
             if (val.hasOwnProperty("driver") && val.driver != null && val.driver!='') {
                 var driverId = val.driver.id;
-                var diverRoute = '{{route("drivers.view",":id")}}';
+                var diverRoute = '{{route("admin.drivers.view",":id")}}';
                 diverRoute = diverRoute.replace(':id', driverId);
                  html.push('<a href="' + diverRoute + '" >' + val.driver.firstName + ' ' + val.driver.lastName + '</a>');
 
@@ -546,7 +546,7 @@
 
             if (val.hasOwnProperty("driver") && val.driver != null && val.driver!='') {
                 var driverId = val.driver.id;
-                var diverRoute = '{{route("drivers.view",":id")}}';
+                var diverRoute = '{{route("admin.drivers.view",":id")}}';
                 diverRoute = diverRoute.replace(':id', driverId);
                 html.push('<a  href="' + diverRoute + '" >' + val.driver.firstName + ' ' + val.driver.lastName + '</a>');
 
@@ -574,7 +574,7 @@
            html.push('<a  href="' + route_view + '" >' + title + '</a>');
             if (val.hasOwnProperty("driver") && val.driver != null && val.driver!='') {
                 var driverId = val.driver.id;
-                var diverRoute = '{{route("drivers.view",":id")}}';
+                var diverRoute = '{{route("admin.drivers.view",":id")}}';
                 diverRoute = diverRoute.replace(':id', driverId);
                 html.push('<a  href="' + diverRoute + '">' + val.driver.firstName + ' ' + val.driver.lastName + '</a>');
 

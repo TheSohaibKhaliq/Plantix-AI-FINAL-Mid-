@@ -1,30 +1,20 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
 
 
-    <div class="row page-titles">
-
+    <div class="row page-titles mb-4 pb-3 border-bottom">
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{trans('lang.wallet_transaction_plural')}} <span class="userTitle"></span>
-            </h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-exchange-alt text-success me-2"></i>{{trans('lang.wallet_transaction_plural')}} <span class="userTitle"></span></h3>
         </div>
-
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.wallet_transaction_plural')}}</li>
             </ol>
         </div>
-
-        <div>
-
-        </div>
-
     </div>
 
 
@@ -36,24 +26,24 @@
                 <div class="menu-tab d-none storeMenuTab">
                     <ul>
                         <li>
-                            <a href="{{route('stores.view',$id)}}" id="basic">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.stores.view',$id)}}" id="basic">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.items',$id)}}" id="tab_foods">{{trans('lang.tab_items')}}</a>
+                            <a href="{{route('admin.products.index')}}" id="tab_foods">{{trans('lang.tab_items')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.orders',$id)}}"
+                            <a href="{{route('admin.orders.index')}}"
                                 id="tab_orders">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.coupons',$id)}}"
+                            <a href="{{route('admin.stores.coupons',$id)}}"
                                 id="tab_promos">{{trans('lang.tab_promos')}}</a>
                         <li>
                             <a href="{{route('admin.stores.payout',$id)}}" id="tab_payouts"
                                 >{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('users.walletstransaction',$id)}}"
+                            <a href="{{route('admin.users.walletstransaction',$id)}}"
                                 class="active">{{trans('lang.wallet_transaction')}}</a>
                         </li>
                     </ul>
@@ -62,20 +52,20 @@
                 <div class="menu-tab d-none driverMenuTab">
                     <ul>
                         <li>
-                            <a href="{{route('drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
                             <a href="{{route('admin.orders.index')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li>
                             <a
-                                href="{{route('payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                                href="{{route('admin.payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                            <a href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
                         </li>
 
                     </ul>
@@ -83,29 +73,29 @@
                 <div class="menu-tab d-none userMenuTab">
                     <ul>
                         <li>
-                            <a href="{{route('users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
                             <a href="{{route('admin.orders.index','userId='.$id)}}" >{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                            <a href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
                         </li>
 
                     </ul>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
+                            <li class="nav-item border-0">
+                                <a class="nav-link active fw-bold text-success border-0 pb-3" href="{!! url()->current() !!}"><i
                                         class="fa fa-list mr-2"></i>{{trans('lang.wallet_transaction_table')}}
                                 </a>
                             </li>
 
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div id="data-table_processing" class="dataTables_processing panel panel-default"
                             style="display: none;">{{trans('lang.processing')}}
                         </div>
@@ -114,7 +104,7 @@
 
 
                             <table id="walletTransactionTable"
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
+                                class="display nowrap table table-hover table-bordered"
                                 cellspacing="0" width="100%">
 
                                 <thead>
@@ -417,15 +407,15 @@
                 var user_name = val.user;
                 var routeuser = "Javascript:void(0)";
                 if (user_role == "customer") {
-                    routeuser = '{{route("users.view",":id")}}';
+                    routeuser = '{{route("admin.users.view",":id")}}';
                     routeuser = routeuser.replace(':id', val.user_id);
                 } else if (user_role == "driver") {
-                    routeuser = '{{route("drivers.view",":id")}}';
+                    routeuser = '{{route("admin.drivers.view",":id")}}';
                     routeuser = routeuser.replace(':id', val.user_id);
                 } else if (user_role == "vendor") {
 
                     if (val.payoutuser.vendorID != '') {
-                        routeuser = '{{route("stores.view",":id")}}';
+                        routeuser = '{{route("admin.stores.view",":id")}}';
                         routeuser = routeuser.replace(':id', val.payoutuser.vendorID);
                     }
 

@@ -6,9 +6,9 @@
 <div class="row g-4 mb-4">
     {{-- Stats Cards --}}
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 bg-primary bg-opacity-10 text-primary">
+                <div class="rounded-3 p-3 bg-success bg-opacity-10 text-success">
                     <i class="bi bi-cart-check fs-3"></i>
                 </div>
                 <div>
@@ -19,9 +19,9 @@
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 bg-warning bg-opacity-10 text-warning">
+                <div class="rounded-3 p-3" style="background:#fff8e1; color:#ffca28;">
                     <i class="bi bi-hourglass-split fs-3"></i>
                 </div>
                 <div>
@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-3 p-3 bg-success bg-opacity-10 text-success">
                     <i class="bi bi-box-seam fs-3"></i>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body d-flex align-items-center gap-3">
                 <div class="rounded-3 p-3 bg-danger bg-opacity-10 text-danger">
                     <i class="bi bi-exclamation-circle fs-3"></i>
@@ -62,7 +62,7 @@
 <div class="row g-4">
     {{-- Revenue Cards --}}
     <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm hover-card">
             <div class="card-body text-center">
                 <div class="text-muted small mb-1">Today's Revenue</div>
                 <div class="fs-3 fw-bold text-success">
@@ -72,10 +72,10 @@
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm hover-card">
             <div class="card-body text-center">
                 <div class="text-muted small mb-1">This Month</div>
-                <div class="fs-3 fw-bold text-primary">
+                <div class="fs-3 fw-bold text-success">
                     {{ config('plantix.currency_symbol') }}{{ number_format($stats['month_revenue'] ?? 0, 2) }}
                 </div>
             </div>

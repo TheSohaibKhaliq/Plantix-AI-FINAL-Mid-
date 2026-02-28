@@ -1,126 +1,99 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 	<div class="page-wrapper">
-    <div class="row page-titles">
-
+    <div class="row page-titles mb-4 pb-3 border-bottom">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">{{trans('lang.store_plural')}}</h3>
+            <h3 class="text-themecolor fw-bold mb-0"><i class="fa fa-store text-success me-2"></i>{{trans('lang.store_plural')}}</h3>
         </div>
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href= "{!! route('stores') !!}" >{{trans('lang.store_plural')}}</a></li>
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item"><a href= "{!! route('admin.stores') !!}" >{{trans('lang.store_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.store_edit')}}</li>
             </ol>
         </div>
-    <div>
-
-    <div class="card-body">
-      	<div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">Processing...</div>
-      <div class="menu-tab">
-      		<ul>
-      			<li>
-      					<a href="{{route('stores.view',$id)}}">Basic</a>
+    </div>
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-header bg-white border-bottom py-3">
+            <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
+      			<li class="nav-item border-0">
+      					<a class="nav-link fw-bold text-muted border-0 pb-3" href="{{route('admin.stores.view',$id)}}">Basic</a>
       			</li>
-      			<li>
-      					<a href="{{route('stores.foods',$id)}}">Foods</a>
+      			<li class="nav-item border-0">
+      					<a class="nav-link fw-bold text-muted border-0 pb-3" href="{{route('admin.products.index')}}">Foods</a>
       			</li>
-      			<li>
-      					<a href="{{route('stores.orders',$id)}}">Orders</a>
+      			<li class="nav-item border-0">
+      					<a class="nav-link fw-bold text-muted border-0 pb-3" href="{{route('admin.orders.index')}}">Orders</a>
       			</li>
-      			<li>
-      					<a href="{{route('stores.promos',$id)}}">Promos</a>
+      			<li class="nav-item border-0">
+      					<a class="nav-link fw-bold text-muted border-0 pb-3" href="{{route('admin.stores.promos',$id)}}">Promos</a>
       			</li>
-      			<li class="active">
-      					<a href="#">Payouts</a>
+      			<li class="nav-item border-0 active">
+      					<a class="nav-link active fw-bold text-success border-0 pb-3" href="#">Payouts</a>
       			</li>
       		</ul>
-      </div>
+        </div>
+        <div class="card-body p-4">
+      	<div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">Processing...</div>
+
       <div class="row daes-top-sec">
       				<div class="col-lg-4 col-md-6">
 
-                  <div class="card">
-
+                  <div class="card shadow-sm border-0" style="border-radius:16px;">
                       <div class="flex-row">
-
-                          <div class="p-10 bg-info col-md-12 text-center">
-
+                          <div class="p-3 bg-success text-center" style="border-top-left-radius:16px; border-bottom-left-radius:16px; width:80px; display:flex; align-items:center; justify-content:center;">
                               <h3 class="text-white box m-b-0"><i class="mdi mdi-bank"></i></h3></div>
-
-                          <div class="align-self-center pt-3 col-md-12 text-center">
-
-                              <h3 class="m-b-0 text-info" id="restaurant_count">44</h3>
-
-                              <h5 class="text-muted m-b-0">Total Earning</h5>
-
+                          <div class="align-self-center px-4 py-3">
+                              <h3 class="m-b-0 text-success fw-bold" id="restaurant_count">44</h3>
+                              <h5 class="text-muted m-b-0 fw-semibold">Total Earning</h5>
                           </div>
-
                       </div>
-
                   </div>
 
             </div>
 
             <div class="col-lg-4 col-md-6">
 
-                  <div class="card">
-
+                  <div class="card shadow-sm border-0" style="border-radius:16px;">
                       <div class="flex-row">
-
-                          <div class="p-10 bg-info col-md-12 text-center">
-
+                          <div class="p-3 bg-info text-center" style="border-top-left-radius:16px; border-bottom-left-radius:16px; width:80px; display:flex; align-items:center; justify-content:center;">
                               <h3 class="text-white box m-b-0"><i class="ti-wallet"></i></h3></div>
-
-                          <div class="align-self-center pt-3 col-md-12 text-center">
-
-                              <h3 class="m-b-0 text-info" id="restaurant_count">44</h3>
-
-                              <h5 class="text-muted m-b-0">Total Payment</h5>
-
+                          <div class="align-self-center px-4 py-3">
+                              <h3 class="m-b-0 text-info fw-bold" id="restaurant_count">44</h3>
+                              <h5 class="text-muted m-b-0 fw-semibold">Total Payment</h5>
                           </div>
-
                       </div>
-
                   </div>
 
             </div>
 
             <div class="col-lg-4 col-md-6">
 
-                  <div class="card">
-
+                  <div class="card shadow-sm border-0" style="border-radius:16px;">
                       <div class="flex-row">
-
-                          <div class="p-10 bg-info col-md-12 text-center">
-
+                          <div class="p-3 bg-warning text-center" style="border-top-left-radius:16px; border-bottom-left-radius:16px; width:80px; display:flex; align-items:center; justify-content:center;">
                               <h3 class="text-white box m-b-0"><i class="ti-wallet"></i></h3></div>
-
-                          <div class="align-self-center pt-3 col-md-12 text-center">
-
-                              <h3 class="m-b-0 text-info" id="restaurant_count">44</h3>
-
-                              <h5 class="text-muted m-b-0">Remaining Payment</h5>
-
+                          <div class="align-self-center px-4 py-3">
+                              <h3 class="m-b-0 text-warning fw-bold" id="restaurant_count">44</h3>
+                              <h5 class="text-muted m-b-0 fw-semibold">Remaining Payment</h5>
                           </div>
-
                       </div>
-
                   </div>
 
             </div>
 
       </div>
-      <div class="row restaurant_payout_create">
+      <div class="row restaurant_payout_create mt-4">
         <div class="restaurant_payout_create-inner">
           <fieldset>
-             <legend>{{trans('lang.store_details')}}</legend>
+             <h4 class="fw-bold mb-4 text-dark"><i class="fa fa-info-circle me-2 text-primary"></i>{{trans('lang.store_details')}}</h4>
             
               <div class="form-group row width-50">
-                <label class="col-3 control-label">{{trans('lang.store_name')}}</label>
+                <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.store_name')}}</label>
                	<div class="col-7">
-                	<input type="text" class="form-control restaurant_name">
-                	<div class="form-text text-muted">
+                	<input type="text" class="form-control restaurant_name shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
+                	<div class="form-text text-muted mt-2">
                   	{{ trans("lang.store_name_help") }}
                 	</div>
               	</div>
@@ -201,22 +174,28 @@
 
       </fieldset>
 
-      <fieldset>
-        <legend>{{trans('lang.admin_area')}}</legend>
+      <fieldset class="mt-4">
+        <h4 class="fw-bold mb-4 text-dark"><i class="fa fa-user-shield me-2 text-primary"></i>{{trans('lang.admin_area')}}</h4>
 
         <div class="form-group row">
-          <label class="col-3 control-label">{{trans('lang.store_users')}}</label>
-          <input type="text" class=" col-3 form-control restaurant_owners" disabled>
+          <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.store_users')}}</label>
+          <div class="col-9">
+            <input type="text" class="form-control restaurant_owners shadow-sm rounded-pill border-0" style="background:#f8f9fa; max-width:300px;" disabled>
+          </div>
         </div>
       </fieldset>
 
     </div>
   </div>
 </div>
-      <div class="form-group col-12 text-center">
-          <button type="button" class="btn btn-primary  save_restaurant_btn" ><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
-         <a href="{!! route('stores') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
-      </div>
+        <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+            <a href="{!! route('admin.stores') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+            </a>
+            <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold save_restaurant_btn">
+                <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
+            </button>
+        </div>
 
     </div>
   </div>
@@ -291,7 +270,7 @@
 
 		    database.collection('vendors').doc(id).update({'title':restaurantname,'description':description,'latitude':latitude,
 		      'longitude':longitude,'location':address,'photo':photo,'categoryID':cuisines,'phonenumber':phonenumber,'categoryTitle':categoryTitle}).then(function(result) {
-		                window.location.href = '{{ route("restaurants")}}';
+		                window.location.href = '{{ route("admin.stores")}}';
 		             }); 
 		})
 

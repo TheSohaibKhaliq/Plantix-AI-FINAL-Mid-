@@ -1,246 +1,231 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">{{trans('lang.driver_plural')}}</h3>
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-car me-2 text-success"></i>{{trans('lang.driver_plural')}}</h3>
         </div>
 
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{!! route('drivers') !!}">{{trans('lang.driver_plural')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.drivers') !!}">{{trans('lang.driver_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.driver_edit')}}</li>
             </ol>
         </div>
-        <div>
+    </div>
 
-            <div class="card-body">
-
-                <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">{{trans('lang.processing')}}
-                </div>
-
-                <div class="row daes-top-sec mb-3">
-
-                    <div class="col-lg-6 col-md-6">
-
-                        <a href="{{route('orders')}}?driverId={{$id}}">
-
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="mdi mdi-cart"></i></h3>
-                                    </div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="total_orders">0</h3>
-
-                                        <h5 class="text-muted m-b-0">{{trans('lang.dashboard_total_orders')}}</h5>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </a>
+    <div class="row daes-top-sec mb-4">
+        <div class="col-lg-6 col-md-6 mb-3 mb-md-0">
+            <a href="{{route('admin.orders.index')}}?driverId={{$id}}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                    <div class="card-body p-4 d-flex align-items-center">
+                        <div class="bg-info-subtle text-info rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="mdi mdi-cart fs-3"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="m-b-0 fw-bold text-dark" id="total_orders">0</h3>
+                            <h5 class="text-muted m-b-0">{{trans('lang.dashboard_total_orders')}}</h5>
+                        </div>
                     </div>
-
-                    <div class="col-lg-6 col-md-6">
-                        <a href="{{route('payoutRequests.drivers.view',$id)}}">
-                            <div class="card">
-
-                                <div class="flex-row">
-
-                                    <div class="p-10 bg-info col-md-12 text-center">
-
-                                        <h3 class="text-white box m-b-0"><i class="mdi mdi-bank"></i></h3>
-                                    </div>
-
-                                    <div class="align-self-center pt-3 col-md-12 text-center">
-
-                                        <h3 class="m-b-0 text-info" id="wallet_amount">0</h3>
-
-                                        <h5 class="text-muted m-b-0">{{trans('lang.wallet_Balance')}}</h5>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </a>
-                    </div>
-
                 </div>
+            </a>
+        </div>
 
-                <div class="error_top"></div>
-                <div class="row restaurant_payout_create">
-                    <div class="restaurant_payout_create-inner">
-                        <fieldset>
-                            <legend>{{trans('lang.driver_details')}}</legend>
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.first_name')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control user_first_name">
-                                    <div class="form-text text-muted">{{trans('lang.first_name_help')}}</div>
-                                </div>
-                            </div>
+        <div class="col-lg-6 col-md-6">
+            <a href="{{route('admin.payoutRequests.drivers.view',$id)}}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                    <div class="card-body p-4 d-flex align-items-center">
+                        <div class="bg-success-subtle text-success rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="mdi mdi-bank fs-3"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="m-b-0 fw-bold text-dark" id="wallet_amount">0</h3>
+                            <h5 class="text-muted m-b-0">{{trans('lang.wallet_Balance')}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.last_name')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control user_last_name">
-                                    <div class="form-text text-muted">{{trans('lang.last_name_help')}}</div>
-                                </div>
-                            </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-info-circle me-2 text-primary"></i>{{trans('lang.driver_details')}}</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">{{trans('lang.processing')}}</div>
+                    <div class="alert alert-danger error_top rounded border-0 shadow-sm mb-4" style="display:none"></div>
 
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.email')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control user_email" disabled>
-                                    <div class="form-text text-muted">{{trans('lang.user_email_help')}}</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.user_phone')}}</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control user_phone" onkeypress="return chkAlphabets2(event,'error2')">
-                                    <div id="error2" class="err"></div>
-                                    <div class="form-text text-muted">{{trans('lang.user_phone_help')}}</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.zone')}}<span
-                                            class="required-field"></span></label>
-                                <div class="col-7">
-                                    <select id='zone' class="form-control">
-                                        <option value="">{{ trans("lang.select_zone") }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-100">
-                                <div class="col-12">
-                                    <h6>{{ trans("lang.know_your_cordinates") }}<a target="_blank" href="https://www.latlong.net/">{{
-                                            trans("lang.latitude_and_longitude_finder") }}</a></h6>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.user_latitude')}}</label>
-                                <div class="col-7">
-                                    <input type="number" class="form-control user_latitude">
-                                    <div class="form-text text-muted">{{trans('lang.user_latitude_help')}}</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.user_longitude')}}</label>
-                                <div class="col-7">
-                                    <input type="number" class="form-control user_longitude">
-                                    <div class="form-text text-muted">{{trans('lang.user_longitude_help')}}</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row width-50">
-                                <label class="col-3 control-label">{{trans('lang.profile_image')}}</label>
-                                <div class="col-7">
-                                    <input type="file" onChange="handleFileSelect(event)" class="">
-                                    <div class="form-text text-muted">{{trans('lang.profile_image_help')}}</div>
-                                </div>
-                                <div class="placeholder_img_thumb user_image">
-                                </div>
-
-                                <div id="uploding_image"></div>
-                            </div>
-
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>{{trans('driver')}} {{trans('lang.active_deactive')}}</legend>
-                            <div class="form-group row width-100">
-                                <div class="form-check">
-                                    <input type="checkbox" id="is_active">
-                                    <label class="col-3 control-label" for="is_active">{{trans('lang.active')}}</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" id="reset_password">
-                                    <label class="col-3 control-label" for="reset_password">{{trans('lang.reset_driver_password')}}</label>
-                                    <div class="form-text text-muted w-100">
-                                        {{ trans("lang.note_reset_driver_password_email") }}
+                    <div class="restaurant_payout_create">
+                        <div class="restaurant_payout_create-inner">
+                            <fieldset>
+                                <legend>{{trans('lang.driver_details')}}</legend>
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.first_name')}}</label>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control user_first_name">
+                                        <div class="form-text text-muted">{{trans('lang.first_name_help')}}</div>
                                     </div>
                                 </div>
-                                <div class="form-button" style="margin-top: 16px;margin-left: 20px;">
-                                    <button type="button" class="btn btn-primary" id="send_mail">{{trans('lang.send_mail')}}
-                                    </button>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <legend>{{trans('lang.bankdetails')}}</legend>
 
-                            <div class="form-group row">
-
-                                <div class="form-group row width-100">
-                                    <label class="col-4 control-label">{{
-                                        trans('lang.bank_name')}}</label>
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.last_name')}}</label>
                                     <div class="col-7">
-                                        <input type="text" name="bank_name" class="form-control" id="bankName">
+                                        <input type="text" class="form-control user_last_name">
+                                        <div class="form-text text-muted">{{trans('lang.last_name_help')}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.email')}}</label>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control user_email" disabled>
+                                        <div class="form-text text-muted">{{trans('lang.user_email_help')}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.user_phone')}}</label>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control user_phone" onkeypress="return chkAlphabets2(event,'error2')">
+                                        <div id="error2" class="err"></div>
+                                        <div class="form-text text-muted">{{trans('lang.user_phone_help')}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.zone')}}<span
+                                                class="required-field"></span></label>
+                                    <div class="col-7">
+                                        <select id='zone' class="form-control">
+                                            <option value="">{{ trans("lang.select_zone") }}</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row width-100">
-                                    <label class="col-4 control-label">{{
-                                        trans('lang.branch_name')}}</label>
-                                    <div class="col-7">
-                                        <input type="text" name="branch_name" class="form-control" id="branchName">
+                                    <div class="col-12">
+                                        <h6>{{ trans("lang.know_your_cordinates") }}<a target="_blank" href="https://www.latlong.net/">{{
+                                                trans("lang.latitude_and_longitude_finder") }}</a></h6>
                                     </div>
                                 </div>
 
 
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.user_latitude')}}</label>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control user_latitude">
+                                        <div class="form-text text-muted">{{trans('lang.user_latitude_help')}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.user_longitude')}}</label>
+                                    <div class="col-7">
+                                        <input type="number" class="form-control user_longitude">
+                                        <div class="form-text text-muted">{{trans('lang.user_longitude_help')}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{trans('lang.profile_image')}}</label>
+                                    <div class="col-7">
+                                        <input type="file" onChange="handleFileSelect(event)" class="">
+                                        <div class="form-text text-muted">{{trans('lang.profile_image_help')}}</div>
+                                    </div>
+                                    <div class="placeholder_img_thumb user_image">
+                                    </div>
+
+                                    <div id="uploding_image"></div>
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>{{trans('driver')}} {{trans('lang.active_deactive')}}</legend>
                                 <div class="form-group row width-100">
-                                    <label class="col-4 control-label">{{
-                                        trans('lang.holer_name')}}</label>
-                                    <div class="col-7">
-                                        <input type="text" name="holer_name" class="form-control" id="holderName">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="is_active">
+                                        <label class="col-3 control-label" for="is_active">{{trans('lang.active')}}</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input type="checkbox" id="reset_password">
+                                        <label class="col-3 control-label" for="reset_password">{{trans('lang.reset_driver_password')}}</label>
+                                        <div class="form-text text-muted w-100">
+                                            {{ trans("lang.note_reset_driver_password_email") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-button" style="margin-top: 16px;margin-left: 20px;">
+                                        <button type="button" class="btn btn-primary" id="send_mail">{{trans('lang.send_mail')}}
+                                        </button>
                                     </div>
                                 </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>{{trans('lang.bankdetails')}}</legend>
 
-                                <div class="form-group row width-100">
-                                    <label class="col-4 control-label">{{
-                                        trans('lang.account_number')}}</label>
-                                    <div class="col-7">
-                                        <input type="text" name="account_number" class="form-control" id="accountNumber">
+                                <div class="form-group row">
+
+                                    <div class="form-group row width-100">
+                                        <label class="col-4 control-label">{{
+                                            trans('lang.bank_name')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" name="bank_name" class="form-control" id="bankName">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group row width-100">
-                                    <label class="col-4 control-label">{{
-                                        trans('lang.other_information')}}</label>
-                                    <div class="col-7">
-                                        <input type="text" name="other_information" class="form-control" id="otherDetails">
+                                    <div class="form-group row width-100">
+                                        <label class="col-4 control-label">{{
+                                            trans('lang.branch_name')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" name="branch_name" class="form-control" id="branchName">
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
-                        </fieldset>
+
+                                    <div class="form-group row width-100">
+                                        <label class="col-4 control-label">{{
+                                            trans('lang.holer_name')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" name="holer_name" class="form-control" id="holderName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row width-100">
+                                        <label class="col-4 control-label">{{
+                                            trans('lang.account_number')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" name="account_number" class="form-control" id="accountNumber">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row width-100">
+                                        <label class="col-4 control-label">{{
+                                            trans('lang.other_information')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" name="other_information" class="form-control" id="otherDetails">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group col-12 text-center btm-btn">
-                <button type="button" class="btn btn-primary edit-form-btn"><i class="fa fa-save"></i> {{
-                    trans('lang.save')}}
+
+            <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                <a href="{!! route('admin.drivers') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                    <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                </a>
+                <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold edit-form-btn">
+                    <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
                 </button>
-                <a href="{!! route('drivers') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
-                    trans('lang.cancel')}}</a>
             </div>
 
         </div>
@@ -476,7 +461,7 @@
                             'zoneId': zoneId
                         }).then(function(result) {
                             jQuery("#data-table_processing").hide();
-                            window.location.href = '{{ route("drivers")}}';
+                            window.location.href = '{{ route("admin.drivers")}}';
 
                         });
                 }).catch(err => {

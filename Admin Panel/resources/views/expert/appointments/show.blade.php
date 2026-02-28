@@ -3,60 +3,60 @@
 @section('page-title', 'Appointment Details')
 
 @section('content')
-<div class="row g-4">
+<div class="row g-4 mb-4">
     {{-- Main details --}}
     <div class="col-lg-8">
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <div class="card border-0 shadow-sm mb-4 hover-card">
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
                 <h6 class="mb-0 fw-bold">
                     <i class="bi bi-calendar-check me-2 text-success"></i>Appointment #{{ $appointment->id }}
                 </h6>
-                <span class="badge bg-{{ $appointment->status_badge }} px-3 py-2">
+                <span class="badge rounded-pill bg-{{ $appointment->status_badge }} px-3 py-2">
                     {{ ucfirst($appointment->status) }}
                 </span>
             </div>
-            <div class="card-body">
-                <div class="row g-3">
+            <div class="card-body p-4">
+                <div class="row g-4">
                     <div class="col-sm-6">
-                        <div class="text-muted small">Farmer</div>
-                        <div class="fw-semibold">{{ $appointment->user->name }}</div>
-                        <div class="text-muted small">{{ $appointment->user->email }}</div>
+                        <div class="text-muted small text-uppercase fw-bold mb-1">Farmer</div>
+                        <div class="fw-semibold fs-6">{{ $appointment->user->name }}</div>
+                        <div class="text-muted small"><i class="bi bi-envelope me-1"></i>{{ $appointment->user->email }}</div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="text-muted small">Scheduled</div>
-                        <div class="fw-semibold">{{ $appointment->scheduled_at?->format('D, d M Y') }}</div>
-                        <div class="text-muted small">{{ $appointment->scheduled_at?->format('H:i') }} ({{ $appointment->duration_minutes }} min)</div>
+                        <div class="text-muted small text-uppercase fw-bold mb-1">Scheduled</div>
+                        <div class="fw-semibold fs-6"><i class="bi bi-calendar3 me-1 text-success"></i>{{ $appointment->scheduled_at?->format('D, d M Y') }}</div>
+                        <div class="text-muted small"><i class="bi bi-clock me-1"></i>{{ $appointment->scheduled_at?->format('H:i') }} ({{ $appointment->duration_minutes }} min)</div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="text-muted small">Topic</div>
-                        <div>{{ $appointment->topic ?? 'General Consultation' }}</div>
+                        <div class="text-muted small text-uppercase fw-bold mb-1">Topic</div>
+                        <div class="fw-medium">{{ $appointment->topic ?? 'General Consultation' }}</div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="text-muted small">Fee / Payment</div>
-                        <div>PKR {{ number_format($appointment->fee) }}
-                            <span class="badge bg-{{ $appointment->payment_status === 'paid' ? 'success' : 'warning' }} ms-1">
+                        <div class="text-muted small text-uppercase fw-bold mb-1">Fee / Payment</div>
+                        <div class="fw-semibold">PKR {{ number_format($appointment->fee) }}
+                            <span class="badge rounded-pill bg-{{ $appointment->payment_status === 'paid' ? 'success' : 'warning' }} ms-2">
                                 {{ ucfirst($appointment->payment_status) }}
                             </span>
                         </div>
                     </div>
                     @if($appointment->notes)
-                    <div class="col-12">
-                        <div class="text-muted small">Farmer Notes</div>
-                        <div class="bg-light p-2 rounded small">{{ $appointment->notes }}</div>
+                    <div class="col-12 mt-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-2">Farmer Notes</div>
+                        <div class="bg-light p-3 rounded-3 small border">{{ $appointment->notes }}</div>
                     </div>
                     @endif
                     @if($appointment->meeting_link)
-                    <div class="col-12">
-                        <div class="text-muted small">Meeting Link</div>
-                        <a href="{{ $appointment->meeting_link }}" target="_blank" class="text-success">
-                            <i class="bi bi-camera-video me-1"></i>{{ $appointment->meeting_link }}
+                    <div class="col-12 mt-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-2">Meeting Link</div>
+                        <a href="{{ $appointment->meeting_link }}" target="_blank" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-camera-video me-2"></i>Join Meeting
                         </a>
                     </div>
                     @endif
                     @if($appointment->reject_reason)
-                    <div class="col-12">
-                        <div class="text-muted small">Rejection Reason</div>
-                        <div class="alert alert-danger py-2 mb-0 small">{{ $appointment->reject_reason }}</div>
+                    <div class="col-12 mt-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-2">Rejection Reason</div>
+                        <div class="alert alert-danger py-2 mb-0 small"><i class="bi bi-exclamation-triangle me-2"></i>{{ $appointment->reject_reason }}</div>
                     </div>
                     @endif
                 </div>
@@ -64,31 +64,34 @@
         </div>
 
         {{-- Status History --}}
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white border-bottom">
+        <div class="card border-0 shadow-sm hover-card">
+            <div class="card-header bg-white border-bottom py-3">
                 <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2 text-info"></i>Status History</h6>
             </div>
             <div class="card-body p-0">
                 @forelse($appointment->statusHistory as $log)
-                <div class="d-flex align-items-start p-3 border-bottom">
-                    <i class="bi bi-arrow-right-circle text-success me-3 mt-1"></i>
+                <div class="d-flex align-items-start p-3 border-bottom hover-bg-light">
+                    <i class="bi bi-arrow-right-circle text-success fs-5 me-3 mt-1"></i>
                     <div class="flex-grow-1">
                         <div class="small">
-                            <span class="badge bg-secondary me-1">{{ ucfirst($log->from_status) }}</span>
-                            <i class="bi bi-arrow-right"></i>
-                            <span class="badge bg-success ms-1">{{ ucfirst($log->to_status) }}</span>
-                            by <strong>{{ $log->changedBy?->name }}</strong>
+                            <span class="badge rounded-pill bg-secondary me-1">{{ ucfirst($log->from_status) }}</span>
+                            <i class="bi bi-arrow-right text-muted mx-1"></i>
+                            <span class="badge rounded-pill bg-success ms-1">{{ ucfirst($log->to_status) }}</span>
+                            <span class="ms-2 text-muted">by <strong>{{ $log->changedBy?->name }}</strong></span>
                         </div>
                         @if($log->notes)
-                            <div class="text-muted small mt-1">{{ $log->notes }}</div>
+                            <div class="text-secondary small mt-2 bg-light p-2 rounded">{{ $log->notes }}</div>
                         @endif
-                        <div class="text-muted" style="font-size:.7rem">
-                            {{ $log->changed_at?->format('d M Y H:i') }}
+                        <div class="text-muted mt-2" style="font-size:.70rem">
+                            <i class="bi bi-clock me-1"></i>{{ $log->changed_at?->format('d M Y H:i') }}
                         </div>
                     </div>
                 </div>
                 @empty
-                <div class="p-3 text-muted small text-center">No status changes yet.</div>
+                <div class="p-4 text-muted small text-center">
+                    <i class="bi bi-info-circle fs-3 d-block mb-2 text-light"></i>
+                    No status changes yet.
+                </div>
                 @endforelse
             </div>
         </div>
@@ -96,11 +99,11 @@
 
     {{-- Action Panel --}}
     <div class="col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white border-bottom">
+        <div class="card border-0 shadow-sm hover-card">
+            <div class="card-header bg-white border-bottom py-3">
                 <h6 class="mb-0 fw-bold"><i class="bi bi-gear me-2 text-secondary"></i>Actions</h6>
             </div>
-            <div class="card-body d-grid gap-2">
+            <div class="card-body p-4 d-grid gap-3">
 
                 {{-- Accept --}}
                 @if($appointment->canBeAccepted())
@@ -129,6 +132,8 @@
                     <i class="bi bi-calendar-plus me-1"></i>Propose Reschedule
                 </button>
                 @endif
+
+                <hr class="my-2 border-secondary opacity-25">
 
                 <a href="{{ route('expert.appointments.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i>Back to List

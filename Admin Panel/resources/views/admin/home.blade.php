@@ -160,7 +160,7 @@
         <div class="row">
 
             <div class="col-lg-4">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border">
                         <div class="d-flex justify-content-between">
                             <h3 class="card-title">{{trans('lang.total_sales')}}</h3>
@@ -179,7 +179,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border">
                         <div class="d-flex justify-content-between">
                             <h3 class="card-title">{{trans('lang.service_overview')}}</h3>
@@ -194,7 +194,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border">
                         <div class="d-flex justify-content-between">
                             <h3 class="card-title">{{trans('lang.sales_overview')}}</h3>
@@ -212,7 +212,7 @@
 
         <div class="row daes-sec-sec mb-3">
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.store_plural')}}</h3>
                         <div class="card-tools">
@@ -240,7 +240,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_orders')}}</h3>
                         <div class="card-tools">
@@ -271,7 +271,7 @@
         <div class="row daes-sec-sec">
 
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.top_drivers')}}</h3>
                         <div class="card-tools">
@@ -299,7 +299,7 @@
             </div>
 
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card hover-card">
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_payouts')}}</h3>
                         <div class="card-tools">

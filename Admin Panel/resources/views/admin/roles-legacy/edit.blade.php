@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -7,132 +7,63 @@
 <div class="page-wrapper">
 
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{trans('lang.edit_role')}}</h3>
-
-
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-pencil-square-o me-2 text-success"></i>{{trans('lang.edit_role')}}</h3>
         </div>
-
-  
 
         <div class="col-md-7 align-self-center">
-
             <ol class="breadcrumb">
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
                 <li class="breadcrumb-item"><a href="{{ url('role') }}">{{trans('lang.role_plural')}}</a> </li>
-
                 <li class="breadcrumb-item active">{{trans('lang.edit_role')}}</li>
-
-
-
-
-
             </ol>
-
         </div>
-
-
-
     </div>
 
-    <div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-shield me-2 text-primary"></i>{{trans('lang.role_details')}}</h5>
+                </div>
+                <div class="card-body p-4">
 
+                    <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
+                        {{trans('lang.processing')}}
+                    </div>
 
+                    <div class="alert alert-danger error_top rounded border-0 shadow-sm" style="display:none"></div>
+                    <div class="alert alert-success success_top rounded border-0 shadow-sm" style="display:none"></div>
 
-        <div class="card-body">
+                    <form action="{{route('admin.role.update',$id)}}" method="post" id="roleForm">
+                        @csrf
 
-
-
-            <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
-
-                {{trans('lang.processing')}}
-
-            </div>
-
-
-
-            <div class="error_top" style="display:none"></div>
-
-
-
-            <div class="success_top" style="display:none"></div>
-
-
-
-            <form action="{{route('role.update',$id)}}" method="post" id="roleForm">
-
-                @csrf
-
-                <div class="row restaurant_payout_create">
-
-
-
-                    <div class="restaurant_payout_create-inner">
-
-
-
-                        <fieldset>
-
-                            <legend>{{trans('lang.role_details')}}</legend>
-
-                            <div class="form-group row width-100 d-flex">
-
-                                <label class="col-3 control-label">{{trans('lang.name')}}</label>
-
-                                <div class="col-6">
-
-                                    <input type="text" class="form-control" id="name" name="name"
-
-                                        value="{{$roles->role_name}}" >
-
+                        <div class="mb-4 bg-light p-4 rounded-3 border">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark">{{trans('lang.name')}}</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25" id="name" name="name" value="{{$roles->role_name}}" >
                                 </div>
-
-                                <div class="col-6 text-right">
-
-                                    <label for="permissions"
-
-                                        class="form-label">{{trans('lang.assign_permissions')}}</label>
-
-                                    <div class="text-right">
-
-                                        <input type="checkbox" name="all_permission" id="all_permission" >
-
-                                        <label class="control-label"
-
-                                            for="all_permission">{{trans('lang.all_permissions')}}</label>
-
+                                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                    <label for="permissions" class="form-label d-block fw-semibold text-dark">{{trans('lang.assign_permissions')}}</label>
+                                    <div class="form-check form-switch d-inline-block">
+                                        <input class="form-check-input" type="checkbox" name="all_permission" id="all_permission" style="transform: scale(1.3); margin-top: 0.3rem;">
+                                        <label class="form-check-label ms-2 fw-medium text-primary cursor-pointer" for="all_permission">{{trans('lang.all_permissions')}}</label>
                                     </div>
-
                                 </div>
-
-
-
                             </div>
+                        </div>
 
-
-
-                            <div class="role-table row width-100">
-
-
-
-                                <div class="col-12">
-
-                                    <table class="table table-striped">
-
-                                        <thead>
-
-                                            <th>Menu</th>
-
-                                            <th>Permission</th>
-
-                                        </thead>
-
-                                        <tbody>
+                        <div class="card border-0 border-top mt-4 pt-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="fw-bold text-uppercase text-muted small w-25">Menu</th>
+                                            <th class="fw-bold text-uppercase text-muted small">Permissions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
                                             <tr>
 
@@ -2417,55 +2348,24 @@
 
 
 
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-
-
-
-
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
 
-
-
-                    </div>
-
-
-
-                    </fieldset>
-
+                        <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
+                            <a href="{{url('role')}}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                                <i class="fa fa-undo me-2"></i>{{ trans('lang.cancel')}}
+                            </a>
+                            <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold edit-form-btn">
+                                <i class="fa fa-save me-2"></i> {{ trans('lang.save')}}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-
-
+            </div>
         </div>
-
-
-
     </div>
-
-    <div class="form-group col-12 text-center btm-btn">
-
-        <button type="button" class="btn btn-primary edit-form-btn"><i class="fa fa-save"></i> {{
-
-            trans('lang.save')}}
-
-        </button>
-
-        <a href="{{url('role')}}" class="btn btn-default"><i class="fa fa-undo"></i>{{
-
-            trans('lang.cancel')}}</a>
-
-    </div>
-
-    <form>
-
-
-
-</div>
 
 
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -22,7 +22,7 @@
 
 				<li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
-				<li class="breadcrumb-item"><a href= "{!! route('settings.app.languages') !!}" >{{trans('lang.languages')}}</a></li>
+				<li class="breadcrumb-item"><a href= "{!! route('admin.settings.app.languages') !!}" >{{trans('lang.languages')}}</a></li>
 
 				<li class="breadcrumb-item active">{{trans('lang.add_language')}}</li>
 
@@ -261,7 +261,7 @@ $(".save-form-btn").click(function(){
 
 				jQuery("#data-table_processing").hide();
 
-				window.location.href = '{{ route("settings.app.languages") }}';
+				window.location.href = '{{ route("admin.settings.app.languages") }}';
 
 			});
 

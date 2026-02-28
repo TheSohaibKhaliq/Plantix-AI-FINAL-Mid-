@@ -1,33 +1,19 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
 
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor restaurantTitle">{{trans('lang.document_plural')}}</h3>
-
+            <h3 class="text-themecolor restaurantTitle fw-bold"><i class="fa fa-file-text-o me-2 text-success"></i>{{trans('lang.document_plural')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
-
             <ol class="breadcrumb">
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
                 <li class="breadcrumb-item active">{{trans('lang.document_table')}}</li>
-
             </ol>
-
         </div>
-
-        <div>
-
-        </div>
-
     </div>
 
 
@@ -36,25 +22,20 @@
         <div class="row">
 
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
-                                        class="fa fa-list mr-2"></i>{{trans('lang.document_table')}}</a>
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent fw-bold" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.document_table')}}</a>
                             </li>
-
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('documents.create') !!}"><i
-                                        class="fa fa-plus mr-2"></i>{{trans('lang.document_create')}}</a>
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{!! route('admin.documents.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.document_create')}}</a>
                             </li>
-
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
 
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
-                            style="display: none;">Processing...
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">{{trans('lang.processing')}}
                         </div>
 
                         <div class="table-responsive m-t-10">
@@ -268,7 +249,7 @@
         newdate = '';
         var id = val.id;
 
-        var route1 = '{{route("documents.edit", ":id")}}';
+        var route1 = '{{route("admin.documents.edit", ":id")}}';
         route1 = route1.replace(':id', id);
 
         if (checkDeletePermission) {
@@ -276,10 +257,10 @@
                 'for="is_open_' + id + '" ></label></td>');
         }
 
-        html.push('<a href="' + route1 + '"  class="redirecttopage">' + val.title + '</a>');
+        html.push('<a href="' + route1 + '"  class="redirecttopage text-success fw-bold text-decoration-none">' + val.title + '</a>');
 
         let type = (val.type == 'restaurant' ) ? 'Store' : 'Driver';
-        html.push(type);
+        html.push('<span class="badge bg-info-subtle text-info fw-bold px-3 py-2 rounded-pill">' + type + '</span>');
 
         if (val.enable) {
             html.push('<label class="switch"><input type="checkbox" checked id="' + val.id + '" name="isActive" dataUser="' + val.type + '"><span class="slider round"></span></label>');
@@ -287,9 +268,9 @@
             html.push('<label class="switch"><input type="checkbox" id="' + val.id + '" name="isActive" dataUser="' + val.type + '"><span class="slider round"></span></label>');
         }
         var actionHtml = '';
-        actionHtml += '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a>';
+        actionHtml += '<span class="action-btn"><a href="' + route1 + '" class="btn btn-sm btn-light border shadow-sm mx-1"><i class="fa fa-edit text-success"></i></a>';
         if (checkDeletePermission) {
-            actionHtml = actionHtml + '<a id="' + val.id + '" name="document_delete" dataUser="' + val.type + '" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a>';
+            actionHtml = actionHtml + '<a id="' + val.id + '" name="document_delete" dataUser="' + val.type + '" class="btn btn-sm btn-light border shadow-sm mx-1 delete-btn" href="javascript:void(0)"><i class="fa fa-trash text-danger"></i></a>';
         }
         actionHtml += '</span>';
         html.push(actionHtml);

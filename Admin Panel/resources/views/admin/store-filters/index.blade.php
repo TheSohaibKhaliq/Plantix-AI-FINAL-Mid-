@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -41,7 +41,7 @@
                                 <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.restaurant_filter_table')}}</a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" href="{!! route('restaurantFilters.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.restaurant_filter_create')}}</a>
+                                <a class="nav-link" href="{!! route('admin.storeFilters.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.restaurant_filter_create')}}</a>
                                 </li>
 
                             </ul>
@@ -169,7 +169,7 @@ function buildHTML(snapshots){
             newdate='';
 
             var id = val.id;
-            var route1 =  '{{route("restaurantFilters.edit",":id")}}';
+            var route1 =  '{{route("admin.storeFilters.edit",":id")}}';
             route1 = route1.replace(':id', id);
             var options = val.options.toString();
 

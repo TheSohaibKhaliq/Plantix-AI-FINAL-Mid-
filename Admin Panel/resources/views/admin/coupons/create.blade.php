@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -30,7 +30,7 @@
 
                 <?php } else { ?>
 
-                    <li class="breadcrumb-item"><a href="{!! route('coupons') !!}">{{trans('lang.coupon_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.coupons') !!}">{{trans('lang.coupon_plural')}}</a>
 
                     </li>
 
@@ -282,7 +282,7 @@
 
                 <?php } else { ?>
 
-                    <a href="{!! route('coupons') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+                    <a href="{!! route('admin.coupons') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
                 <?php } ?>
 
@@ -537,7 +537,7 @@ $(document).ready(function () {
 
                             jQuery("#data-table_processing").hide();
 
-                            window.location.href = '{{ route("coupons")}}';
+                            window.location.href = '{{ route("admin.coupons")}}';
 
                         }
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -28,7 +28,7 @@
                                 <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.user_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('users.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.user_create')}}</a>
+                                <a class="nav-link" href="{!! route('admin.users.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.user_create')}}</a>
                             </li>
                         </ul>
                     </div>
@@ -185,14 +185,14 @@
 
                     paginatedRecords.forEach(function (childData) {
                         var id = childData.id;
-                        var route1 = '{{route("users.edit",":id")}}';
+                        var route1 = '{{route("admin.users.edit",":id")}}';
                         route1 = route1.replace(':id', id);
 
 
-                        var user_view = '{{route("users.view",":id")}}';
+                        var user_view = '{{route("admin.users.view",":id")}}';
                         user_view = user_view.replace(':id', id);
 
-                        var trroute1 = '{{route("users.walletstransaction",":id")}}';
+                        var trroute1 = '{{route("admin.users.walletstransaction",":id")}}';
                         trroute1 = trroute1.replace(':id', id);
                         var date = '';
                         var time = '';

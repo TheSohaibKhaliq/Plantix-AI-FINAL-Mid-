@@ -4,44 +4,72 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white border-0 py-3">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-chat-quote me-2 text-warning"></i>Customer Review</h5>
+    <div class="col-lg-8">
+        
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ route('vendor.reviews.index') }}" class="btn btn-sm btn-outline-secondary rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;" title="Back to Reviews">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h4 class="mb-0 fw-bold text-dark"><i class="bi bi-chat-quote-fill me-2 text-primary"></i>Customer Review Details</h4>
+                <span class="text-muted small fw-medium mt-1 d-block">View feedback left by a customer for your product</span>
             </div>
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4 text-muted">Product</dt>
-                    <dd class="col-sm-8 fw-semibold">{{ $review->product->name ?? '—' }}</dd>
+        </div>
 
-                    <dt class="col-sm-4 text-muted">Customer</dt>
-                    <dd class="col-sm-8">{{ $review->user->name ?? '—' }}</dd>
+        <div class="card border-0 shadow-sm hover-card mb-4" style="border-radius:16px;">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-info-circle-fill me-2 text-info fs-5"></i>Review Information</h6>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                
+                <div class="text-center mb-5 border-bottom pb-4">
+                    <div class="d-inline-block bg-warning bg-opacity-10 rounded-pill px-4 py-2 border border-warning border-opacity-25 shadow-sm mb-3">
+                        <div class="fs-4 text-warning">
+                            @for($i=1;$i<=5;$i++)
+                                <i class="bi bi-star{{ ($i <= $review->rating) ? '-fill' : ' text-muted opacity-25' }}"></i>
+                            @endfor
+                        </div>
+                    </div>
+                    <div class="fw-bold text-dark fs-5">{{ $review->rating }}.0 out of 5 Stars</div>
+                    <div class="text-muted small fw-medium mt-1">Submitted on <i class="bi bi-calendar3 mx-1"></i>{{ $review->created_at->format('d M Y, h:i A') }}</div>
+                </div>
 
-                    <dt class="col-sm-4 text-muted">Order</dt>
-                    <dd class="col-sm-8">{{ $review->order->order_number ?? '—' }}</dd>
-
-                    <dt class="col-sm-4 text-muted">Rating</dt>
+                <dl class="row mb-0 g-4">
+                    <dt class="col-sm-4 text-muted small text-uppercase fw-bold">Product</dt>
                     <dd class="col-sm-8">
-                        @for($i=1;$i<=5;$i++)
-                            <i class="bi bi-star{{ ($i <= $review->rating) ? '-fill text-warning' : ' text-muted' }}"></i>
-                        @endfor
-                        <span class="ms-2 small text-muted">({{ $review->rating }}/5)</span>
+                        <a href="{{ route('vendor.products.edit', $review->product_id) }}" class="text-decoration-none fw-bold text-primary d-flex align-items-center">
+                            <i class="bi bi-box-seam me-2"></i>{{ $review->product->name ?? '—' }}
+                        </a>
                     </dd>
 
-                    <dt class="col-sm-4 text-muted">Comment</dt>
-                    <dd class="col-sm-8">{{ $review->comment ?: 'No comment provided.' }}</dd>
+                    <dt class="col-sm-4 text-muted small text-uppercase fw-bold">Customer</dt>
+                    <dd class="col-sm-8 fw-medium text-dark d-flex align-items-center">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 shadow-sm" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                            {{ substr($review->user->name ?? '?', 0, 1) }}
+                        </div>
+                        {{ $review->user->name ?? '—' }}
+                    </dd>
 
-                    <dt class="col-sm-4 text-muted">Submitted</dt>
-                    <dd class="col-sm-8 text-muted small">{{ $review->created_at->format('d M Y, H:i') }}</dd>
+                    <dt class="col-sm-4 text-muted small text-uppercase fw-bold">Order Reference</dt>
+                    <dd class="col-sm-8">
+                        <a href="{{ route('vendor.orders.show', $review->order_id ?? 0) }}" class="text-decoration-none fw-bold text-dark btn btn-sm btn-light border shadow-sm rounded-pill px-3">
+                            <i class="bi bi-receipt me-1"></i>{{ $review->order->order_number ?? '—' }}
+                        </a>
+                    </dd>
+
+                    <dt class="col-sm-4 text-muted small text-uppercase fw-bold">Customer Comment</dt>
+                    <dd class="col-sm-8">
+                        <div class="bg-light p-4 rounded-4 border-start border-4 border-primary position-relative">
+                            <i class="bi bi-quote position-absolute top-0 start-0 text-primary opacity-25" style="font-size: 3rem; transform: translate(-10px, -15px);"></i>
+                            <span class="fst-italic text-dark position-relative z-1" style="font-size: 1.05rem; line-height: 1.6;">
+                                {{ $review->comment ?: 'No written comment provided by the customer.' }}
+                            </span>
+                        </div>
+                    </dd>
                 </dl>
             </div>
         </div>
 
-        <div class="mt-3">
-            <a href="{{ route('vendor.reviews.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i>Back to Reviews
-            </a>
-        </div>
     </div>
 </div>
 @endsection

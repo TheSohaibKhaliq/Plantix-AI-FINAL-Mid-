@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -7,7 +7,7 @@
     <div class="row page-titles">
 
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-car me-2 text-success"></i>
                 @if(request()->is('drivers/approved'))
                 @php    $type = 'approved'; @endphp
                 {{trans('lang.approved_drivers')}}
@@ -47,33 +47,33 @@
 
             <div class="col-12">
 
-                <div class="card">
+                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
 
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
+                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <ul class="nav nav-tabs card-header-tabs border-bottom-0 fw-semibold m-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{!! route('drivers') !!}"><i
-                                        class="fa fa-list mr-2"></i>{{trans('lang.driver_table')}}</a>
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{!! route('admin.drivers') !!}"><i
+                                        class="fa fa-list me-2"></i>{{trans('lang.driver_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('drivers.create') !!}"><i
-                                        class="fa fa-plus mr-2"></i>{{trans('lang.drivers_create')}}</a>
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{!! route('admin.drivers.create') !!}"><i
+                                        class="fa fa-plus me-2"></i>{{trans('lang.drivers_create')}}</a>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="card-body">
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
+                    <div class="card-body p-0">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success"
                             style="display: none;">{{trans('lang.processing')}}
                         </div>
 
-                        <div class="table-responsive m-t-10">
+                        <div class="table-responsive">
 
                             <table id="driverTable"
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
+                                class="table table-hover align-middle mb-0"
                                 cellspacing="0" width="100%">
 
-                                <thead>
+                                <thead class="table-light">
 
                                     <tr>
                                         <?php if (
@@ -81,28 +81,32 @@
     ($type == "pending" && in_array('pending.driver.delete', json_decode(@session('admin_permissions'), true))) ||
     ($type == "all" && in_array('driver.delete', json_decode(@session('admin_permissions'), true)))
 ) { ?>
-                                            <th class="delete-all"><input type="checkbox" id="is_active"><label
-                                                    class="col-3 control-label" for="is_active"><a id="deleteAll"
-                                                        class="do_not_delete" href="javascript:void(0)"><i
-                                                            class="fa fa-trash"></i> {{trans('lang.all')}}</a></label>
+                                            <th class="delete-all ps-4" style="width: 50px;">
+                                                <div class="form-check m-0">
+                                                    <input type="checkbox" id="is_active" class="form-check-input">
+                                                    <label class="form-check-label d-none" for="is_active"></label>
+                                                </div>
+                                                <a id="deleteAll" class="do_not_delete text-danger small mt-1 d-block" href="javascript:void(0)" style="font-size: 0.70rem; text-decoration: none;">
+                                                    <i class="fa fa-trash"></i> {{trans('lang.all')}}
+                                                </a>
                                             </th>
                                         <?php } ?>
 
-                                        <th>{{trans('lang.extra_image')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.extra_image')}}</th>
 
-                                        <th>{{trans('lang.user_name')}}</th>
-                                        <th>{{trans('lang.email')}}</th>
-                                        <th>{{trans('lang.date')}}</th>
-                                        <th>{{trans('lang.document_plural')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.user_name')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.email')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.date')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.document_plural')}}</th>
 
-                                        <th>{{trans('lang.driver_active')}}</th>
-                                        <th>{{trans('lang.driver_online')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.driver_active')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.driver_online')}}</th>
 
-                                        <th>{{trans('lang.wallet_history')}}</th>
-                                        <th>{{trans('lang.dashboard_total_orders')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.wallet_history')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.dashboard_total_orders')}}</th>
 
 
-                                        <th>{{trans('lang.actions')}}</th>
+                                        <th class="text-end pe-4 fw-medium text-muted text-uppercase small">{{trans('lang.actions')}}</th>
 
                                     </tr>
 
@@ -260,19 +264,18 @@
 
                     paginatedRecords.forEach(function (childData) {
                         var id = childData.id;
-                        var route1 = '{{route("drivers.edit", ":id")}}';
+                        var route1 = '{{route("admin.drivers.edit", ":id")}}';
                         route1 = route1.replace(':id', id);
 
-                        var driverView = '{{route("drivers.view", ":id")}}';
+                        var driverView = '{{route("admin.drivers.view", ":id")}}';
                         driverView = driverView.replace(':id', id);
 
-                        document_list_view = "{{route('drivers.document', ':id')}}";
+                        document_list_view = "{{route('admin.drivers.document', ':id')}}";
                         document_list_view = document_list_view.replace(':id', childData.id);
 
-                        var trroute2 = '{{route("orders", ":id")}}';
-                        trroute2 = trroute2.replace(':id', 'driverId=' + id);
+                        var trroute2 = '{{route("admin.orders.index")}}' + '?driverId=' + id;
 
-                        var walletTransactions = '{{route("users.walletstransaction", ":id")}}';
+                        var walletTransactions = '{{route("admin.users.walletstransaction", ":id")}}';
                         walletTransactions = walletTransactions.replace(':id', id);
 
                         var date = '';
@@ -286,17 +289,17 @@
                         }
 
                         records.push([
-                            checkDeletePermission ? '<td class="delete-all"><input type="checkbox" id="is_open_' + childData.id + '" class="is_open" dataId="' + childData.id + '"><label class="col-3 control-label"\n' + 'for="is_open_' + childData.id + '" ></label></td>' : '',
-                            childData.profilePictureURL == '' || childData.profilePictureURL == null ? '<img class="rounded" style="width:50px" src="' + placeholderImage + '" alt="image">' : '<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="rounded" style="width:50px" src="' + childData.profilePictureURL + '" alt="image">',
-                            '<a href="' + driverView + '" class="redirecttopage">' + childData.fullName + '</a>',
-                            childData.email ? shortEmail(childData.email) : ' ',
-                            date + ' ' + time,
-                            '<a href="' + document_list_view + '"><i class="fa fa-file"></i></a>',
+                            checkDeletePermission ? '<td class="delete-all ps-4"><input type="checkbox" id="is_open_' + childData.id + '" class="is_open form-check-input" dataId="' + childData.id + '"><label class="col-3 control-label d-none"\n' + 'for="is_open_' + childData.id + '" ></label></td>' : '',
+                            childData.profilePictureURL == '' || childData.profilePictureURL == null ? '<img class="rounded-circle shadow-sm" style="width:40px; height:40px; object-fit:cover;" src="' + placeholderImage + '" alt="image">' : '<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="rounded-circle shadow-sm" style="width:40px; height:40px; object-fit:cover;" src="' + childData.profilePictureURL + '" alt="image">',
+                            '<a href="' + driverView + '" class="redirecttopage fw-bold text-dark text-decoration-none">' + childData.fullName + '</a>',
+                            childData.email ? '<span class="text-muted">' + shortEmail(childData.email) + '</span>' : ' ',
+                            '<span class="text-muted small">' + date + ' ' + time + '</span>',
+                            '<a href="' + document_list_view + '" class="btn btn-sm btn-outline-info rounded-pill shadow-sm"><i class="fa fa-file"></i></a>',
                             childData.active ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>',
                             childData.isActive ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isOnline"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isOnline"><span class="slider round"></span></label>',
-                            '<a href="' + walletTransactions + '">{{trans("lang.wallet_history")}}</a>',
-                            '<a href="' + trroute2 + '">' + childData.orders + '</a>',
-                            '<span class="action-btn"><a href="' + driverView + '"><i class="fa fa-eye"></i></a><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if (in_array('driver.delete', json_decode(@session('admin_permissions'), true))) { ?> <a id="' + childData.id + '" name="driver-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
+                            '<a href="' + walletTransactions + '" class="badge bg-light text-primary border border-primary text-decoration-none px-2 py-1"><i class="fa fa-wallet me-1"></i>{{trans("lang.wallet_history")}}</a>',
+                            '<a href="' + trroute2 + '" class="badge bg-light text-dark border px-2 py-1 text-decoration-none">' + childData.orders + '</a>',
+                            '<div class="d-flex align-items-center gap-1 justify-content-end pe-4"><a href="' + driverView + '" class="btn btn-sm btn-outline-info rounded-pill shadow-sm px-3"><i class="fa fa-eye"></i></a><a href="' + route1 + '" class="btn btn-sm btn-outline-primary rounded-pill shadow-sm px-3"><i class="fa fa-edit"></i></a><?php if (in_array('driver.delete', json_decode(@session('admin_permissions'), true))) { ?> <a id="' + childData.id + '" name="driver-delete" class="btn btn-sm btn-outline-danger rounded-pill shadow-sm px-3 delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></div>'                           
 
                         ]);
                     });

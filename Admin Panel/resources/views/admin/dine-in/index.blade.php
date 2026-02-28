@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -33,24 +33,24 @@
                 <div class="menu-tab">
                     <ul>
                         <li>
-                            <a href="{{route('restaurants.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.stores.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('restaurants.foods',$id)}}">{{trans('lang.tab_foods')}}</a>
+                            <a href="{{route('admin.products.index')}}">{{trans('lang.tab_foods')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('restaurants.orders',$id)}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('restaurants.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
+                            <a href="{{route('admin.stores.coupons',$id)}}">{{trans('lang.tab_promos')}}</a>
                         <li>
-                            <a href="{{route('restaurants.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.stores.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('payoutRequests.restaurants.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                            <a href="{{route('admin.payoutRequests.stores.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('restaurants.booktable',$id)}}">{{trans('lang.dine_in_future')}}</a>
+                            <a href="{{route('admin.stores.booktable',$id)}}">{{trans('lang.dine_in_future')}}</a>
                         </li>
                         <li id="restaurant_wallet"></li>
                     </ul>
@@ -162,7 +162,7 @@
 
         database.collection('vendors').where("id", "==", '<?php echo $id; ?>').get().then(async function(snapshots) {
             var vendorData = snapshots.docs[0].data();
-            walletRoute = "{{route('users.walletstransaction',':id')}}";
+            walletRoute = "{{route('admin.users.walletstransaction',':id')}}";
             walletRoute = walletRoute.replace(":id", vendorData.author);
             $('#restaurant_wallet').append('<a href="' + walletRoute + '">{{trans("lang.wallet_transaction")}}</a>');
         });
@@ -345,7 +345,7 @@
     async function buildHTML(val) {
         var html = [];
         var id = val.id;
-        var route1 = '{{route("booktable.edit",":id")}}?id=<?php echo $id; ?>';
+        var route1 = '{{route("admin.booktable.edit",":id")}}?id=<?php echo $id; ?>';
         route1 = route1.replace(':id', id);
 
         var date = '';
@@ -434,7 +434,7 @@
                         if (user.fcmToken) {
                             $.ajax({
                                 method: 'POST',
-                                url: '<?php echo route('sendnotification'); ?>',
+                                url: '<?php echo route('admin.sendnotification'); ?>',
                                 data: {
                                     'fcm': user.fcmToken,
                                     'type': 'booktable_request_accepted',
@@ -473,7 +473,7 @@
                         if (doc.fcmToken) {
                             $.ajax({
                                 method: 'POST',
-                                url: '<?php echo route('sendnotification'); ?>',
+                                url: '<?php echo route('admin.sendnotification'); ?>',
                                 data: {
                                     'fcm': doc.fcmToken,
                                     'type': 'booktable_request_reject',

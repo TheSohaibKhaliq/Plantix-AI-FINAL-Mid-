@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -22,7 +22,7 @@
 
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
 
-                <li class="breadcrumb-item"><a href="{!! route('setting.banners') !!}">{{trans('lang.menu_items')}}</a></li>
+                <li class="breadcrumb-item"><a href="{!! route('admin.setting.banners') !!}">{{trans('lang.menu_items')}}</a></li>
 
                 <li class="breadcrumb-item active">{{trans('lang.menu_items_create')}}</li>
 
@@ -162,7 +162,7 @@
 
         <button type="button" class="btn btn-primary  save-form-btn"><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
 
-        <a href="{!! route('setting.banners') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
+        <a href="{!! route('admin.setting.banners') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
     </div>
 
@@ -407,7 +407,7 @@
                 'redirect_type': redirect_type,
                 'redirect_id': redirect_id
             }).then(function(result) {
-                window.location.href = '{{ route("setting.banners")}}';
+                window.location.href = '{{ route("admin.setting.banners")}}';
             }).catch(function(error) {
                 $(".error_top").show();
                 $(".error_top").html("");

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -358,7 +358,7 @@
 
                     window.scrollTo(0, 0);
 
-                    window.location.href = '{{ route("dynamic-notification.index")}}';
+                    window.location.href = '{{ route("admin.dynamic-notification.index")}}';
 
                 }).catch(function (error) {
 
@@ -396,7 +396,7 @@
 
 
 
-                        window.location.href = '{{ route("dynamic-notification.index")}}';
+                        window.location.href = '{{ route("admin.dynamic-notification.index")}}';
 
                     }).catch(function (error) {
 

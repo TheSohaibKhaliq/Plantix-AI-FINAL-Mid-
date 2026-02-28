@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -30,22 +30,22 @@
                 <div class="menu-tab">
                     <ul>
                         <li>
-                            <a href="{{route('stores.view', $id)}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.stores.view', $id)}}">{{trans('lang.tab_basic')}}</a>
                         </li>
                         <li class="active">
-                            <a href="{{route('stores.items', $id)}}">{{trans('lang.tab_items')}}</a>
+                            <a href="{{route('admin.products.index')}}">{{trans('lang.tab_items')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.orders', $id)}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}">{{trans('lang.tab_orders')}}</a>
                         </li>
                         <li>
-                            <a href="{{route('stores.coupons', $id)}}">{{trans('lang.tab_promos')}}</a>
+                            <a href="{{route('admin.stores.coupons', $id)}}">{{trans('lang.tab_promos')}}</a>
                         <li>
-                            <a href="{{route('stores.payout', $id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.stores.payout', $id)}}">{{trans('lang.tab_payouts')}}</a>
                         </li>
                         <li>
                             <a
-                                href="{{route('payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
+                                href="{{route('admin.payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
                         </li>
                         <li id="restaurant_wallet"></li>
 
@@ -62,12 +62,12 @@
                             </li>
                             <?php if ($id != '') { ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('items.create') !!}/{{$id}}"><i
+                                <a class="nav-link" href="{!! route('admin.products.create') !!}"><i
                                         class="fa fa-plus mr-2"></i>{{trans('lang.item_create')}}</a>
                             </li>
                             <?php } else { ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('items.create') !!}"><i
+                                <a class="nav-link" href="{!! route('admin.products.create') !!}"><i
                                         class="fa fa-plus mr-2"></i>{{trans('lang.item_create')}}</a>
                             </li>
                             <?php } ?>
@@ -162,7 +162,7 @@
         <?php if ($id != '') { ?>
         database.collection('vendors').where("id", "==", '<?php    echo $id; ?>').get().then(async function (snapshots) {
             var vendorData = snapshots.docs[0].data();
-            walletRoute = "{{route('users.walletstransaction', ':id')}}";
+            walletRoute = "{{route('admin.users.walletstransaction', ':id')}}";
             walletRoute = walletRoute.replace(":id", vendorData.author);
             $('#restaurant_wallet').append('<a href="' + walletRoute + '">{{trans("lang.wallet_transaction")}}</a>');
         });
@@ -377,7 +377,7 @@
         newdate = '';
         var imageHtml = '';
         var id = val.id;
-        var route1 = '{{route("items.edit", ":id")}}';
+        var route1 = '{{route("admin.items.edit", ":id")}}';
         route1 = route1.replace(':id', id);
 
         <?php if ($id != '') { ?>
@@ -428,13 +428,13 @@
         }
 
         <?php if ($id == '') { ?>
-        var restaurantroute = '{{route("stores.view", ":id")}}';
+        var restaurantroute = '{{route("admin.stores.view", ":id")}}';
         restaurantroute = restaurantroute.replace(':id', val.vendorID);
 
          html.push('<a href="' + restaurantroute + '">' + val.restaurant + '</a>');
         <?php } ?>
 
-        var caregoryroute = '{{route("categories.edit", ":id")}}';
+        var caregoryroute = '{{route("admin.categories.edit", ":id")}}';
         caregoryroute = caregoryroute.replace(':id', val.categoryID);
 
          html.push('<a href="' + caregoryroute + '">' + val.category + '</a>');

@@ -7,107 +7,151 @@
     <div class="alert alert-success alert-dismissible fade show">{{ session('success') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
 @endif
 
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-0 fw-bold text-dark"><i class="bi bi-box-seam me-2 text-primary"></i>Inventory Management</h4>
+        <span class="text-muted small fw-medium mt-1 d-block">Track and update stock levels for your products</span>
+    </div>
+</div>
+
 {{-- Summary Cards --}}
-<div class="row g-3 mb-4">
-    <div class="col-sm-4">
-        <div class="card border-0 shadow-sm text-center p-3">
-            <div class="fs-3 fw-bold text-primary">{{ $summary['total_products'] }}</div>
-            <div class="small text-muted">Total Products</div>
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center p-4 hover-card h-100" style="border-radius:16px;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-boxes fs-3"></i>
+                </div>
+                <div class="display-5 fw-bold text-dark mb-1">{{ $summary['total_products'] }}</div>
+                <div class="text-muted small text-uppercase fw-bold mt-1">Total Products</div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-4">
-        <div class="card border-0 shadow-sm text-center p-3">
-            <div class="fs-3 fw-bold text-warning">{{ $summary['low_stock'] }}</div>
-            <div class="small text-muted">Low Stock</div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center p-4 hover-card h-100" style="border-radius:16px;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+                </div>
+                <div class="display-5 fw-bold text-dark mb-1">{{ $summary['low_stock'] }}</div>
+                <div class="text-muted small text-uppercase fw-bold mt-1">Low Stock</div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-4">
-        <div class="card border-0 shadow-sm text-center p-3">
-            <div class="fs-3 fw-bold text-danger">{{ $summary['out_of_stock'] }}</div>
-            <div class="small text-muted">Out of Stock</div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center p-4 hover-card h-100" style="border-radius:16px;">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-x-octagon-fill fs-3"></i>
+                </div>
+                <div class="display-5 fw-bold text-dark mb-1">{{ $summary['out_of_stock'] }}</div>
+                <div class="text-muted small text-uppercase fw-bold mt-1">Out of Stock</div>
+            </div>
         </div>
     </div>
 </div>
 
-{{-- Filters --}}
-<form method="GET" class="row g-2 mb-3">
-    <div class="col-md-4">
-        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search product..."
-               value="{{ request('search') }}">
+<div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+    <div class="card-header bg-white border-bottom py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-list-columns-reverse me-2 text-primary fs-5"></i>Stock List</h6>
+        
+        {{-- Filters --}}
+        <form method="GET" class="d-flex flex-wrap align-items-center gap-2 m-0">
+            <div class="input-group input-group-sm rounded-pill shadow-sm" style="width: 200px;">
+                <span class="input-group-text bg-light border-0 rounded-start-pill text-muted px-3"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control border-0 bg-light rounded-end-pill py-2" placeholder="Search product..." value="{{ request('search') }}">
+            </div>
+            
+            <select name="stock_status" class="form-select form-select-sm border-0 bg-light rounded-pill px-3 py-2 fw-medium shadow-sm w-auto">
+                <option value="">All Statuses</option>
+                <option value="in_stock" @selected(request('stock_status')==='in_stock')>In Stock</option>
+                <option value="low"      @selected(request('stock_status')==='low')>Low Stock</option>
+                <option value="out"      @selected(request('stock_status')==='out')>Out of Stock</option>
+            </select>
+            
+            <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm d-flex align-items-center">
+                <i class="bi bi-funnel-fill d-sm-none"></i><span class="d-none d-sm-inline">Filter</span>
+            </button>
+            
+            @if(request()->hasAny(['search','stock_status']))
+                <a href="{{ route('vendor.inventory.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm" title="Clear Filters">
+                    <i class="bi bi-x-circle d-sm-none"></i><span class="d-none d-sm-inline">Clear</span>
+                </a>
+            @endif
+        </form>
     </div>
-    <div class="col-auto">
-        <select name="stock_status" class="form-select form-select-sm">
-            <option value="">All Statuses</option>
-            <option value="in_stock" @selected(request('stock_status')==='in_stock')>In Stock</option>
-            <option value="low"      @selected(request('stock_status')==='low')>Low Stock</option>
-            <option value="out"      @selected(request('stock_status')==='out')>Out of Stock</option>
-        </select>
-    </div>
-    <div class="col-auto d-flex gap-2">
-        <button type="submit" class="btn btn-outline-success btn-sm">Filter</button>
-        @if(request()->hasAny(['search','stock_status']))
-            <a href="{{ route('vendor.inventory.index') }}" class="btn btn-outline-secondary btn-sm">Clear</a>
+    <div class="card-body p-0">
+        @if($stocks->isEmpty())
+            <div class="text-center text-muted py-5 my-4">
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-muted" style="width: 80px; height: 80px;">
+                    <i class="bi bi-inboxes fs-1"></i>
+                </div>
+                <h6 class="fw-bold text-dark">No inventory records found</h6>
+                <p class="small mb-0">Try adjusting your filters or search term.</p>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 fw-semibold text-muted text-uppercase small">Product</th>
+                            <th class="text-center fw-semibold text-muted text-uppercase small" style="width: 120px;">Current Qty</th>
+                            <th class="text-center fw-semibold text-muted text-uppercase small" style="width: 140px;">Low Threshold</th>
+                            <th class="text-center fw-semibold text-muted text-uppercase small">Status</th>
+                            <th class="text-center pe-4 fw-semibold text-muted text-uppercase small" style="width: 250px;">Update Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($stocks as $stock)
+                        <tr>
+                            <td class="ps-4">
+                                <a href="{{ route('vendor.products.edit', $stock->product_id) }}" class="text-decoration-none fw-bold text-dark small mb-1 d-block hover-text-primary">
+                                    {{ Str::limit($stock->product->name ?? 'Unknown Product', 40) }}
+                                </a>
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded"><i class="bi bi-upc-scan me-1"></i>SKU: {{ $stock->sku ?? 'N/A' }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="fs-5 fw-bold {{ $stock->quantity <= 0 ? 'text-danger' : ($stock->isLow() ? 'text-warning' : 'text-success') }}">
+                                    {{ $stock->quantity }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-light border text-dark fs-6">{{ $stock->low_stock_threshold ?? '—' }}</span>
+                            </td>
+                            <td class="text-center">
+                                @if($stock->quantity <= 0)
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-1 shadow-sm"><i class="bi bi-x-octagon-fill me-1"></i>Out of Stock</span>
+                                @elseif($stock->isLow())
+                                    <span class="badge bg-warning bg-opacity-10 text-dark border border-warning border-opacity-25 rounded-pill px-3 py-1 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-1"></i>Low Stock</span>
+                                @else
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 shadow-sm"><i class="bi bi-check-circle-fill me-1"></i>In Stock</span>
+                                @endif
+                            </td>
+                            <td class="text-center pe-4">
+                                <form method="POST" action="{{ route('vendor.inventory.update', $stock->product_id) }}" class="d-flex align-items-center justify-content-center gap-2">
+                                    @csrf
+                                    <div class="input-group input-group-sm shadow-sm" style="width: 180px;">
+                                        <input type="number" name="quantity" value="{{ $stock->quantity }}"
+                                               class="form-control text-center border-secondary border-opacity-25" min="0" title="Quantity" placeholder="Qty">
+                                        <input type="number" name="low_stock_threshold" value="{{ $stock->low_stock_threshold }}"
+                                               class="form-control text-center border-secondary border-opacity-25" min="0" title="Low Threshold" placeholder="Thr.">
+                                        <button type="submit" class="btn btn-success" title="Save Stock">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @endif
     </div>
-</form>
-
-<div class="card border-0 shadow-sm">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Product</th>
-                        <th class="text-center">Current Qty</th>
-                        <th class="text-center">Low Stock Threshold</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Update Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($stocks as $stock)
-                    <tr>
-                        <td>
-                            <p class="mb-0 fw-semibold small">{{ $stock->product->name ?? '—' }}</p>
-                            <p class="mb-0 text-muted" style="font-size:.75rem;">SKU: {{ $stock->sku ?? '—' }}</p>
-                        </td>
-                        <td class="text-center fw-bold {{ $stock->quantity <= 0 ? 'text-danger' : ($stock->isLow() ? 'text-warning' : 'text-success') }}">
-                            {{ $stock->quantity }}
-                        </td>
-                        <td class="text-center text-muted small">{{ $stock->low_stock_threshold ?? '—' }}</td>
-                        <td class="text-center">
-                            @if($stock->quantity <= 0)
-                                <span class="badge bg-danger-subtle text-danger">Out of Stock</span>
-                            @elseif($stock->isLow())
-                                <span class="badge bg-warning-subtle text-warning">Low Stock</span>
-                            @else
-                                <span class="badge bg-success-subtle text-success">In Stock</span>
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            <form method="POST" action="{{ route('vendor.inventory.update', $stock->product_id) }}"
-                                  class="d-inline-flex gap-2">
-                                @csrf
-                                <input type="number" name="quantity" value="{{ $stock->quantity }}"
-                                       class="form-control form-control-sm" style="width:80px;" min="0">
-                                <input type="number" name="low_stock_threshold" value="{{ $stock->low_stock_threshold }}"
-                                       class="form-control form-control-sm" style="width:80px;" min="0"
-                                       placeholder="Threshold">
-                                <button type="submit" class="btn btn-sm btn-outline-success">
-                                    <i class="bi bi-save"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="5" class="text-center text-muted py-4">No inventory records found.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
     @if($stocks->hasPages())
-    <div class="card-footer bg-white border-0">{{ $stocks->links() }}</div>
+        <div class="card-footer bg-white border-top p-4 d-flex justify-content-center" style="border-radius: 0 0 16px 16px;">
+            {{ $stocks->links() }}
+        </div>
     @endif
 </div>
 @endsection

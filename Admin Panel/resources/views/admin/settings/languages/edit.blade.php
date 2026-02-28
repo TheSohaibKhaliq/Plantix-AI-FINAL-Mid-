@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -304,7 +304,7 @@
 
 						jQuery("#data-table_processing").hide();
 
-						window.location.href = '{{ route("settings.app.languages") }}';
+						window.location.href = '{{ route("admin.settings.app.languages") }}';
 
 					});
 

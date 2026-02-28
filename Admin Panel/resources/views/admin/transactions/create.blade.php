@@ -1,73 +1,78 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
-  <div class="row page-titles">
-
+  <div class="row page-titles mb-4 pb-3 border-bottom">
       <div class="col-md-5 align-self-center">
-          <h3 class="text-themecolor">{{trans('lang.drivers_payout_plural')}}</h3>
+          <h3 class="text-themecolor fw-bold mb-0"><i class="fa fa-money-bill-wave text-success me-2"></i>{{trans('lang.drivers_payout_plural')}}</h3>
       </div>
       <div class="col-md-7 align-self-center">
           <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a>
-              </li>
-              <li class="breadcrumb-item">
-                <a href="{{url('/driversPayouts')}}">{{trans('lang.drivers_payout_plural')}}</a>
-              </li>
-              <li class="breadcrumb-item">{{trans('lang.drivers_payout_create')}}</li>
+              <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
+              <li class="breadcrumb-item"><a href="{{url('/driversPayouts')}}">{{trans('lang.drivers_payout_plural')}}</a></li>
+              <li class="breadcrumb-item active">{{trans('lang.drivers_payout_create')}}</li>
           </ol>
       </div>
   </div>
 
-      <div class="card-body">
-          <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">{{trans('lang.processing')}}</div>
-          <div class="error_top"></div>
-            <div class="row restaurant_payout_create">
-              <div class="restaurant_payout_create-inner">
-                <fieldset>
-                  <legend>{{trans('lang.drivers_payout_create')}}</legend>
-
-                  <div class="form-group row width-50">
-                    <label class="col-4 control-label">{{ trans('lang.drivers_payout_driver_id')}}</label>
-                    <div class="col-7">
-                      <select id="select_restaurant" class="form-control">
-                        <option value="">{{ trans('lang.select_driver') }}</option>
-                      </select>
-                      <div class="form-text text-muted">
-                        {{ trans("lang.drivers_payout_driver_id_help") }}
+      <div class="container-fluid">
+          <div class="row justify-content-center">
+              <div class="col-md-10">
+                  <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                      <div class="card-header bg-white border-bottom py-3">
+                          <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-plus me-2 text-primary"></i>{{trans('lang.drivers_payout_create')}}</h5>
                       </div>
-                    </div>
-                  </div>
+                      <div class="card-body p-4">
+                          <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">{{trans('lang.processing')}}</div>
+                          <div class="error_top alert alert-danger rounded border-0 shadow-sm" style="display:none"></div>
+                          <div class="row restaurant_payout_create">
+                              <div class="restaurant_payout_create-inner">
+                                  <fieldset>
+                                      <div class="form-group row width-50">
+                                          <label class="col-4 control-label fw-semibold text-muted">{{ trans('lang.drivers_payout_driver_id')}}</label>
+                                          <div class="col-7">
+                                              <select id="select_restaurant" class="form-control shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
+                                                  <option value="">{{ trans('lang.select_driver') }}</option>
+                                              </select>
+                                              <div class="form-text text-muted mt-2">
+                                                  <i class="fa fa-info-circle me-1"></i>{{ trans("lang.drivers_payout_driver_id_help") }}
+                                              </div>
+                                          </div>
+                                      </div>
 
-                  <div class="form-group row width-50">
-                    <label class="col-4 control-label">{{trans('lang.drivers_payout_amount')}}</label>
-                    <div class="col-7">
-                      <input type="number" class="form-control payout_amount">          
-                      <div class="form-text text-muted">
-                        {{ trans("lang.drivers_payout_amount_placeholder") }}
+                                      <div class="form-group row width-50">
+                                          <label class="col-4 control-label fw-semibold text-muted">{{trans('lang.drivers_payout_amount')}}</label>
+                                          <div class="col-7">
+                                              <input type="number" class="form-control payout_amount shadow-sm rounded-pill border-0" style="background:#f8f9fa;">          
+                                              <div class="form-text text-muted mt-2">
+                                                  <i class="fa fa-info-circle me-1"></i>{{ trans("lang.drivers_payout_amount_placeholder") }}
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group row width-100">
+                                          <label class="col-2 control-label fw-semibold text-muted">{{ trans('lang.stores_payout_note')}}</label>
+                                          <div class="col-12">
+                                              <textarea type="text" rows="5" class="form-control payout_note shadow-sm rounded border-0" style="background:#f8f9fa; border-radius:12px;"></textarea>
+                                          </div>
+                                      </div>
+                                  </fieldset>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <div class="form-group row width-100">
-                    <label class="col-2 control-label">{{ trans('lang.stores_payout_note')}}</label>
-                    <div class="col-12">
-                      <textarea type="text" rows="7" class="form-control form-control payout_note"></textarea>
-                    </div>
+                      <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                          <a href="{!! route('admin.driversPayouts') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                              <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                          </a>
+                          <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold save_restaurant_payout_btn">
+                              <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
+                          </button>
+                      </div>
                   </div>
-                </fieldset>
               </div>
-            </div>
           </div>
-
-          <div class="form-group col-12 text-center btm-btn">
-          <button type="button" class="btn btn-primary save_restaurant_payout_btn" ><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
-          <a href="{!! route('driversPayouts') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
-        </div>
-
-        </div>
       </div>    
 
 
@@ -145,7 +150,7 @@ $(document).ready(function(){
           if(driverID != '' && $(".payout_amount").val() != ''){
             database.collection('driver_payouts').doc(payoutId).set({'driverID':driverID,'amount':amount,'note':note,'id':payoutId,'paidDate':date}).then(function(){
               
-                window.location.href = "{{ route('driversPayouts') }}";
+                window.location.href = "{{ route('admin.driversPayouts') }}";
             })
           }else{
                 $(".error_top").show();

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -150,7 +150,7 @@
 
         <?php } else { ?>
 
-            <a href="{!! route('storesPayouts') !!}" class="btn btn-default"><i
+            <a href="{!! route('admin.storesPayouts') !!}" class="btn btn-default"><i
 
                         class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
@@ -659,7 +659,7 @@
 
                                                         <?php }else{?>
 
-                                                        window.location.href = '{{ route("storesPayouts")}}';
+                                                        window.location.href = '{{ route("admin.storesPayouts")}}';
 
                                                         <?php } ?>                                    }
 

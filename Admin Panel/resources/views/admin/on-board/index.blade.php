@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -136,7 +136,7 @@
             html = html + '<tr>';
             newdate = '';
             var id = val.id;
-            var route1 = '{{route("on-board.save",":id")}}';
+            var route1 = '{{route("admin.on-board.save",":id")}}';
             route1 = route1.replace(':id', id);
 
             html = html + '<td><a href="' + route1 + '">' + val.title + '</a></td>';

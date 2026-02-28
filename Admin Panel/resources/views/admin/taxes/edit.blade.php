@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -102,7 +102,7 @@
                     <button type="button" class="btn btn-primary  edit-form-btn"><i class="fa fa-save"></i> {{
                 trans('lang.save')}}
                     </button>
-                    <a href="{!! route('tax') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
+                    <a href="{!! route('admin.tax') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
                 trans('lang.cancel')}}</a>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                         'enable': enable,
                     }).then(function (result) {
                         jQuery("#overlay").hide();
-                        window.location.href = '{{ route("tax")}}';
+                        window.location.href = '{{ route("admin.tax")}}';
                     });
                 }
             })

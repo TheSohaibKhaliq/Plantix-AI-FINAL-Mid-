@@ -45,7 +45,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('admin.permission.store') }}">
+                        <form method="POST" action="{{ route('admin.permissions.store') }}">
                             @csrf
                             <div class="form-group">
                                 <label>Slug / Name <span class="text-danger">*</span>
@@ -138,7 +138,7 @@
                                                 <i class="fa fa-pencil"></i>
                                             </button>
                                             <form method="POST"
-                                                  action="{{ route('admin.permission.destroy', $perm->id) }}"
+                                                  action="{{ route('admin.permissions.destroy', $perm->id) }}"
                                                   class="d-inline delete-perm-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -216,7 +216,7 @@ $(document).on('click', '.edit-perm-btn', function() {
     const name    = $(this).data('name');
     const group   = $(this).data('group');
     const display = $(this).data('display');
-    const url     = '{{ route("admin.permission.update", ":id") }}'.replace(':id', id);
+    const url     = '{{ route("admin.permissions.update", ":id") }}'.replace(':id', id);
 
     $('#edit_name').val(name);
     $('#edit_group').val(group);

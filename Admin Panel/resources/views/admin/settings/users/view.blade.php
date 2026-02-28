@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -30,14 +30,14 @@
 
                             <ul>
                                 <li class="active">
-                                    <a href="{{route('users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                                    <a href="{{route('admin.users.view',$id)}}">{{trans('lang.tab_basic')}}</a>
                                 </li>
                                 <li>
                                     <a href="{{route('admin.orders.index')}}?userId={{$id}}">{{trans('lang.tab_orders')}}</a>
                                 </li>
                                 <li>
                                     <a
-                                            href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                                            href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
                                 </li>
 
                             </ul>

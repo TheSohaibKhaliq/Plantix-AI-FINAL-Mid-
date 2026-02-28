@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -11,7 +11,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                     <li class="breadcrumb-item"><a
-                            href="{!! route('on-board') !!}">{{trans('lang.on_board_plural')}}</a>
+                            href="{!! route('admin.on-board') !!}">{{trans('lang.on_board_plural')}}</a>
                     </li>
 
                 </ol>
@@ -59,7 +59,7 @@
                     <div class="form-group col-12 text-center btm-btn">
                         <button type="button" class="btn btn-primary  edit-form-btn"><i class="fa fa-save"></i> {{
                         trans('lang.save')}}</button>
-                        <a href="{!! route('on-board') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
+                        <a href="{!! route('admin.on-board') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{
                         trans('lang.cancel')}}</a>
                     </div>
 
@@ -116,7 +116,7 @@
                     'title': title,
                     'description': description,
                 }).then(function (result) {
-                    window.location.href = '{{ route("on-board")}}';
+                    window.location.href = '{{ route("admin.on-board")}}';
                 }).catch(function (error) {
                     $(".error_top").show();
                     $(".error_top").html("");

@@ -6,33 +6,21 @@
 
     <div class="page-wrapper">
 
-        <div class="row page-titles">
-
-
-
-            <div class="col-md-5 align-self-center">
-
-                <h3 class="text-themecolor">{{trans('lang.app_setting_global')}}</h3>
-
-            </div>
-
-            <div class="col-md-7 align-self-center">
-
-                <ol class="breadcrumb">
-
-                    <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
-                    <li class="breadcrumb-item active">{{trans('lang.app_setting_global')}}</li>
-
-                </ol>
-
-            </div>
-
+    <div class="row page-titles mb-4 pb-3 border-bottom">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-cogs text-success me-2"></i>{{trans('lang.app_setting_global')}}</h3>
         </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
+                <li class="breadcrumb-item active">{{trans('lang.app_setting_global')}}</li>
+            </ol>
+        </div>
+    </div>
 
-
-
-        <div class="card-body">
+    <div class="container-fluid">
+        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+            <div class="card-body p-4">
 
             <div id="data-table_processing" class="dataTables_processing panel panel-default"
 
@@ -760,19 +748,16 @@
 
 
 
-        <div class="form-group col-12 text-center btm-btn">
-
-            <button type="button" class="btn btn-primary save-form-btn"><i
-
-                        class="fa fa-save"></i> {{trans('lang.save')}}</button>
-
-            <a href="{{url('/dashboard')}}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}
-
-            </a>
-
-        </div>
-
-    </div>
+                    <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3 mt-4" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                        <a href="{{url('/dashboard')}}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                            <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                        </a>
+                        <button type="button" class="btn btn-success rounded-pill px-5 shadow-sm fw-bold save-form-btn">
+                            <i class="fa fa-save me-2"></i> {{trans('lang.save')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 
 

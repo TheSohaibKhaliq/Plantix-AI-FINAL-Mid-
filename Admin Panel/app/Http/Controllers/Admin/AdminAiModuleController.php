@@ -121,7 +121,7 @@ class AdminAiModuleController extends Controller
         }
 
         $recommendations = $query->paginate(20);
-        return view('admin.ai-modules.fertilizer-recommendations', compact('recommendations'));
+        return view('admin.ai-modules.fertilizer', compact('recommendations'));
     }
 
     // ── Seasonal Data CRUD ─────────────────────────────────────────────────

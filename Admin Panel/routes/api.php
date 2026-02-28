@@ -7,6 +7,11 @@ use App\Http\Controllers\Api\VendorDocumentController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\OrderController as ApiOrderController;
+// Customer MVC API
+use App\Http\Controllers\Api\CustomerAuthApiController;
+use App\Http\Controllers\Api\CustomerCartApiController;
+use App\Http\Controllers\Api\CustomerOrderApiController;
+use App\Http\Controllers\Api\CustomerAppointmentApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,4 +70,54 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
     Route::patch('/notifications/mark-all-read',       [NotificationController::class, 'markAllAsRead']);
     Route::delete('/notifications/{notification}',     [NotificationController::class, 'destroy']);
+});
+
+// =============================================================================
+// Customer MVC API  (prefix: /api/customer)
+// =============================================================================
+Route::prefix('customer')->group(function () {
+
+    // ── Public auth (no token required) ──────────────────────────────────────
+    Route::post('/auth/register',      [CustomerAuthApiController::class, 'register']);
+    Route::post('/auth/login',         [CustomerAuthApiController::class, 'login']);
+    Route::post('/password/forgot',    [CustomerAuthApiController::class, 'forgotPassword']);
+
+    // ── Available experts (public, for booking page) ──────────────────────────
+    Route::get('/appointments/experts', [CustomerAppointmentApiController::class, 'experts']);
+
+    // ── CSRF cookie for SPA / static-HTML clients ─────────────────────────────
+    // GET /api/customer/csrf  → sets XSRF-TOKEN cookie (Sanctum SPA flow)
+    Route::get('/csrf', fn () => response()->noContent());
+
+    // ── Protected (Bearer token required) ────────────────────────────────────
+    Route::middleware('auth:sanctum')->group(function () {
+
+        // Auth & profile
+        Route::post('/auth/logout',    [CustomerAuthApiController::class, 'logout']);
+        Route::get('/auth/me',         [CustomerAuthApiController::class, 'me']);
+        Route::put('/auth/profile',    [CustomerAuthApiController::class, 'updateProfile']);
+        Route::post('/auth/password',  [CustomerAuthApiController::class, 'changePassword']);
+
+        // Cart
+        Route::get('/cart',            [CustomerCartApiController::class, 'index']);
+        Route::post('/cart/add',       [CustomerCartApiController::class, 'add']);
+        Route::patch('/cart/{id}',     [CustomerCartApiController::class, 'update']);
+        Route::delete('/cart/{id}',    [CustomerCartApiController::class, 'remove']);
+        Route::delete('/cart',         [CustomerCartApiController::class, 'clear']);
+        Route::post('/cart/coupon',    [CustomerCartApiController::class, 'applyCoupon']);
+        Route::delete('/cart/coupon',  [CustomerCartApiController::class, 'removeCoupon']);
+
+        // Orders
+        Route::get('/orders',                   [CustomerOrderApiController::class, 'index']);
+        Route::get('/orders/{id}',              [CustomerOrderApiController::class, 'show']);
+        Route::post('/orders/{id}/cancel',      [CustomerOrderApiController::class, 'cancel']);
+        Route::post('/orders/{id}/return',      [CustomerOrderApiController::class, 'requestReturn']);
+
+        // Appointments
+        Route::get('/appointments',             [CustomerAppointmentApiController::class, 'index']);
+        Route::post('/appointments',            [CustomerAppointmentApiController::class, 'store']);
+        Route::get('/appointments/{id}',        [CustomerAppointmentApiController::class, 'show']);
+        Route::post('/appointments/{id}/cancel',    [CustomerAppointmentApiController::class, 'cancel']);
+        Route::patch('/appointments/{id}/reschedule', [CustomerAppointmentApiController::class, 'reschedule']);
+    });
 });

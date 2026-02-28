@@ -1,28 +1,19 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
 
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{trans('lang.category_plural')}}</h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-tags me-2 text-success"></i>{{trans('lang.category_plural')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.category_plural')}}</li>
             </ol>
         </div>
-
-        <div>
-
-        </div>
-
     </div>
 
 
@@ -32,24 +23,20 @@
 
             <div class="col-12">
 
-                <div class="card">
-
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.category_table')}}</a>
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent fw-bold" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.category_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('categories.create') !!}"><i
-                                            class="fa fa-plus mr-2"></i>{{trans('lang.category_create')}}</a>
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{!! route('admin.categories.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.category_create')}}</a>
                             </li>
                         </ul>
                     </div>
+                    <div class="card-body p-4">
 
-                    <div class="card-body">
-
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
-                             style="display: none;">Processing...
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">{{trans('lang.processing')}}
                         </div>
 
                         <div class="table-responsive m-t-10">
@@ -198,19 +185,17 @@
                     
                     filteredRecords.slice(start, start + length).forEach(function (childData) {
                         var id = childData.id;
-                        var route1 = '{{route("categories.edit",":id")}}';
+                        var route1 = '{{route("admin.categories.edit",":id")}}';
                         route1 = route1.replace(':id', id);
                         var url = '{{url("items?categoryID=id")}}';
                         url = url.replace("id", id);
                         records.push([
                             checkDeletePermission ? '<td class="delete-all"><input type="checkbox" id="is_open_' + childData.id + '" class="is_open" dataId="' + childData.id + '"><label class="col-3 control-label"\n' + 'for="is_open_' + childData.id + '" ></label></td>' : '',
-                            childData.photo == '' || childData.photo == null ? '<img class="rounded" style="width:50px" src="' + placeholderImage + '" alt="image">' : '<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="rounded" style="width:50px" src="' + childData.photo + '" alt="image">',
-                            '<a href="' + route1 + '">' + childData.title + '</a>',
-                            '<a href="' + url + '">'+childData.totalProducts+'</a>',
+                            childData.photo == '' || childData.photo == null ? '<img class="rounded" style="width:50px" src="' + placeholderImage + '" alt="image">' : '<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="rounded shadow-sm" style="width:50px" src="' + childData.photo + '" alt="image">',
+                            '<a href="' + route1 + '" class="text-success fw-bold text-decoration-none">' + childData.title + '</a>',
+                            '<a href="' + url + '" class="badge bg-info-subtle text-info fw-bold px-3 py-2 rounded-pill text-decoration-none">'+childData.totalProducts+'</a>',
                             childData.publish ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isActive"><span class="slider round"></span></label>',
-
-                            '<span class="action-btn"><a href="' + route1 + '"><i class="fa fa-edit"></i></a><?php if(in_array('category.delete', json_decode(@session('admin_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a><?php } ?></span>'                           
-
+                            '<span class="action-btn"><a href="' + route1 + '" class="btn btn-sm btn-light border shadow-sm mx-1"><i class="fa fa-edit text-success"></i></a><?php if(in_array('category.delete', json_decode(@session('admin_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="btn btn-sm btn-light border shadow-sm mx-1 delete-btn" href="javascript:void(0)"><i class="fa fa-trash text-danger"></i></a><?php } ?></span>'                           
                         ]);
                     });
 
@@ -288,7 +273,7 @@
     $(document).on("click", "a[name='category-delete']", function (e) {
         var id = this.id;
         database.collection('vendor_categories').doc(id).delete().then(function (result) {
-            window.location.href = '{{ route("categories")}}';
+            window.location.href = '{{ route("admin.categories")}}';
         });
     });
 

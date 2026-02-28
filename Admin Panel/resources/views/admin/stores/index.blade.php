@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -11,365 +11,119 @@
 
 
     <div class="row page-titles">
-
-
-
         <div class="col-md-5 align-self-center">
-
-
-
-            <h3 class="text-themecolor">{{trans('lang.store_plural')}}</h3>
-
-
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-shopping-bag me-2 text-success"></i>{{trans('lang.store_plural')}}</h3>
         </div>
-
-
-
         <div class="col-md-7 align-self-center">
-
-
-
             <ol class="breadcrumb">
-
-
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
-
-
                 <li class="breadcrumb-item">{{trans('lang.store_plural')}}</li>
-
-
-
                 <li class="breadcrumb-item active">{{trans('lang.store_table')}}</li>
-
-
-
             </ol>
-
-
-
         </div>
-
-
-
-        <div>
-
-
-
-        </div>
-
-
-
     </div>
-
-
-
-
 
     <div class="container-fluid">
-
-
-
         <div class="row">
-
-
-
             <div class="col-12">
-
-
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-
+                <div class="card border-0 shadow-sm hover-card" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <ul class="nav nav-tabs card-header-tabs border-bottom-0 fw-semibold m-0">
                             <li class="nav-item">
-
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
-
-                                        class="fa fa-list mr-2"></i>{{trans('lang.stores_table')}}</a>
-
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent" href="{!! url()->current() !!}">
+                                    <i class="fa fa-list me-2"></i>{{trans('lang.stores_table')}}
+                                </a>
                             </li>
-
                             <li class="nav-item">
-
-                                <a class="nav-link" href="{!! route('admin.stores.create') !!}"><i
-
-                                        class="fa fa-plus mr-2"></i>{{trans('lang.create_store')}}</a>
-
+                                <a class="nav-link text-muted" href="{!! route('admin.stores.create') !!}">
+                                    <i class="fa fa-plus me-2"></i>{{trans('lang.create_store')}}
+                                </a>
                             </li>
-
-
-
                         </ul>
-
                     </div>
-
-                    <div class="card-body">
-
-
-
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
-
-                            style="display: none;">{{trans('lang.processing')}}
-
-                        </div>
-
-
-
-                        <div class="table-responsive m-t-10">
-
-
-
-
-
-                            <table id="storeTable"
-
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
-
-                                cellspacing="0" width="100%">
-
-
-
-                                <thead>
-
-
-
+                    
+                    <div class="card-body p-0">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">{{trans('lang.processing')}}</div>
+                        
+                        <div class="table-responsive">
+                            <table id="storeTable" class="table table-hover align-middle mb-0" cellspacing="0" width="100%">
+                                <thead class="table-light">
                                     <tr>
-
                                         <?php if (in_array('store.delete', json_decode(@session('admin_permissions'), true))) { ?>
-
-                                            <th class="delete-all"><input type="checkbox" id="is_active"><label
-
-                                                    class="col-3 control-label" for="is_active"><a id="deleteAll"
-
-                                                        class="do_not_delete" href="javascript:void(0)"><i
-
-                                                            class="fa fa-trash"></i> {{trans('lang.all')}}</a></label>
-
+                                            <th class="delete-all ps-4" style="width: 50px;">
+                                                <div class="form-check m-0">
+                                                    <input type="checkbox" id="is_active" class="form-check-input">
+                                                    <label class="form-check-label d-none" for="is_active"></label>
+                                                </div>
+                                                <a id="deleteAll" class="do_not_delete text-danger small mt-1 d-block" href="javascript:void(0)" style="font-size: 0.70rem; text-decoration: none;">
+                                                    <i class="fa fa-trash"></i> {{trans('lang.all')}}
+                                                </a>
                                             </th>
-
                                         <?php } ?>
-
-
-
-                                        <th>{{trans('lang.store_image')}}</th>
-
-
-
-                                        <th>{{trans('lang.store_name')}}</th>
-
-
-
-
-
-                                        <th>{{trans('lang.store_phone')}}</th>
-
-                                        <th>{{trans('lang.date')}}</th>
-
-
-
-                                        <!-- <th>{{trans('lang.order_transactions')}}</th> -->
-
-
-
-                                        <th>{{trans('lang.wallet_history')}}</th>
-
-
-
-                                        <th>{{trans('lang.item_plural')}}</th>
-
-                                        <th>{{trans('lang.order_plural')}}</th>
-
-
-
-                                        <th>{{trans('lang.actions')}}</th>
-
-
-
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.store_image')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.store_name')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.store_phone')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.date')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.wallet_history')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.item_plural')}}</th>
+                                        <th class="fw-medium text-muted text-uppercase small">{{trans('lang.order_plural')}}</th>
+                                        <th class="text-end pe-4 fw-medium text-muted text-uppercase small">{{trans('lang.actions')}}</th>
                                     </tr>
-
-
-
                                 </thead>
-
-
-
                                 <tbody id="append_restaurants">
-
-
-
-
-
                                 </tbody>
-
-
-
                             </table>
-
-
-
                         </div>
 
-
-
                         <!-- Popup -->
-
-
-
                         <div class="modal fade" id="create_vendor" tabindex="-1" role="dialog" aria-hidden="true">
-
-                            <div class="modal-dialog modal-dialog-centered notification-main" role="document">
-
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-
-                                        <h5 class="modal-title" id="exampleModalLongTitle">{{trans('lang.copy_vendor')}}
-
-                                            <span id="vendor_title_lable"></span>
-
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content border-0 shadow-lg" style="border-radius:16px;">
+                                    <div class="modal-header border-bottom bg-light py-3">
+                                        <h5 class="modal-title fw-bold" id="exampleModalLongTitle">
+                                            <i class="fa fa-copy text-primary me-2"></i>{{trans('lang.copy_vendor')}}
+                                            <span id="vendor_title_lable" class="text-success ms-1"></span>
                                         </h5>
-
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                            <span aria-hidden="true">&times;</span>
-
-                                        </button>
-
+                                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
-
-                                    <div class="modal-body">
-
-                                        <div id="data-table_processing"
-
-                                            class="dataTables_processing panel panel-default" style="display: none;">
-
-                                            {{trans('lang.processing')}}
-
+                                    <div class="modal-body p-4">
+                                        <div id="data-table_processing" class="text-success mb-3" style="display: none;">{{trans('lang.processing')}}</div>
+                                        <div class="error_top text-danger mb-3 font-weight-bold"></div>
+                                        
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold text-muted">{{trans('lang.first_name')}}</label>
+                                                <input placeholder="Name" type="text" id="user_name" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold text-muted">{{trans('lang.last_name')}}</label>
+                                                <input placeholder="Name" type="text" id="user_last_name" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-semibold text-muted">{{trans('lang.vendor_title')}}</label>
+                                                <input placeholder="Vendor Title" type="text" id="vendor_title" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-semibold text-muted">{{trans('lang.email')}}</label>
+                                                <input placeholder="Email" value="" id="user_email" type="email" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-semibold text-muted">{{trans('lang.password')}}</label>
+                                                <input placeholder="Password" id="user_password" type="password" class="form-control form-control-lg rounded-3 border-secondary border-opacity-25">
+                                            </div>
                                         </div>
-
-                                        <div class="error_top"></div>
-
-                                        <!-- Form -->
-
-                                        <div class="form-row">
-
-                                            <div class="col-md-12 form-group">
-
-                                                <label class="form-label">{{trans('lang.first_name')}}</label>
-
-                                                <div class="input-group">
-
-                                                    <input placeholder="Name" type="text" id="user_name"
-
-                                                        class="form-control">
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-md-12 form-group">
-
-                                                <label class="form-label">{{trans('lang.last_name')}}</label>
-
-                                                <div class="input-group">
-
-                                                    <input placeholder="Name" type="text" id="user_last_name"
-
-                                                        class="form-control">
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-md-12 form-group">
-
-                                                <label class="form-label">{{trans('lang.vendor_title')}}</label>
-
-                                                <div class="input-group">
-
-                                                    <input placeholder="Vendor Title" type="text" id="vendor_title"
-
-                                                        class="form-control">
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-md-12 form-group"><label
-
-                                                    class="form-label">{{trans('lang.email')}}</label><input
-
-                                                    placeholder="Email" value="" id="user_email" type="text"
-
-                                                    class="form-control"></div>
-
-                                            <div class="col-md-12 form-group"><label
-
-                                                    class="form-label">{{trans('lang.password')}}</label><input
-
-                                                    placeholder="Password" id="user_password" type="password"
-
-                                                    class="form-control">
-
-                                            </div>
-
-
-
-                                        </div>
-
-                                        <!-- Form -->
-
                                     </div>
-
-                                    <div class="modal-footer">
-
-                                        <button type="button" class="btn btn-primary save-form-btn"
-
-                                            >{{trans('lang.create')}}
-
-                                        </button>
-
+                                    <div class="modal-footer border-top bg-light py-3">
+                                        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm save-form-btn">{{trans('lang.create')}}</button>
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
-
-
-                        <!-- Popup -->
-
-
-
-
-
                     </div>
-
-
-
                 </div>
-
-
-
             </div>
-
-
-
         </div>
-
-
-
     </div>
-
-
-
 </div>
 
 
@@ -788,10 +542,10 @@
             var id = val.id;
             var vendorUserId = val.author;
 
-            var route1 = '{{route("stores.edit",":id")}}';
+            var route1 = '{{route("admin.stores.edit",":id")}}';
             route1 = route1.replace(':id', id);
 
-            var route_view = '{{route("stores.view",":id")}}';
+            var route_view = '{{route("admin.stores.view",":id")}}';
             route_view = route_view.replace(':id', id);
             if (checkDeletePermission) {
                 html.push('<td class="delete-all"><input type="checkbox" id="is_open_' + id + '" class="is_open" dataId="' + id + '" author="' + val.author + '"><label class="col-3 control-label"\n' +
@@ -835,25 +589,28 @@
                 html.push('');
             }
 
-            var payoutRequests = '{{route("users.walletstransaction",":id")}}';
+            var payoutRequests = '{{route("admin.users.walletstransaction",":id")}}';
             payoutRequests = payoutRequests.replace(':id', val.author);
 
             html.push('<a href="' + payoutRequests + '">{{trans("lang.wallet_history")}}</a>');
 
             var active = val.isActive;
             var vendorId = val.id;
-            var url = '{{route("stores.items",":id")}}';
+            var url = '{{route("admin.stores.items",":id")}}';
             url = url.replace(":id", vendorId);
             html.push('<a href = "' + url + '">' + val.foods + '</a>');
 
-            var url2 = '{{route("stores.orders",":id")}}';
+            var url2 = '{{route("admin.stores.orders",":id")}}';
             url2 = url2.replace(":id", vendorId);
             html.push('<a href="' + url2 + '">' + val.orders + '</a>');
-            var actionHtml = '';
-            actionHtml += '<span class="action-btn"><a href="javascript:void(0)" vendor_id="' + val.id + '" author="' + val.author + '" name="vendor-clone"><i class="fa fa-clone"></i></a><a href="' + route_view + '"><i class="fa fa-eye"></i></a><a href="' + route1 + '"><i class="fa fa-edit"></i></a>';
+            var actionHtml = '<div class="d-flex align-items-center gap-1 justify-content-end pe-4">';
+            actionHtml += '<a href="javascript:void(0)" vendor_id="' + val.id + '" author="' + val.author + '" name="vendor-clone" class="btn btn-sm btn-outline-secondary rounded-pill shadow-sm px-3" title="Clone"><i class="fa fa-clone"></i></a>';
+            actionHtml += '<a href="' + route_view + '" class="btn btn-sm btn-outline-info rounded-pill shadow-sm px-3" title="View"><i class="fa fa-eye"></i></a>';
+            actionHtml += '<a href="' + route1 + '" class="btn btn-sm btn-outline-success rounded-pill shadow-sm px-3" title="Edit"><i class="fa fa-edit"></i></a>';
             if (checkDeletePermission) {
-                actionHtml += '<a id="' + val.id + '" author="' + val.author + '" name="vendor-delete" class="delete-btn" href="javascript:void(0)"><i class="fa fa-trash"></i></a></span>';
+                actionHtml += '<a id="' + val.id + '" author="' + val.author + '" name="vendor-delete" class="btn btn-sm btn-outline-danger rounded-pill shadow-sm px-3 delete-btn" href="javascript:void(0)" title="Delete"><i class="fa fa-trash"></i></a>';
             }
+            actionHtml += '</div>';
             html.push(actionHtml);
             return html;
         }

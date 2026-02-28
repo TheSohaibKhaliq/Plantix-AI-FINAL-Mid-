@@ -2,11 +2,10 @@
 
 @section('content')
 <div class="page-wrapper">
-    <div class="row page-titles">
+    <div class="row page-titles mb-4 pb-3 border-bottom">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">{{trans('lang.notification')}}</h3>
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-bell text-success me-2"></i>{{trans('lang.notification')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
@@ -14,67 +13,68 @@
                 <li class="breadcrumb-item active">{{trans('lang.notification')}}</li>
             </ol>
         </div>
-
     </div>
-    <div>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-plus me-2 text-primary"></i>{{trans('lang.notification')}}</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
+                            {{trans('lang.processing')}}
+                        </div>
+                        <div class="error_top alert alert-danger rounded border-0 shadow-sm" style="display:none"></div>
+                        <div class="success_top alert alert-success rounded border-0 shadow-sm" style="display:none"></div>
 
-        <div class="card-body">
+                        <div class="row restaurant_payout_create">
+                            <div class="restaurant_payout_create-inner">
+                                <fieldset>
+                                    <div class="form-group row width-100">
+                                        <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.subject')}}</label>
+                                        <div class="col-7">
+                                            <input type="text" class="form-control shadow-sm rounded-pill border-0" style="background:#f8f9fa;" id="subject">
+                                        </div>
+                                    </div>
 
-            <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
-                {{trans('lang.processing')}}
-            </div>
+                                    <div class="form-group row width-100">
+                                        <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.message')}}</label>
+                                        <div class="col-7">
+                                            <textarea class="form-control shadow-sm rounded border-0" style="background:#f8f9fa; border-radius:12px;" rows="5" id="message"></textarea>
+                                        </div>
+                                    </div>
 
-            <div class="error_top" style="display:none"></div>
-
-            <div class="success_top" style="display:none"></div>
-
-            <div class="row restaurant_payout_create">
-
-                <div class="restaurant_payout_create-inner">
-
-                    <fieldset>
-                        <legend>{{trans('lang.notification')}}</legend>
-
-
-                        <div class="form-group row width-100">
-                            <label class="col-3 control-label">{{trans('lang.subject')}}</label>
-                            <div class="col-7">
-                                <input type="text" class="form-control" id="subject">
+                                    <div class="form-group row width-50 mt-3">
+                                        <label class="col-3 control-label fw-semibold text-muted">{{trans('lang.send_to')}}</label>
+                                        <div class="col-7">
+                                            <select id='role' class="form-control shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
+                                                <option value="vendor">{{trans('lang.vendor')}}</option>
+                                                <option value="customer">{{trans('lang.customer')}}</option>
+                                                <option value="driver">{{trans('lang.driver')}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
-
-                        <div class="form-group row width-100">
-                            <label class="col-3 control-label">{{trans('lang.message')}}</label>
-                            <div class="col-7">
-                                <textarea class="form-control" id="message"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group row width-50">
-                            <label class="col-3 control-label">{{trans('lang.send_to')}}</label>
-                            <div class="col-7">
-                                <select id='role' class="form-control">
-                                    <option value="vendor">{{trans('lang.vendor')}}</option>
-                                    <option value="customer">{{trans('lang.customer')}}</option>
-                                    <option value="driver">{{trans('lang.driver')}}</option>
-
-                                </select>
-                            </div>
-                        </div>
-
-                    </fieldset>
+                    </div>
                 </div>
 
             </div>
 
         </div>
-        <div class="form-group col-12 text-center btm-btn">
-            <button type="button" class="btn btn-primary  save-form-btn"><i class="fa fa-save"></i> {{
-                trans('lang.send')}}
-            </button>
-            <a href="{{url('/dashboard')}}" class="btn btn-default"><i class="fa fa-undo"></i>{{ trans('lang.cancel')}}</a>
+                    <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                        <a href="{{url('/dashboard')}}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                            <i class="fa fa-undo me-2"></i>{{ trans('lang.cancel')}}
+                        </a>
+                        <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold save-form-btn">
+                            <i class="fa fa-save me-2"></i>{{ trans('lang.send')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 
 @endsection

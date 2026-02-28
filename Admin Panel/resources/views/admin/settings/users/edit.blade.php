@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="page-wrapper">
@@ -23,7 +23,7 @@
             <div class="row daes-top-sec mb-3">
 
                 <div class="col-lg-6 col-md-6">
-                    <a href="{{route('orders','userId='.$id)}}">
+                    <a href="{{route('admin.orders.index')}}?userId={{$id}}">
 
                         <div class="card">
 
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6">
-                    <a href="{{route('users.walletstransaction',$id)}}">
+                    <a href="{{route('admin.users.walletstransaction',$id)}}">
                         <div class="card">
 
                             <div class="flex-row">

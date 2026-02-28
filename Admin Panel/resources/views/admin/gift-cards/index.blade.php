@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -34,7 +34,7 @@
                                 <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.gift_card_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('gift-card.save') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.create_gift_card')}}</a>
+                                <a class="nav-link" href="{!! route('admin.gift-card.save') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.create_gift_card')}}</a>
                             </li>
                         </ul>
                     </div>
@@ -187,7 +187,7 @@
 
                     paginatedRecords.forEach(function (childData) {
                         var id = childData.id;
-                        var route1 = '{{route("gift-card.edit",":id")}}';
+                        var route1 = '{{route("admin.gift-card.edit",":id")}}';
                         route1 = route1.replace(':id', id);
 
                         records.push([

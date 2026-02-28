@@ -5,27 +5,18 @@
 <div class="page-wrapper">
 
 
-    <div class="row page-titles">
-
+    <div class="row page-titles mb-4 pb-3 border-bottom">
         <div class="col-md-5 align-self-center">
-
-            <h3 class="text-themecolor">{{trans('lang.notifications')}}</h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-bell text-success me-2"></i>{{trans('lang.notifications')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
-
             <ol class="breadcrumb">
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
                 <li class="breadcrumb-item">{{trans('lang.notifications')}}</li>
-
                 <li class="breadcrumb-item active">{{trans('lang.notifications')}}</li>
-
             </ol>
-
         </div>
+    </div>
 
         <div>
 
@@ -40,27 +31,26 @@
 
             <div class="col-12">
 
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
+                            <li class="nav-item border-0">
+                                <a class="nav-link active fw-bold text-success border-0 pb-3" href="{!! url()->current() !!}"><i
                                         class="fa fa-list mr-2"></i>{{trans('lang.notificaions_table')}}</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{!! url('notification/send') !!}"><i
+                            <li class="nav-item border-0">
+                                <a class="nav-link fw-bold text-muted border-0 pb-3" href="{!! url('notification/send') !!}"><i
                                         class="fa fa-plus mr-2"></i>{{trans('lang.create_notificaion')}}</a>
                             </li>
-
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
 
                         <div class="table-responsive m-t-10">
 
 
                             <table id="notificationTable"
-                                class="display nowrap table table-hover table-striped table-bordered table table-striped"
+                                class="display nowrap table table-hover table-bordered"
                                 cellspacing="0" width="100%">
 
                                 <thead>

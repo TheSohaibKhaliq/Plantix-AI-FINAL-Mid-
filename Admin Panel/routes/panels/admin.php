@@ -119,6 +119,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/stores/view/{id}', [\App\Http\Controllers\StoreController::class, 'view'])->name('stores.view');
         });
         Route::get('/stores/promos/{id}', [\App\Http\Controllers\StoreController::class, 'promos'])->name('stores.promos');
+        Route::get('/stores/foods/{id}',  [\App\Http\Controllers\StoreController::class, 'foods'])->name('stores.items');
+        Route::get('/stores/orders/{id}', [\App\Http\Controllers\StoreController::class, 'orders'])->name('stores.orders');
         Route::middleware(['permission:vendors-document,vendor.document.list'])->group(function () {
             Route::get('vendors/document-list/{id}', [\App\Http\Controllers\StoreController::class, 'DocumentList'])->name('vendors.document');
         });
@@ -138,6 +140,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{id}/toggle-featured', [\App\Http\Controllers\Admin\AdminProductController::class, 'toggleFeatured'])->name('toggle-featured');
         });
 
+        // ── Items (Store Food/Menu Items) ─────────────────────────────────────
+        Route::get('/items/{id?}',     [\App\Http\Controllers\ItemController::class, 'index'])->name('items');
+        Route::get('/items/edit/{id}', [\App\Http\Controllers\ItemController::class, 'edit'])->name('items.edit');
+        Route::get('/items/create/{id?}', [\App\Http\Controllers\ItemController::class, 'create'])->name('items.create');
+
         // ── Orders ────────────────────────────────────────────────────────────
         Route::prefix('/orders')->name('orders.')->group(function () {
             Route::get('/',                    [\App\Http\Controllers\Admin\AdminOrderController::class, 'index'])->name('index');
@@ -145,6 +152,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{id}/status',        [\App\Http\Controllers\Admin\AdminOrderController::class, 'updateStatus'])->name('status');
             Route::post('/{id}/assign-driver', [\App\Http\Controllers\Admin\AdminOrderController::class, 'assignDriver'])->name('assign-driver');
         });
+        // ── Legacy Orders (Firebase-based views) ──────────────────────────────
+        Route::get('/orders/edit/{id}',        [\App\Http\Controllers\OrderController::class, 'edit'])->name('orders.edit');
+        Route::get('/vendors/orderprint/{id}', [\App\Http\Controllers\OrderController::class, 'orderprint'])->name('vendors.orderprint');
         // ── Appointments ──────────────────────────────────────────────────────
         Route::prefix('/appointments')->name('appointments.')->group(function () {
             Route::get('/',               [\App\Http\Controllers\Admin\AdminAppointmentController::class, 'index'])->name('index');
@@ -514,6 +524,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware(['permission:privacy,privacyPolicy'])->group(function () {
             Route::get('/privacyPolicy', [\App\Http\Controllers\TermsAndConditionsController::class, 'privacyindex'])->name('privacyPolicy');
         });
+
+        // ── Page Templates ────────────────────────────────────────────────────
+        Route::get('/footer-template',   [\App\Http\Controllers\SettingsController::class, 'footerTemplate'])->name('footerTemplate');
+        Route::get('/homepage-template', [\App\Http\Controllers\SettingsController::class, 'homepageTemplate'])->name('homepageTemplate');
+
+        // ── User Customer CRUD (customer-facing user management) ──────────────
+        Route::post('/users/store',         [\App\Http\Controllers\UserController::class, 'storeAdminUsers'])->name('users.store');
+        Route::post('/users/update/{id}',   [\App\Http\Controllers\UserController::class, 'updateAdminUsers'])->name('users.update');
+        Route::get('/users/delete/{id}',    [\App\Http\Controllers\UserController::class, 'deleteAdminUsers'])->name('users.delete');
 
         // ── AI Agriculture Module (Admin Oversight) ───────────────────────────
         Route::prefix('ai-modules')->name('ai.')->group(function () {

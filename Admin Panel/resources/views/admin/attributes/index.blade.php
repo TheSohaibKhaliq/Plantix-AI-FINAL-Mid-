@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -41,7 +41,7 @@
                                         class="fa fa-list mr-2"></i>{{trans('lang.attribute_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('attributes.create') !!}"><i
+                                <a class="nav-link" href="{!! route('admin.attributes.create') !!}"><i
                                         class="fa fa-plus mr-2"></i>{{trans('lang.attribute_create')}}</a>
                             </li>
                         </ul>
@@ -242,7 +242,7 @@
         newdate = '';
 
         var id = val.id;
-        var route1 = '{{route("attributes.edit",":id")}}';
+        var route1 = '{{route("admin.attributes.edit",":id")}}';
         route1 = route1.replace(':id', id);
 
         html.push('<a href="' + route1 + '">' + val.title + '</a>');
@@ -264,7 +264,7 @@
         var id = this.id;
         jQuery("#data-table_processing").show();
         database.collection('vendor_attributes').doc(id).delete().then(function (result) {
-            window.location.href = '{{ route("attributes")}}';
+            window.location.href = '{{ route("admin.attributes")}}';
         });
     });
 

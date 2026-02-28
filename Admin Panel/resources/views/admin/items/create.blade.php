@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -32,7 +32,7 @@
 
             <ol class="breadcrumb">
 
-                <li class="breadcrumb-item"><a href="{!! route('dashboard') !!}">{{trans('lang.dashboard')}}</a>
+                <li class="breadcrumb-item"><a href="{!! route('admin.dashboard') !!}">{{trans('lang.dashboard')}}</a>
 
                 </li>
 
@@ -46,7 +46,7 @@
 
                 <?php } else { ?>
 
-                    <li class="breadcrumb-item"><a href="{!! route('items') !!}">{{trans('lang.item_plural')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.products.index') !!}">{{trans('lang.item_plural')}}</a></li>
 
                 <?php } ?>
 
@@ -580,7 +580,7 @@
 
                 <?php } else { ?>
 
-                    <a href="{!! route('items') !!}" class="btn btn-default"><i
+                    <a href="{!! route('admin.products.index') !!}" class="btn btn-default"><i
 
                             class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
 
@@ -1257,7 +1257,7 @@
 
 
 
-                                window.location.href = '{{ route("items")}}';
+                                window.location.href = '{{ route("admin.items")}}';
 
                             }
 

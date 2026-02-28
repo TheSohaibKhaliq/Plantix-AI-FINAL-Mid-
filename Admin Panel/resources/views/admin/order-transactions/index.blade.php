@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -222,11 +222,11 @@
     alldata.forEach((listval) => {
 
         var val=listval;
-        var route1 =  '{{route("users.edit",":id")}}';
+        var route1 =  '{{route("admin.users.edit",":id")}}';
         route1 = route1.replace(':id', val.id);
         html=html+'<tr>';
 
-        var order_detail = '{{route("orders.edit",":id")}}';
+        var order_detail = '{{route("admin.orders.edit",":id")}}';
         order_detail = order_detail.replace(':id', val.order_id);
 
 
@@ -394,7 +394,7 @@ wherequery.then((snapshots) => {
 async function driverFunction(driverId) {
 
   var driverName='';
-  var routeuser =  '{{route("drivers.edit",":id")}}';
+  var routeuser =  '{{route("admin.drivers.edit",":id")}}';
   routeuser = routeuser.replace(':id', driverId);
   await database.collection('users').where("id","==",driverId).get().then( async function(snapshotss){
 
@@ -412,7 +412,7 @@ async function driverFunction(driverId) {
 async function vendorFunction(vendorId) {
 
   var driverName='';
-  var routeuser =  '{{route("restaurants.edit",":id")}}';
+  var routeuser =  '{{route("admin.stores.edit",":id")}}';
   routeuser = routeuser.replace(':id', vendorId);
   await database.collection('vendors').where("id","==",vendorId).get().then( async function(snapshotss){
 

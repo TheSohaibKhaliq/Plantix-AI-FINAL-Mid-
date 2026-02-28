@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -33,7 +33,7 @@
                                 <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.cms_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('cms.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.cms_create')}}</a>
+                                <a class="nav-link" href="{!! route('admin.cms.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.cms_create')}}</a>
                             </li>
                         </ul>
                     </div>
@@ -176,7 +176,7 @@
 
                     paginatedRecords.forEach(function (childData) {
 
-                        var route1 = '{{route("cms.edit",":id")}}';
+                        var route1 = '{{route("admin.cms.edit",":id")}}';
                         route1 = route1.replace(':id', childData.id);
 
                         records.push([

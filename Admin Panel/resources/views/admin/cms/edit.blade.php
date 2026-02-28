@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <div class="page-wrapper">
@@ -10,7 +10,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{!! route('cms') !!}">{{trans('lang.cms_plural')}}</a>
+                    <li class="breadcrumb-item"><a href="{!! route('admin.cms') !!}">{{trans('lang.cms_plural')}}</a>
                     </li>
                     <li class="breadcrumb-item active">{{trans('lang.cms_edit')}}</li>
                 </ol>
@@ -73,7 +73,7 @@
             <button type="button" class="btn btn-primary edit-form-btn">
             	<i class="fa fa-save"></i> {{trans('lang.save')}}</button>
 
-            <a href="{!! route('cms') !!}" class="btn btn-default">
+            <a href="{!! route('admin.cms') !!}" class="btn btn-default">
             	<i class="fa fa-undo"></i>{{trans('lang.cancel')}}
             </a>
 
@@ -190,7 +190,7 @@
                     'description': description,
                     'publish': publish,
                 }).then(function (result) {
-                    window.location.href = '{{ route("cms")}}';
+                    window.location.href = '{{ route("admin.cms")}}';
                 });
             }
         });

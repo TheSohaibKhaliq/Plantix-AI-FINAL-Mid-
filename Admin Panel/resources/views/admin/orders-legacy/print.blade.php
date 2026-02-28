@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
@@ -15,7 +15,7 @@
                     <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
                         <li class="breadcrumb-item"><a href= "{{route('admin.stores.view',$_GET['eid'])}}" >{{trans('lang.order_plural')}}</a></li>
                     <?php }else{ ?>
-                        <li class="breadcrumb-item"><a href= "{!! route('orders') !!}" >{{trans('lang.order_plural')}}</a></li>
+                        <li class="breadcrumb-item"><a href= "{!! route('admin.orders.index') !!}" >{{trans('lang.order_plural')}}</a></li>
                     <?php } ?>
 
                     <li class="breadcrumb-item">{{trans('lang.print_order')}}</li>
@@ -367,7 +367,7 @@ ref.get().then( async function(snapshots){
         var vendordata = snapshotsnew.docs[0].data();
         
           if (vendordata.id) {
-              var route_view =  '{{route("stores.view",":id")}}';
+              var route_view =  '{{route("admin.stores.view",":id")}}';
                 route_view = route_view.replace(':id', vendordata.id);
 
               $('#resturant-view').attr('data-url',route_view);  

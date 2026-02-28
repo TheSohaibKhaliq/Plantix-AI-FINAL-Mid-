@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 	<div class="page-wrapper">
@@ -10,7 +10,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href= "{!! route('currencies') !!}" >{{trans('lang.currency_table')}}</a></li>
+                <li class="breadcrumb-item"><a href= "{!! route('admin.currencies') !!}" >{{trans('lang.currency_table')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.currency_edit')}}</li>
             </ol>
         </div>
@@ -167,7 +167,7 @@ function disableCurrency() {
           database.collection('currencies').doc(currency.id).update({
             'isActive': false,
           }).then(function(result) {
-            window.location.href = '{{ route("currencies")}}';
+            window.location.href = '{{ route("admin.currencies")}}';
           }).catch(function(error) {
             console.error("Error updating currency: ", error);
           });
@@ -183,7 +183,7 @@ function disableCurrency() {
             'isActive': active,
             'symbolAtRight': symbolAtRight
           }).then(function(result) {
-            window.location.href = '{{ route("currencies")}}';
+            window.location.href = '{{ route("admin.currencies")}}';
           }).catch(function(error) {
             console.error("Error updating currency: ", error);
           });

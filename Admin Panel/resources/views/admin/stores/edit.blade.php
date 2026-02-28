@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -15,118 +15,36 @@
 
 
     <div class="row page-titles">
-
-
-
-
-
-
-
         <div class="col-md-5 align-self-center">
-
-
-
-            <h3 class="text-themecolor">{{trans('lang.store_plural')}}</h3>
-
-
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-edit me-2 text-success"></i>{{trans('lang.store_edit')}}</h3>
         </div>
-
-
 
         <div class="col-md-7 align-self-center">
-
-
-
             <ol class="breadcrumb">
-
-
-
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
-
-
-
-                <li class="breadcrumb-item"><a href="{!! route('stores') !!}">{{trans('lang.store_plural')}}</a></li>
-
-
-
+                <li class="breadcrumb-item"><a href="{!! route('admin.stores') !!}">{{trans('lang.store_plural')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.store_edit')}}</li>
-
-
-
             </ol>
-
-
-
         </div>
-
-
-
     </div>
 
-
-
-
-
-
-
-    <div class="container-fluid">
-
-
-
-        <div class="row">
-
-
-
-            <div class="col-12">
-
-
-
-
-
-
-
-                <div class="resttab-sec">
-
-
-
-                    <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">{{trans('lang.processing')}}
-
-
-
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-info-circle me-2 text-primary"></i>{{trans('lang.store_details')}}</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div id="data-table_processing" class="dataTables_processing panel panel-default" style="display: none;">
+                        {{trans('lang.processing')}}
                     </div>
+                    
+                    <div class="alert alert-danger error_top rounded border-0 shadow-sm" style="display:none"></div>
+                    <div class="alert alert-success success_top rounded border-0 shadow-sm" style="display:none"></div>
 
-
-
-
-
-
-
-                    <div class="error_top"></div>
-
-
-
-
-
-
-
-                    <div class="row restaurant_payout_create">
-
-
-
-
-
-
-
+                    <div class="restaurant_payout_create">
                         <div class="restaurant_payout_create-inner">
-
-
-
-
-
-
-
-                        <fieldset>
+                            <fieldset>
 
 
 
@@ -3443,61 +3361,21 @@
 
 
                         </fieldset>
-
-
-
                     </div>
-
-
-
                 </div>
-
-
-
             </div>
 
-
-
-
-
-
-
-        </div>
-
-
-
-        <div class="form-group col-12 text-center btm-btn">
-
-
-
-            <button type="button" class="btn btn-primary  edit-form-btn"><i class="fa fa-save"></i> {{trans('lang.save')}}
-
-
-
-            </button>
-
-
-
-            <a href="{!! route('stores') !!}" class="btn btn-default"><i class="fa fa-undo"></i>{{trans('lang.cancel')}}</a>
-
-
+            <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                <a href="{!! route('admin.stores') !!}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
+                    <i class="fa fa-undo me-2"></i>{{trans('lang.cancel')}}
+                </a>
+                <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold edit-form-btn">
+                    <i class="fa fa-save me-2"></i>{{trans('lang.save')}}
+                </button>
+            </div>
 
         </div>
-
-
-
-
-
-
-
     </div>
-
-
-
-</div>
-
-
-
 </div>
 
 
@@ -6560,7 +6438,7 @@
 
 
 
-                                                window.location.href = '{{ route("stores")}}';
+                                                window.location.href = '{{ route("admin.stores")}}';
 
 
 
@@ -6588,7 +6466,7 @@
 
 
 
-                                        window.location.href = '{{ route("stores")}}';
+                                        window.location.href = '{{ route("admin.stores")}}';
 
 
 

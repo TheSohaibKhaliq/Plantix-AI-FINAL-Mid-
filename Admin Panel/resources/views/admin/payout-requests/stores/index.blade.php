@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -104,7 +104,7 @@
 
                             <li class="active">
 
-                                <a href="{{route('payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
+                                <a href="{{route('admin.payoutRequests.stores.view', $id)}}">{{trans('lang.tab_payout_request')}}</a>
 
                             </li>
 
@@ -536,7 +536,7 @@
 
                 var vendorData = snapshots.docs[0].data();
 
-                walletRoute = "{{route('users.walletstransaction', ':id')}}";
+                walletRoute = "{{route('admin.users.walletstransaction', ':id')}}";
 
                 walletRoute = walletRoute.replace(":id", vendorData.author);
 
@@ -968,7 +968,7 @@
 
 
 
-                var route = '{{route("stores.view", ":id")}}';
+                var route = '{{route("admin.stores.view", ":id")}}';
 
                 route = route.replace(':id', val.vendorID);
 
@@ -1636,7 +1636,7 @@
 
             var payoutVendor = '';
 
-            var route = '{{route("stores.view", ":id")}}';
+            var route = '{{route("admin.stores.view", ":id")}}';
 
             route = route.replace(':id', vendor);
 

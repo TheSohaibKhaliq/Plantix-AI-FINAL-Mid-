@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 
 
@@ -50,31 +50,31 @@
 
                         <li>
 
-                            <a href="{{route('drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
+                            <a href="{{route('admin.drivers.view',$id)}}">{{trans('lang.tab_basic')}}</a>
 
                         </li>
 
                         <li>
 
-                            <a href="{{route('orders')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
+                            <a href="{{route('admin.orders.index')}}?driverId={{$id}}">{{trans('lang.tab_orders')}}</a>
 
                         </li>
 
                         <li>
 
-                            <a href="{{route('driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
+                            <a href="{{route('admin.driver.payout',$id)}}">{{trans('lang.tab_payouts')}}</a>
 
                         </li>
 
                         <li class="active">
 
-                            <a href="{{route('payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
+                            <a href="{{route('admin.payoutRequests.drivers.view',$id)}}">{{trans('lang.tab_payout_request')}}</a>
 
                         </li>
 
                         <li>
 
-                            <a href="{{route('users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
+                            <a href="{{route('admin.users.walletstransaction',$id)}}">{{trans('lang.wallet_transaction')}}</a>
 
                         </li>
 
@@ -894,7 +894,7 @@
 
 
 
-        var route1 = '{{route("drivers.edit",":id")}}';
+        var route1 = '{{route("admin.drivers.edit",":id")}}';
 
         route1 = route1.replace(':id', val.id);
 
@@ -1294,7 +1294,7 @@
 
         var payoutDriver = '';
 
-        var routedriver = '{{route("users.edit",":id")}}';
+        var routedriver = '{{route("admin.users.edit",":id")}}';
 
         routedriver = routedriver.replace(':id', driver);
 

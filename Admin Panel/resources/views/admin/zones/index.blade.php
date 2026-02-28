@@ -1,28 +1,19 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 
 <div class="page-wrapper">
 
     <div class="row page-titles">
-
         <div class="col-md-5 align-self-center"> 
-
-            <h3 class="text-themecolor">{{trans('lang.zone_plural')}}</h3>
-
+            <h3 class="text-themecolor fw-bold"><i class="fa fa-map-marker me-2 text-success"></i>{{trans('lang.zone_plural')}}</h3>
         </div>
-
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">{{trans('lang.dashboard')}}</a></li>
                 <li class="breadcrumb-item active">{{trans('lang.zone_plural')}}</li>
             </ol>
         </div>
-
-        <div>
-
-        </div>
-
     </div>
 
 
@@ -32,24 +23,20 @@
 
             <div class="col-12">
 
-                <div class="card">
-
-                    <div class="card-header">
-                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
+                <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <ul class="nav nav-tabs align-items-end card-header-tabs w-100 border-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{!! url()->current() !!}"><i
-                                            class="fa fa-list mr-2"></i>{{trans('lang.zone_table')}}</a>
+                                <a class="nav-link active text-success border-success border-bottom border-2 bg-transparent fw-bold" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.zone_table')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{!! route('zone.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.zone_create')}}</a>
+                                <a class="nav-link text-muted border-0 bg-transparent" href="{!! route('admin.zone.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.zone_create')}}</a>
                             </li>
                         </ul>
                     </div>
+                    <div class="card-body p-4">
 
-                    <div class="card-body">
-
-                        <div id="data-table_processing" class="dataTables_processing panel panel-default"
-                             style="display: none;">Processing...
+                        <div id="data-table_processing" class="dataTables_processing panel panel-default text-success" style="display: none;">{{trans('lang.processing')}}
                         </div>
 
                         <div class="table-responsive m-t-10">
