@@ -11,10 +11,14 @@ return new class extends Migration
         Schema::table('appointments', function (Blueprint $table) {
             // Prevent double-booking at the DB level
             // Unique on expert + scheduled time (only active appointments)
-            $table->unique(['expert_id', 'scheduled_at'], 'uniq_expert_slot');
+            if (!Schema::hasColumn('appointments', 'uniq_expert_slot')) {
+                $table->unique(['expert_id', 'scheduled_at'], 'uniq_expert_slot');
+            }
 
-            // Add meeting link for video consultations
-            $table->string('meeting_link', 500)->nullable()->after('admin_notes');
+            // Add meeting link for video consultations (only if it doesn't exist)
+            if (!Schema::hasColumn('appointments', 'meeting_link')) {
+                $table->string('meeting_link', 500)->nullable()->after('admin_notes');
+            }
         });
     }
 
