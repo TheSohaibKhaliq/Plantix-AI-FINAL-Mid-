@@ -20,7 +20,7 @@ class CustomerOrderController extends Controller
     public function index(): View
     {
         $user   = auth('web')->user();
-        $orders = Order::with(['vendor', 'admin.items.product'])
+        $orders = Order::with(['vendor', 'items.product'])
                        ->forCustomer($user->id)
                        ->latest()
                        ->paginate(10);
@@ -31,7 +31,7 @@ class CustomerOrderController extends Controller
     public function show(int $id): View
     {
         $user  = auth('web')->user();
-        $order = Order::with(['vendor', 'admin.items.product', 'statusHistory', 'returnRequest', 'refund'])
+        $order = Order::with(['vendor', 'items.product', 'statusHistory', 'returnRequest', 'refund'])
                       ->forCustomer($user->id)
                       ->findOrFail($id);
 
@@ -41,7 +41,7 @@ class CustomerOrderController extends Controller
     public function success(int $id): View
     {
         $user  = auth('web')->user();
-        $order = Order::with(['vendor', 'admin.items.product'])
+        $order = Order::with(['vendor', 'items.product'])
                       ->forCustomer($user->id)
                       ->findOrFail($id);
 

@@ -97,12 +97,17 @@
                                     </td>
                                     <td class="border-bottom-0 py-3">
                                         <span class="badge rounded-pill fw-medium" style="background: {{ $appt->status === 'completed' ? 'rgba(16, 185, 129, 0.1); color: #10B981;' : ($appt->status === 'cancelled' ? 'rgba(239, 68, 68, 0.1); color: #EF4444;' : 'rgba(245, 158, 11, 0.1); color: #F59E0B;') }} padding: 6px 12px; font-size: 12px;">
-                                            {{ ucfirst($appt->status) }}
+                                            {{ ucwords(str_replace('_', ' ', $appt->status)) }}
                                         </span>
                                     </td>
                                     <td class="border-bottom-0 py-3 rounded-end">
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('appointment.details', $appt->id) }}" class="btn-agri text-decoration-none" style="padding: 6px 12px; font-size: 13px; background: var(--agri-bg); color: var(--agri-text-main);"><i class="fas fa-eye"></i></a>
+                                            @if($appt->status === 'pending_payment')
+                                            <a href="{{ route('appointment.pay', $appt->id) }}" class="btn-agri btn-agri-primary text-decoration-none" style="padding: 6px 14px; font-size: 13px;">
+                                                <i class="fas fa-credit-card me-1"></i> Pay
+                                            </a>
+                                            @endif
                                             @if(in_array($appt->status, ['pending','confirmed']))
                                             <form method="POST" action="{{ route('appointment.cancel', $appt->id) }}">
                                                 @csrf

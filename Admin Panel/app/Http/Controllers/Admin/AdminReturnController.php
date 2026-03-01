@@ -33,7 +33,7 @@ class AdminReturnController extends Controller
 
     public function show(int $id): View
     {
-        $return  = ReturnRequest::with(['user', 'order.admin.items.product', 'reason', 'refund'])->findOrFail($id);
+        $return  = ReturnRequest::with(['user', 'order.items.product', 'reason', 'refund'])->findOrFail($id);
         $reasons = ReturnReason::active()->get();
 
         return view('admin.returns.show', compact('return', 'reasons'));

@@ -45,7 +45,7 @@
                                 <h5>Order Summary</h5>
                                 <table class="table table-sm">
                                     <tbody>
-                                        @foreach($order->admin->items ?? [] as $item)
+                                        @foreach($order->items ?? [] as $item)
                                         <tr>
                                             <td>{{ $item->product->name ?? 'Product' }} × {{ $item->quantity }}</td>
                                             <td class="text-end">PKR {{ number_format(($item->unit_price ?? 0) * $item->quantity, 2) }}</td>

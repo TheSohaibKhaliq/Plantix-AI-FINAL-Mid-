@@ -22,12 +22,17 @@
                         <h2 class="fw-bold mb-0 text-dark d-flex align-items-center gap-3">
                             Appointment #{{ $appointment->id }}
                             <span class="badge rounded-pill fw-medium fs-6" style="background: {{ $appointment->status === 'completed' ? 'rgba(16, 185, 129, 0.1); color: #10B981;' : ($appointment->status === 'cancelled' ? 'rgba(239, 68, 68, 0.1); color: #EF4444;' : 'rgba(245, 158, 11, 0.1); color: #F59E0B;') }} padding: 6px 12px; font-size: 14px; vertical-align: middle;">
-                                {{ ucfirst($appointment->status) }}
+                                {{ ucwords(str_replace('_', ' ', $appointment->status)) }}
                             </span>
                         </h2>
                     </div>
                     
                     <div class="d-flex gap-2">
+                        @if($appointment->status === 'pending_payment')
+                        <a href="{{ route('appointment.pay', $appointment->id) }}" class="btn-agri btn-agri-primary text-decoration-none d-flex align-items-center gap-2" style="padding: 8px 20px;">
+                            <i class="fas fa-credit-card"></i> Pay Now
+                        </a>
+                        @endif
                         @if(in_array($appointment->status, ['pending','confirmed']))
                         <form method="POST" action="{{ route('appointment.cancel', $appointment->id) }}">
                             @csrf

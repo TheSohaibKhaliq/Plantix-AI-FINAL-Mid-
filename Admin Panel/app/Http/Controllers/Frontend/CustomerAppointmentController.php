@@ -70,6 +70,65 @@ class CustomerAppointmentController extends Controller
     }
 
     /**
+     * Show the payment page for a pending_payment appointment.
+     * GET /appointment/{id}/pay
+     */
+    public function payPage(int $id): \Illuminate\View\View|RedirectResponse
+    {
+        $user        = auth('web')->user();
+        $appointment = $user->appointments()
+            ->with('expert.user')
+            ->findOrFail($id);
+
+        if ($appointment->status !== Appointment::STATUS_PENDING_PAYMENT) {
+            return redirect()->route('appointment.details', $id)
+                             ->with('error', 'This appointment does not require payment.');
+        }
+
+        return view('customer.appointment-payment', compact('appointment'));
+    }
+
+    /**
+     * Process the simulated payment for a pending_payment appointment.
+     * POST /appointment/{id}/pay
+     */
+    public function processPayment(Request $request, int $id): RedirectResponse
+    {
+        $user        = auth('web')->user();
+        $appointment = $user->appointments()
+            ->where('status', Appointment::STATUS_PENDING_PAYMENT)
+            ->findOrFail($id);
+
+        $request->validate([
+            'card_name'   => 'required|string|max:100',
+            'card_number' => 'required|string',
+            'card_exp'    => 'required|string',
+            'card_cvc'    => 'required|string',
+        ]);
+
+        try {
+            if ($appointment->stripe_payment_intent_id) {
+                // Use the real Stripe PI stored on the appointment
+                $this->service->confirmPayment($appointment->stripe_payment_intent_id, 'succeeded');
+            } else {
+                // No real PI — simulate advance for demo / test environments
+                $appointment->update([
+                    'status'                => Appointment::STATUS_PENDING_EXPERT_APPROVAL,
+                    'stripe_payment_status' => 'succeeded',
+                    'payment_status'        => 'paid',
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('Appointment payment processing error', ['id' => $id, 'error' => $e->getMessage()]);
+            return redirect()->route('appointment.details', $id)
+                             ->with('error', 'Payment could not be processed. Please try again.');
+        }
+
+        return redirect()->route('appointment.details', $id)
+                         ->with('success', 'Payment successful! Your appointment is now pending expert approval.');
+    }
+
+    /**
      * Customer accepts or rejects an expert's reschedule proposal.
      * Section 6 – Reschedule Logic: POST /appointment/{id}/reschedule-response
      * Input: action[accept|reject]

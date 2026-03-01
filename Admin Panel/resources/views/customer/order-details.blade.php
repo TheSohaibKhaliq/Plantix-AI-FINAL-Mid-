@@ -97,7 +97,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($order->admin->items ?? [] as $item)
+                                        @forelse($order->items ?? [] as $item)
                                         <tr style="border-bottom: 1px solid var(--agri-border);">
                                             <td class="py-4">
                                                 <div class="d-flex align-items-center gap-3">
