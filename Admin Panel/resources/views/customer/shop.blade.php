@@ -73,24 +73,6 @@
             margin-bottom: 15px !important;
             color: var(--agri-dark) !important;
         }
-        #categoryFilters label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--agri-text-muted);
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        #categoryFilters label:hover {
-            color: var(--agri-primary);
-        }
-        #categoryFilters input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--agri-primary);
-            cursor: pointer;
-        }
         .clear-filters-btn {
             background: var(--agri-bg) !important;
             color: var(--agri-text-main) !important;
@@ -103,6 +85,46 @@
             background: var(--agri-secondary) !important;
             color: var(--agri-text-main) !important;
         }
+        /* Advanced filter elements */
+        .filter-scroll { max-height: 180px; overflow-y: auto; padding-right: 4px; }
+        .filter-scroll::-webkit-scrollbar { width: 4px; }
+        .filter-scroll::-webkit-scrollbar-thumb { background: var(--agri-border); border-radius: 4px; }
+        .sidebar-section label {
+            display: flex; align-items: center; gap: 10px;
+            color: var(--agri-text-muted); margin-bottom: 8px;
+            cursor: pointer; transition: color 0.2s; font-size: 14px;
+        }
+        .sidebar-section label:hover { color: var(--agri-primary); }
+        .sidebar-section label input[type="checkbox"] {
+            width: 16px; height: 16px; accent-color: var(--agri-primary); cursor: pointer; flex-shrink: 0;
+        }
+        .rating-btn {
+            background: none; border: 1px solid var(--agri-border);
+            border-radius: var(--agri-radius-sm); padding: 5px 10px;
+            font-size: 12px; color: var(--agri-text-muted);
+            cursor: pointer; transition: all 0.2s; text-align: left; width: 100%;
+        }
+        .rating-btn:hover, .rating-btn.active {
+            background: var(--agri-primary-light); border-color: var(--agri-primary); color: var(--agri-primary);
+        }
+        .rating-btn .fa-star { color: #f59e0b; font-size: 11px; }
+        #filterBadge {
+            background: #ef4444; color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 10px; font-weight: 700;
+            display: none; align-items: center; justify-content: center; margin-left: 2px;
+        }
+        .price-inputs { display: flex; gap: 8px; align-items: center; }
+        .price-inputs input {
+            width: 90px; border: 1px solid var(--agri-border); border-radius: var(--agri-radius-sm);
+            padding: 6px 10px; font-size: 13px; outline: none;
+        }
+        .price-inputs input:focus { border-color: var(--agri-primary); }
+        .price-apply-btn {
+            background: var(--agri-primary); color: white; border: none;
+            border-radius: var(--agri-radius-sm); padding: 6px 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+        }
+        .price-apply-btn:hover { opacity: 0.85; }
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -139,12 +161,30 @@
 @endsection
 
 @section('page_scripts')
+<script>
+// Backend-supplied shop data — consumed by shop-dynamic.js
+window.SHOP_DATA = {
+    products  : @json($shopData),
+    brands    : @json($brandList),
+    vendors   : @json($vendorList),
+    priceRange: { min: {{ $priceMin }}, max: {{ $priceMax }} },
+};
+// Cart route map for cart.js
+window.CART_ROUTES = {
+    'cart.add'    : '{{ route('cart.add') }}',
+    'cart.remove' : '{{ url('/cart') }}/{id}',
+    'cart.update' : '{{ url('/cart') }}/{id}',
+    'cart.count'  : '{{ route('cart.count') }}',
+    'cart.mini'   : '{{ route('cart.mini') }}',
+    'auth'        : {{ auth('web')->check() ? 'true' : 'false' }},
+    'loginUrl'    : '{{ route('signin') }}',
+};
+</script>
     <script src="{{ asset('assets/js/strict-validation.js') }}"></script>
     <script src="{{ asset('assets/js/cart.js') }}"></script>
     <script src="{{ asset('assets/js/dialogs.js') }}"></script>
     <script src="{{ asset('assets/js/toast.js') }}"></script>
     <script src="{{ asset('assets/js/shop-dynamic.js') }}"></script>
-    <script src="{{ asset('assets/js/reviews.js') }}"></script>
 @endsection
 
 @section('content')
@@ -175,7 +215,7 @@
         <div class="container-agri pb-5">
             <!-- DYNAMIC SHOP ENHANCEMENTS BEGIN -->
             <div class="shop-controls-bar" id="shopControlsBar">
-                <button id="sidebarToggle" class="sidebar-toggle-btn"><i class="fas fa-sliders-h"></i> Filters</button>
+                <button id="sidebarToggle" class="sidebar-toggle-btn"><i class="fas fa-sliders-h"></i> Filters <span id="filterBadge"></span></button>
                 <span id="productCount">0 products found</span>
                 <select id="sortSelect" data-label="Sort by">
                     <option value="price-low">Price: Low to High</option>
@@ -197,10 +237,51 @@
                         <span class="fs-5">Filters</span>
                         <i class="fas fa-times d-lg-none" id="sidebarClose" style="cursor:pointer;"></i>
                     </div>
+
+                    {{-- Price Range --}}
                     <div class="sidebar-section">
-                        <h4>Categories</h4>
-                        <div id="categoryFilters" class="d-flex flex-column gap-2 mt-3"></div>
+                        <h4><i class="fas fa-tag me-2 text-success" style="font-size:14px;"></i>Price Range</h4>
+                        <div class="price-inputs mt-2">
+                            <input type="number" id="priceMin" min="0" placeholder="Min PKR">
+                            <span class="text-muted">—</span>
+                            <input type="number" id="priceMax" min="0" placeholder="Max PKR">
+                        </div>
+                        <button id="applyPrice" class="price-apply-btn mt-2 w-100"><i class="fas fa-check me-1"></i> Apply</button>
                     </div>
+
+                    {{-- On Sale --}}
+                    <div class="sidebar-section mt-4 pt-3 border-top">
+                        <h4><i class="fas fa-fire me-2 text-success" style="font-size:14px;"></i>Deals</h4>
+                        <label class="mt-2">
+                            <input type="checkbox" id="onSaleFilter">
+                            On Sale Only
+                        </label>
+                    </div>
+
+                    {{-- Min Rating --}}
+                    <div class="sidebar-section mt-4 pt-3 border-top">
+                        <h4><i class="fas fa-star me-2 text-success" style="font-size:14px;"></i>Min Rating</h4>
+                        <div id="ratingFilter" class="d-flex flex-column gap-1 mt-2"></div>
+                    </div>
+
+                    {{-- Categories --}}
+                    <div class="sidebar-section mt-4 pt-3 border-top">
+                        <h4><i class="fas fa-layer-group me-2 text-success" style="font-size:14px;"></i>Categories</h4>
+                        <div id="categoryFilters" class="d-flex flex-column filter-scroll mt-2"></div>
+                    </div>
+
+                    {{-- Brands --}}
+                    <div class="sidebar-section mt-4 pt-3 border-top">
+                        <h4><i class="fas fa-certificate me-2 text-success" style="font-size:14px;"></i>Brand</h4>
+                        <div id="brandFilters" class="d-flex flex-column filter-scroll mt-2"></div>
+                    </div>
+
+                    {{-- Stores / Vendors --}}
+                    <div class="sidebar-section mt-4 pt-3 border-top">
+                        <h4><i class="fas fa-store me-2 text-success" style="font-size:14px;"></i>Store</h4>
+                        <div id="vendorFilters" class="d-flex flex-column filter-scroll mt-2"></div>
+                    </div>
+
                     <div class="mt-4 pt-3 border-top">
                         <button id="clearFilters" class="clear-filters-btn w-100 border-0"><i class="fas fa-sync-alt me-2"></i> Clear All Filters</button>
                     </div>

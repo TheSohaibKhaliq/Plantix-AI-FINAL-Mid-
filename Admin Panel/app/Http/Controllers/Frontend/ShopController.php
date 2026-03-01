@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ShopController extends Controller
@@ -53,11 +54,40 @@ class ShopController extends Controller
             default      => ['created_at', 'desc'],
         };
 
-        $products   = $query->orderBy(...$sort)->paginate(16)->withQueryString();
+        $products   = $query->orderBy(...$sort)->with(['category', 'primaryImage', 'brand', 'vendor'])->get();
         $categories = Category::orderBy('name')->get();
         $brands     = Brand::active()->orderBy('name')->get();
+        $vendors    = Vendor::where('is_active', true)->where('is_approved', true)->orderBy('title')->get();
 
-        return view('customer.shop', compact('products', 'categories', 'brands'));
+        $shopData = $products->map(fn ($p) => [
+            'id'              => $p->id,
+            'name'            => $p->name,
+            'subtitle'        => $p->brand?->name,
+            'description'     => $p->description,
+            'price'           => (float) $p->price,
+            'effective_price' => (float) $p->effective_price,
+            'discount_price'  => $p->discount_price ? (float) $p->discount_price : null,
+            'is_on_sale'      => (bool) $p->is_on_sale,
+            'category'        => $p->category?->name,
+            'brand'           => $p->brand?->name,
+            'vendor'          => $p->vendor?->title,
+            'vendor_id'       => $p->vendor_id,
+            'rating_avg'      => (float) ($p->rating_avg ?? 0),
+            'image_url'       => $p->primaryImage
+                                    ? Storage::url($p->primaryImage->path)
+                                    : asset('assets/img/products/urea_sona.png'),
+            'url'             => route('shop.single', $p->id),
+        ])->values()->all();
+
+        $priceMin   = (int) ($products->min('price') ?? 0);
+        $priceMax   = (int) ($products->max('price') ?? 50000);
+        $brandList  = $brands->map(fn ($b) => ['id' => $b->id, 'name' => $b->name])->values()->all();
+        $vendorList = $vendors->map(fn ($v) => ['id' => $v->id, 'name' => $v->title])->values()->all();
+
+        return view('customer.shop', compact(
+            'products', 'categories', 'brands', 'vendors',
+            'shopData', 'priceMin', 'priceMax', 'brandList', 'vendorList'
+        ));
     }
 
     public function show(int $id): View

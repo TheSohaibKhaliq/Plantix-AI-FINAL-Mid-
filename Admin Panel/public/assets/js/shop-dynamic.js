@@ -1,263 +1,312 @@
-// === DYNAMIC SHOP ENHANCEMENTS JS ===
-// Mock data: 24 products
-const products = [
-  {id:1,name:'FFC Sona Urea',subtitle:'46% N',price:3500,originalPrice:null,category:'Nitrogen',subcategory:'Urea',description:'High-quality nitrogen fertilizer for all crops.',isOnSale:false,rating:4.5,imageUrl:'assets/img/products/urea_sona.png'},
-  {id:2,name:'Engro DAP',subtitle:'18-46-0',price:1500,originalPrice:1900,category:'Phosphorus',subcategory:'DAP',description:'Di-Ammonium Phosphate for better root development.',isOnSale:true,rating:4.8,imageUrl:'assets/img/products/dap_engro.png'},
-  {id:3,name:'Sarsabz CAN',subtitle:'Calcium Ammonium Nitrate',price:3800,originalPrice:null,category:'Nitrogen',subcategory:'CAN',description:'Fast-acting nitrogen source with calcium.',isOnSale:false,rating:4.3,imageUrl:'assets/img/products/can_sarsabz.png'},
-  {id:4,name:'MOP Potash',subtitle:'MOP 60% K2O',price:12000,originalPrice:null,category:'Potash',subcategory:'MOP',description:'Essential potassium for fruit quality.',isOnSale:false,rating:4.6,imageUrl:'assets/img/products/mop_potash.jpg'},
-  {id:5,name:'SOP Potash',subtitle:'SOP 50% K2O',price:17500,originalPrice:null,category:'Potash',subcategory:'SOP',description:'Premium potassium without chloride.',isOnSale:false,rating:4.7,imageUrl:'assets/img/products/sop_potash.jpg'},
-  {id:6,name:'NPK 15-15-15',subtitle:'Balanced Blend',price:11000,originalPrice:null,category:'NPK Blends',subcategory:'NPK',description:'Complete balanced nutrition for all crops.',isOnSale:false,rating:4.9,imageUrl:'assets/img/products/npk_15_15_15.jpg'},
-  {id:7,name:'Zinc Sulphate',subtitle:'33% Zn',price:2800,originalPrice:null,category:'Micronutrients',subcategory:'Zinc',description:'Essential micronutrient for crop health.',isOnSale:false,rating:4.4,imageUrl:'assets/img/products/zinc_sulphate.jpg'},
-  {id:8,name:'Agricultural Gypsum',subtitle:'Calcium Sulphate',price:1200,originalPrice:null,category:'Soil Conditioners',subcategory:'Gypsum',description:'Improves soil structure and water penetration.',isOnSale:false,rating:4.2,imageUrl:'assets/img/products/agricultural_gypsum.jpg'},
-  {id:9,name:'FFC Premium Urea',subtitle:'46% N',price:3700,originalPrice:4000,category:'Nitrogen',subcategory:'Urea',description:'Premium grade urea with added nutrients.',isOnSale:true,rating:4.6,imageUrl:'assets/img/products/urea_premium.png'},
-  {id:10,name:'Single Super Phosphate',subtitle:'SSP 16% P2O5',price:2500,originalPrice:null,category:'Phosphorus',subcategory:'SSP',description:'Affordable phosphorus source.',isOnSale:false,rating:4.1,imageUrl:'assets/img/products/ssp.jpg'},
-  {id:11,name:'Triple Super Phosphate',subtitle:'TSP 46% P2O5',price:13500,originalPrice:null,category:'Phosphorus',subcategory:'TSP',description:'Concentrated phosphorus fertilizer.',isOnSale:false,rating:4.5,imageUrl:'assets/img/products/triple_super_phosphate.jpg'},
-  {id:12,name:'NPK 20-20-20',subtitle:'Water Soluble',price:15000,originalPrice:16500,category:'NPK Blends',subcategory:'NPK',description:'Complete water-soluble fertilizer.',isOnSale:true,rating:4.8,imageUrl:'assets/img/products/npk_20.jpg'},
-  {id:13,name:'Ammonium Sulphate',subtitle:'21% N, 24% S',price:3200,originalPrice:null,category:'Nitrogen',subcategory:'Sulphate',description:'Nitrogen with added sulphur.',isOnSale:false,rating:4.3,imageUrl:'assets/img/products/ammonium_sulphate.jpg'},
-  {id:14,name:'Potassium Nitrate',subtitle:'13-0-46',price:18500,originalPrice:null,category:'Potash',subcategory:'Nitrate',description:'Premium potassium with nitrogen.',isOnSale:false,rating:4.7,imageUrl:'assets/img/products/potassium_nitrate.jpg'},
-  {id:15,name:'Boron',subtitle:'17% B',price:2500,originalPrice:null,category:'Micronutrients',subcategory:'Boron',description:'Essential for flowering and fruiting.',isOnSale:false,rating:4.4,imageUrl:'assets/img/products/boron.png'},
-  {id:16,name:'Iron Chelate',subtitle:'12% Fe',price:3500,originalPrice:null,category:'Micronutrients',subcategory:'Iron',description:'Prevents iron deficiency chlorosis.',isOnSale:false,rating:4.5,imageUrl:'assets/img/products/iron_chelate.jpg'},
-  {id:17,name:'Calcium Nitrate',subtitle:'15.5-0-0 + 19% Ca',price:5800,originalPrice:6200,category:'Soil Conditioners',subcategory:'Calcium',description:'Water-soluble calcium with nitrogen.',isOnSale:true,rating:4.6,imageUrl:'assets/img/products/calcium_nitrate.png'},
-  {id:18,name:'NPK 12-32-16',subtitle:'Starter Formula',price:9500,originalPrice:null,category:'NPK Blends',subcategory:'NPK',description:'High phosphorus for seedling growth.',isOnSale:false,rating:4.7,imageUrl:'assets/img/products/npk_starter.jpg'},
-  {id:19,name:'Magnesium Sulphate',subtitle:'16% Mg, 13% S',price:2900,originalPrice:null,category:'Micronutrients',subcategory:'Magnesium',description:'Prevents magnesium deficiency.',isOnSale:false,rating:4.3,imageUrl:'assets/img/products/magnesium_sulphate.jpg'},
-  {id:20,name:'Humic Acid Granules',subtitle:'50% Humic',price:4200,originalPrice:null,category:'Soil Conditioners',subcategory:'Organic',description:'Improves nutrient uptake and soil health.',isOnSale:false,rating:4.8,imageUrl:'assets/img/products/humic_acid.png'},
-  {id:21,name:'Micronutrient Mix',subtitle:'Zn+Fe+Mn+Cu+B',price:3800,originalPrice:4100,category:'Micronutrients',subcategory:'Mixed',description:'Complete micronutrient blend.',isOnSale:true,rating:4.9,imageUrl:'assets/img/products/micronutrient_mix.jpg'},
-  {id:22,name:'NPK 10-26-26',subtitle:'High PK Formula',price:10500,originalPrice:null,category:'NPK Blends',subcategory:'NPK',description:'For flowering and fruiting stages.',isOnSale:false,rating:4.6,imageUrl:'assets/img/products/npk_high_pk.jpg'},
-  {id:23,name:'Superphosphate',subtitle:'Phosphorus',price:2500,originalPrice:3200,category:'Phosphorus',subcategory:'SSP',description:'Superphosphate for wheat.',isOnSale:true,rating:4.2,imageUrl:'assets/img/products/superphosphate.jpg'},
-  {id:24,name:'Urea Gold',subtitle:'Nitrogen',price:3200,originalPrice:null,category:'Nitrogen',subcategory:'Urea',description:'Urea Gold for rice.',isOnSale:false,rating:4.3,imageUrl:'assets/img/products/urea_gold.png'}
-];
+// === DYNAMIC SHOP JS ===
+// Products supplied by server via window.SHOP_DATA
+// localStorage is NOT used for cart or wishlist.
+
+const SHOP       = window.SHOP_DATA || {};
+const products   = Array.isArray(SHOP.products) ? SHOP.products : [];
+const allBrands  = Array.isArray(SHOP.brands)   ? SHOP.brands   : [];
+const allVendors = Array.isArray(SHOP.vendors)  ? SHOP.vendors  : [];
+const PRICE_RANGE = SHOP.priceRange || { min: 0, max: 50000 };
 
 // State
 let selectedCategories = [];
-let sortBy = 'price-low';
-let perPage = 8;
-let currentPage = 1;
-let searchQuery = '';
-let dismissed = new Set();
-let wishlist = JSON.parse(localStorage.getItem('wishlist')||'[]');
-let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+let selectedBrands     = [];
+let selectedVendors    = [];
+let sortBy         = 'newest';
+let perPage        = 8;
+let currentPage    = 1;
+let searchQuery    = '';
+let filterMinPrice = null;
+let filterMaxPrice = null;
+let filterMinRating = 0;
+let filterOnSale   = false;
+let dismissed      = new Set();
+let wishlist       = [];
 
-// DOM
-const productGrid = document.getElementById('productGrid');
-const pagination = document.getElementById('pagination');
-const productCount = document.getElementById('productCount');
-const sortSelect = document.getElementById('sortSelect');
-const perPageSelect = document.getElementById('perPageSelect');
-const sidebarToggle = document.getElementById('sidebarToggle');
+// DOM refs
+const productGrid    = document.getElementById('productGrid');
+const pagination     = document.getElementById('pagination');
+const productCount   = document.getElementById('productCount');
+const sortSelect     = document.getElementById('sortSelect');
+const perPageSelect  = document.getElementById('perPageSelect');
+const sidebarToggle  = document.getElementById('sidebarToggle');
 const sidebarFilters = document.getElementById('sidebarFilters');
-const sidebarClose = document.getElementById('sidebarClose');
-const categoryFilters = document.getElementById('categoryFilters');
-const clearFilters = document.getElementById('clearFilters');
+const sidebarClose   = document.getElementById('sidebarClose');
+const clearFilters   = document.getElementById('clearFilters');
+
 const toast = document.createElement('div');
 toast.id = 'toast';
 document.body.appendChild(toast);
 
-// --- INIT ---
+// Boot
 renderFilters();
 updateProducts();
-updateCartWishlistBadges();
 
-// --- EVENT LISTENERS ---
+// Event wiring
 if (sidebarToggle) sidebarToggle.onclick = () => sidebarFilters.classList.toggle('collapsed');
-if (sidebarClose) sidebarClose.onclick = () => sidebarFilters.classList.add('collapsed');
+if (sidebarClose)  sidebarClose.onclick  = () => sidebarFilters.classList.add('collapsed');
+
 if (clearFilters) clearFilters.onclick = () => {
-  selectedCategories = [];
-  document.querySelectorAll('#categoryFilters input[type=checkbox]').forEach(cb=>cb.checked=false);
-  updateProducts();
+    selectedCategories = []; selectedBrands = []; selectedVendors = [];
+    filterMinPrice = null; filterMaxPrice = null;
+    filterMinRating = 0; filterOnSale = false;
+    document.querySelectorAll('#categoryFilters input, #brandFilters input, #vendorFilters input')
+        .forEach(cb => (cb.checked = false));
+    const pMin = document.getElementById('priceMin'); if (pMin) pMin.value = '';
+    const pMax = document.getElementById('priceMax'); if (pMax) pMax.value = '';
+    const oSale = document.getElementById('onSaleFilter'); if (oSale) oSale.checked = false;
+    document.querySelectorAll('#ratingFilter .rating-btn').forEach(b => b.classList.remove('active'));
+    currentPage = 1;
+    updateProducts();
+    updateFilterBadge();
 };
-if (sortSelect) sortSelect.onchange = e => { sortBy = e.target.value; updateProducts(); };
+
+if (sortSelect)    sortSelect.onchange    = e => { sortBy = e.target.value; updateProducts(); };
 if (perPageSelect) perPageSelect.onchange = e => { perPage = +e.target.value; currentPage = 1; updateProducts(); };
-if (categoryFilters) categoryFilters.onchange = e => {
-  selectedCategories = Array.from(document.querySelectorAll('#categoryFilters input[type=checkbox]:checked')).map(cb=>cb.value);
-  currentPage = 1;
-  updateProducts();
+
+function wireCheckboxGroup(containerId, cb) {
+    const el = document.getElementById(containerId);
+    if (el) el.addEventListener('change', () => {
+        cb(Array.from(el.querySelectorAll('input:checked')).map(i => i.value));
+        currentPage = 1; updateProducts(); updateFilterBadge();
+    });
+}
+wireCheckboxGroup('categoryFilters', v => (selectedCategories = v));
+wireCheckboxGroup('brandFilters',    v => (selectedBrands     = v));
+wireCheckboxGroup('vendorFilters',   v => (selectedVendors    = v));
+
+const applyPriceBtn = document.getElementById('applyPrice');
+if (applyPriceBtn) applyPriceBtn.onclick = () => {
+    const mn = document.getElementById('priceMin');
+    const mx = document.getElementById('priceMax');
+    filterMinPrice = mn && mn.value !== '' ? +mn.value : null;
+    filterMaxPrice = mx && mx.value !== '' ? +mx.value : null;
+    currentPage = 1; updateProducts(); updateFilterBadge();
 };
-// Header search bar enhancement
+
+const onSaleEl = document.getElementById('onSaleFilter');
+if (onSaleEl) onSaleEl.onchange = () => {
+    filterOnSale = onSaleEl.checked;
+    currentPage = 1; updateProducts(); updateFilterBadge();
+};
+
 const headerSearch = document.getElementById('searchInput');
 if (headerSearch) headerSearch.oninput = e => {
-  searchQuery = e.target.value.toLowerCase();
-  currentPage = 1;
-  updateProducts();
+    searchQuery = e.target.value.toLowerCase().trim();
+    currentPage = 1; updateProducts();
 };
 
-// --- FUNCTIONS ---
+// Build all sidebar filter panels
 function renderFilters() {
-  if (!categoryFilters) return;
-  const cats = [
-    {label:'Nitrogen (Urea)', value:'Urea'},
-    {label:'Nitrogen (CAN)', value:'CAN'},
-    {label:'Phosphorus (DAP)', value:'DAP'},
-    {label:'Phosphorus (SSP)', value:'SSP'},
-    {label:'Phosphorus (TSP)', value:'TSP'},
-    {label:'Potash (MOP)', value:'MOP'},
-    {label:'Potash (SOP)', value:'SOP'},
-    {label:'NPK Blends', value:'NPK'},
-    {label:'Micronutrients (Zinc)', value:'Zinc'},
-    {label:'Micronutrients (Boron)', value:'Boron'},
-    {label:'Micronutrients (Iron)', value:'Iron'},
-    {label:'Micronutrients (Magnesium)', value:'Magnesium'},
-    {label:'Micronutrients (Mixed)', value:'Mixed'},
-    {label:'Soil Conditioners (Gypsum)', value:'Gypsum'},
-    {label:'Soil Conditioners (Calcium)', value:'Calcium'},
-    {label:'Soil Conditioners (Organic)', value:'Organic'}
-  ];
-  categoryFilters.innerHTML = cats
-    .map(
-      (cat) =>
-        `<label><input type="checkbox" value="${cat.value}" data-label="${cat.label}"> ${cat.label}</label>`
-    )
-    .join("");
+    const catEl = document.getElementById('categoryFilters');
+    if (catEl) {
+        const cats = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+        catEl.innerHTML = cats.length
+            ? cats.map(c => `<label><input type="checkbox" value="${escapeHtml(c)}"> ${escapeHtml(c)}</label>`).join('')
+            : '<span class="text-muted small">No categories</span>';
+    }
+
+    const brandEl = document.getElementById('brandFilters');
+    if (brandEl) {
+        const list = allBrands.length
+            ? allBrands
+            : [...new Set(products.map(p => p.brand).filter(Boolean))].sort().map(n => ({ name: n }));
+        brandEl.innerHTML = list.length
+            ? list.map(b => `<label><input type="checkbox" value="${escapeHtml(b.name)}"> ${escapeHtml(b.name)}</label>`).join('')
+            : '<span class="text-muted small">No brands</span>';
+    }
+
+    const vendorEl = document.getElementById('vendorFilters');
+    if (vendorEl) {
+        const list = allVendors.length
+            ? allVendors
+            : [...new Set(products.map(p => p.vendor).filter(Boolean))].sort().map(n => ({ name: n }));
+        vendorEl.innerHTML = list.length
+            ? list.map(v => `<label><input type="checkbox" value="${escapeHtml(v.name)}"> ${escapeHtml(v.name)}</label>`).join('')
+            : '<span class="text-muted small">No stores</span>';
+    }
+
+    const ratingEl = document.getElementById('ratingFilter');
+    if (ratingEl) {
+        ratingEl.innerHTML = [4, 3, 2, 1].map(r =>
+            `<button class="rating-btn" data-rating="${r}">${'<i class="fas fa-star"></i>'.repeat(r)}${'<i class="far fa-star"></i>'.repeat(5 - r)}<span class="text-muted small ms-1">& up</span></button>`
+        ).join('');
+        ratingEl.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.onclick = () => {
+                const r = +btn.dataset.rating;
+                if (filterMinRating === r) {
+                    filterMinRating = 0;
+                    btn.classList.remove('active');
+                } else {
+                    filterMinRating = r;
+                    ratingEl.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+                currentPage = 1; updateProducts(); updateFilterBadge();
+            };
+        });
+    }
 }
+
+function updateFilterBadge() {
+    let n = selectedCategories.length + selectedBrands.length + selectedVendors.length;
+    if (filterMinPrice !== null || filterMaxPrice !== null) n++;
+    if (filterMinRating > 0) n++;
+    if (filterOnSale) n++;
+    const badge = document.getElementById('filterBadge');
+    if (badge) { badge.textContent = n; badge.style.display = n > 0 ? 'inline-flex' : 'none'; }
+}
+
 function updateProducts() {
-  let filtered = products.filter(p =>
-    (!searchQuery ||
-      p.name.toLowerCase().includes(searchQuery) ||
-      (p.subtitle && p.subtitle.toLowerCase().includes(searchQuery)) ||
-      (p.description && p.description.toLowerCase().includes(searchQuery))
-    ) &&
-    (selectedCategories.length === 0 || selectedCategories.includes(p.subcategory)) &&
-    !dismissed.has(p.id)
-  );
-  // Sort
-  switch(sortBy) {
-    case 'price-low': filtered.sort((a,b)=>a.price-b.price); break;
-    case 'price-high': filtered.sort((a,b)=>b.price-a.price); break;
-    case 'name-az': filtered.sort((a,b)=>a.name.localeCompare(b.name)); break;
-    case 'popularity':
-      filtered.sort((a,b)=>{
-        const aAvg = (window.Reviews && Reviews.getSummary) ? Reviews.getSummary(a.id, { fallbackAvg: a.rating||0 }).avg : (a.rating||0);
-        const bAvg = (window.Reviews && Reviews.getSummary) ? Reviews.getSummary(b.id, { fallbackAvg: b.rating||0 }).avg : (b.rating||0);
-        return bAvg - aAvg;
-      });
-      break;
-  }
-  // Pagination
-  const total = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(total/perPage));
-  if (currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage-1)*perPage;
-  const pageProds = filtered.slice(start, start+perPage);
-  // Render
-  renderProductGrid(pageProds);
-  renderPagination(total, totalPages);
-  if (productCount) productCount.textContent = `${total} product${total!==1?'s':''} found`;
+    let filtered = products.filter(p => {
+        if (dismissed.has(p.id)) return false;
+        if (searchQuery) {
+            const q = searchQuery;
+            if (!(p.name.toLowerCase().includes(q) ||
+                  (p.subtitle    && p.subtitle.toLowerCase().includes(q))    ||
+                  (p.description && p.description.toLowerCase().includes(q)) ||
+                  (p.vendor      && p.vendor.toLowerCase().includes(q))      ||
+                  (p.brand       && p.brand.toLowerCase().includes(q)))) return false;
+        }
+        if (selectedCategories.length && !selectedCategories.includes(p.category)) return false;
+        if (selectedBrands.length     && !selectedBrands.includes(p.brand))        return false;
+        if (selectedVendors.length    && !selectedVendors.includes(p.vendor))      return false;
+        if (filterMinPrice !== null   && p.effective_price < filterMinPrice)       return false;
+        if (filterMaxPrice !== null   && p.effective_price > filterMaxPrice)       return false;
+        if (filterMinRating > 0       && (p.rating_avg || 0) < filterMinRating)   return false;
+        if (filterOnSale              && !p.is_on_sale)                            return false;
+        return true;
+    });
+
+    switch (sortBy) {
+        case 'price-low':  filtered.sort((a, b) => a.effective_price - b.effective_price); break;
+        case 'price-high': filtered.sort((a, b) => b.effective_price - a.effective_price); break;
+        case 'name-az':    filtered.sort((a, b) => a.name.localeCompare(b.name));          break;
+        case 'popularity': filtered.sort((a, b) => (b.rating_avg || 0) - (a.rating_avg || 0)); break;
+        default: break;
+    }
+
+    const total      = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(total / perPage));
+    if (currentPage > totalPages) currentPage = totalPages;
+    const paginated  = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+    renderProductGrid(paginated);
+    renderPagination(total, totalPages);
+    if (productCount) productCount.textContent = `${total} product${total !== 1 ? 's' : ''} found`;
 }
+
 function renderProductGrid(prods) {
-  if (!productGrid) return;
-  productGrid.innerHTML = prods.map(p => {
-    const sum = (window.Reviews && Reviews.getSummary) ? Reviews.getSummary(p.id, { fallbackAvg: p.rating }) : { avg: p.rating||0, count: 0 };
-  const rounded = Math.round(sum.avg);
-  const stars = `<span class="stars">${'<i class=\'fas fa-star\'></i>'.repeat(rounded)}${'<i class=\'far fa-star\'></i>'.repeat(5-rounded)}</span>`;
-    const latest = (window.Reviews && Reviews.getReviews) ? (Reviews.getReviews(p.id).slice().sort((a,b)=> (b.updatedAt||0)-(a.updatedAt||0))[0]) : null;
-    const snippet = latest ? (latest.comment||'').slice(0, 70) + ((latest.comment||'').length>70?'…':'') : '';
-    return `
-    <div class="card-agri product-card d-flex flex-column h-100" style="animation-delay:${Math.random()*0.2}s; border: none;" data-id="${p.id}">
-      <div class="position-relative p-4 text-center" style="background: var(--agri-bg); border-radius: var(--agri-radius-md) var(--agri-radius-md) 0 0;">
-          <button class="btn btn-sm btn-light position-absolute rounded-circle" style="top: 10px; right: 10px; width: 32px; height: 32px; z-index: 10;" title="Dismiss" onclick="dismissProduct(${p.id})"><i class="fas fa-times text-muted"></i></button>
-          <button class="btn btn-sm position-absolute rounded-circle bg-white" style="top: 10px; left: 10px; width: 32px; height: 32px; z-index: 10; box-shadow: var(--agri-shadow-sm);" title="Wishlist" onclick="toggleWishlist(${p.id})"><i class="fa${wishlist.includes(p.id)?'s text-danger':'r text-muted'} fa-heart"></i></button>
-          ${p.isOnSale?'<span class="badge position-absolute" style="top: 50px; left: 10px; background: var(--agri-secondary); color: var(--agri-text-main); font-weight: bold; padding: 5px 10px;">SALE!</span>':''}
-          <a href="{{ route('shop.single') }}">
-              <img src="${p.imageUrl}" alt="${p.name}" style="height: 180px; object-fit: contain; margin: 0 auto; transition: transform 0.3s;" class="product-img-hover">
-          </a>
-      </div>
-      <div class="p-4 d-flex flex-column flex-grow-1">
-          <div class="d-flex justify-content-between align-items-start mb-2">
-              <span class="badge bg-light text-success fw-medium px-2 py-1" style="font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;">${p.category}</span>
-          </div>
-          <h5 class="fw-bold text-dark mb-1"><a href="{{ route('shop.single') }}" class="text-decoration-none text-dark">${p.name}</a></h5>
-          <div class="text-muted small mb-2">${p.subtitle||''}</div>
-          <div class="product-rating mb-3" title="${sum.avg} average rating" style="font-size: 13px;">
-            <span class="text-warning">${stars}</span> <span class="text-muted ms-1">(${sum.avg})</span>
-          </div>
-          <div class="mt-auto">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div class="product-price">
-                      ${p.originalPrice?`<span class='text-muted text-decoration-line-through small d-block'>PKR ${formatPrice(p.originalPrice)}</span>`:''}
-                      <span class="fw-bold text-success fs-5">PKR ${formatPrice(p.price)}</span>
-                  </div>
-              </div>
-              <div class="d-flex gap-2">
-                  <button class="btn-agri btn-agri-primary flex-grow-1" style="padding: 8px 10px; font-size: 14px;" onclick="addToCart(${p.id})"><i class="fas fa-shopping-cart me-1"></i> Add</button>
-                  <a class="btn-agri btn-agri-outline text-center" style="padding: 8px 12px; font-size: 14px;" href="{{ route('shop.single') }}" title="View details"><i class="far fa-eye"></i></a>
-              </div>
-          </div>
-      </div>
-    </div>
-  `}).join('');
+    if (!productGrid) return;
+    if (!prods.length) {
+        productGrid.innerHTML = `<div class="col-12 text-center py-5">
+            <i class="fas fa-box-open text-muted mb-3" style="font-size:48px;opacity:.4;display:block;"></i>
+            <h5 class="fw-bold text-dark">No products found</h5>
+            <p class="text-muted">Try adjusting your filters or search term.</p>
+        </div>`;
+        return;
+    }
+    productGrid.innerHTML = prods.map(p => {
+        const rating  = parseFloat(p.rating_avg) || 0;
+        const rounded = Math.round(rating);
+        const stars   = '<i class=\'fas fa-star\'></i>'.repeat(Math.min(rounded, 5)) +
+                        '<i class=\'far fa-star\'></i>'.repeat(Math.max(0, 5 - rounded));
+        const liked   = wishlist.includes(p.id);
+        return `<div class="card-agri product-card d-flex flex-column h-100" style="border:none;" data-id="${p.id}">
+            <div class="position-relative p-4 text-center" style="background:var(--agri-bg);border-radius:var(--agri-radius-md) var(--agri-radius-md) 0 0;">
+                <button class="btn btn-sm btn-light position-absolute rounded-circle"
+                    style="top:10px;right:10px;width:32px;height:32px;z-index:10;" title="Dismiss"
+                    onclick="dismissProduct(${p.id})"><i class="fas fa-times text-muted"></i></button>
+                <button class="btn btn-sm position-absolute rounded-circle bg-white"
+                    style="top:10px;left:10px;width:32px;height:32px;z-index:10;box-shadow:var(--agri-shadow-sm);"
+                    title="Wishlist" onclick="toggleWishlist(${p.id})">
+                    <i class="fa${liked ? 's text-danger' : 'r text-muted'} fa-heart"></i></button>
+                ${p.is_on_sale ? '<span class="badge position-absolute" style="top:50px;left:10px;background:var(--agri-secondary);color:var(--agri-text-main);font-weight:bold;padding:5px 10px;">SALE!</span>' : ''}
+                <a href="${p.url ?? '#'}">
+                    <img src="${p.image_url ?? 'assets/img/products/default.png'}" alt="${escapeHtml(p.name)}"
+                        style="height:180px;object-fit:contain;margin:0 auto;transition:transform .3s;" class="product-img-hover">
+                </a>
+            </div>
+            <div class="p-4 d-flex flex-column flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-1">
+                    <span class="badge bg-light text-success fw-medium px-2 py-1"
+                        style="font-size:11px;text-transform:uppercase;">${escapeHtml(p.category ?? '')}</span>
+                    ${p.vendor ? `<span class="text-muted" style="font-size:11px;white-space:nowrap;"><i class="fas fa-store me-1"></i>${escapeHtml(p.vendor)}</span>` : ''}
+                </div>
+                <h5 class="fw-bold text-dark mb-1">
+                    <a href="${p.url ?? '#'}" class="text-decoration-none text-dark">${escapeHtml(p.name)}</a></h5>
+                ${p.subtitle ? `<div class="text-muted small mb-2">${escapeHtml(p.subtitle)}</div>` : ''}
+                <div class="product-rating mb-3" style="font-size:13px;">
+                    <span class="text-warning">${stars}</span>
+                    <span class="text-muted ms-1">(${rating.toFixed(1)})</span>
+                </div>
+                <div class="mt-auto">
+                    <div class="mb-3">
+                        ${p.is_on_sale ? `<span class="text-muted text-decoration-line-through small d-block">PKR ${formatPrice(p.price)}</span>` : ''}
+                        <span class="fw-bold text-success fs-5">PKR ${formatPrice(p.effective_price)}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn-agri btn-agri-primary flex-grow-1"
+                            style="padding:8px 10px;font-size:14px;" onclick="addToCart(${p.id})">
+                            <i class="fas fa-shopping-cart me-1"></i> Add
+                        </button>
+                        <a class="btn-agri btn-agri-outline text-center" style="padding:8px 12px;font-size:14px;"
+                            href="${p.url ?? '#'}" title="View details"><i class="far fa-eye"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 }
+
 function renderPagination(total, totalPages) {
-  if (!pagination) return;
-  let html = '';
-  if (totalPages > 1) {
-    html += `<button ${currentPage===1?'disabled':''} onclick="changePage(${currentPage-1})">&lt;</button>`;
-    for (let i=1; i<=totalPages; i++) {
-      if (i===1||i===totalPages||Math.abs(i-currentPage)<=1) {
-        html += `<button class="${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
-      } else if (i===currentPage-2||i===currentPage+2) {
-        html += '<button disabled>...</button>';
-      }
+    if (!pagination) return;
+    let html = '';
+    if (totalPages > 1) {
+        html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&lt;</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+                html += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += '<button disabled>…</button>';
+            }
+        }
+        html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">&gt;</button>`;
     }
-    html += `<button ${currentPage===totalPages?'disabled':''} onclick="changePage(${currentPage+1})">&gt;</button>`;
-  }
-  pagination.innerHTML = html;
+    pagination.innerHTML = html;
 }
+
 function changePage(page) {
-  currentPage = page;
-  updateProducts();
-  window.scrollTo({top:document.getElementById('productGrid').offsetTop-100,behavior:'smooth'});
+    currentPage = page;
+    updateProducts();
+    window.scrollTo({ top: (productGrid?.offsetTop ?? 0) - 100, behavior: 'smooth' });
 }
-function formatPrice(p) {
-  return new Intl.NumberFormat('en-PK').format(p);
-}
-function addToCart(id) {
-  try {
-    const p = products.find(x=>x.id===id);
-    if (!p) return;
+
+function formatPrice(p) { return new Intl.NumberFormat('en-PK').format(p ?? 0); }
+
+function addToCart(productId) {
     if (window.CartManager && typeof window.CartManager.addToCart === 'function') {
-      window.CartManager.addToCart({
-        id: String(p.id),
-        name: `${p.name}${p.subtitle?` (${p.subtitle})`:''}`,
-        price: p.price,
-        image: p.imageUrl,
-        quantity: 1,
-        tags: [p.category, p.subcategory].filter(Boolean)
-      });
+        window.CartManager.addToCart(productId, 1);
     } else {
-      // Fallback to local storage array if CartManager not present
-      if (!cart.includes(id)) cart.push(id);
-      localStorage.setItem('cart', JSON.stringify(cart));
+        showToast('Please refresh the page.');
     }
-    updateCartWishlistBadges();
-    showToast('Added to cart!');
-  } catch (e) {
-    console.error('Add to cart failed', e);
-  }
 }
+
 function toggleWishlist(id) {
-  const idx = wishlist.indexOf(id);
-  if (idx>-1) wishlist.splice(idx,1); else wishlist.push(id);
-  localStorage.setItem('wishlist',JSON.stringify(wishlist));
-  updateCartWishlistBadges();
-  updateProducts();
+    const idx = wishlist.indexOf(id);
+    if (idx === -1) { wishlist.push(id); showToast('Added to wishlist'); }
+    else            { wishlist.splice(idx, 1); showToast('Removed from wishlist'); }
+    updateProducts();
 }
-function dismissProduct(id) {
-  dismissed.add(id);
-  updateProducts();
-}
+
+function dismissProduct(id) { dismissed.add(id); updateProducts(); }
+
 function showToast(msg) {
-  toast.textContent = msg;
-  toast.className = 'show';
-  setTimeout(()=>toast.className='',2000);
+    toast.textContent = msg;
+    toast.className = 'visible';
+    setTimeout(() => (toast.className = ''), 2500);
 }
-function updateCartWishlistBadges() {
-  const cartBadge = document.getElementById('cartCount');
-  const wishBadge = document.getElementById('wishlistCount');
-  if (cartBadge) cartBadge.textContent = cart.length;
-  if (wishBadge) wishBadge.textContent = wishlist.length;
+
+function escapeHtml(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-// Expose for inline onclick
-window.changePage = changePage;
-window.toggleWishlist = toggleWishlist;
-window.addToCart = addToCart;
-window.dismissProduct = dismissProduct;

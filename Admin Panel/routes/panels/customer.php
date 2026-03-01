@@ -72,6 +72,10 @@ Route::redirect('/blog',              '/forum')->name('blog');
 Route::get('/experts',         [\App\Http\Controllers\Frontend\ExpertBrowseController::class, 'index'])->name('experts.index');
 Route::get('/experts/{id}',    [\App\Http\Controllers\Frontend\ExpertBrowseController::class, 'show'])->name('experts.show');
 
+// ── Cart state (public — guests get count=0) ──────────────────────────────────
+Route::get('/cart/count', [\App\Http\Controllers\Frontend\CartController::class, 'count'])->name('cart.count');
+Route::get('/cart/mini',  [\App\Http\Controllers\Frontend\CartController::class, 'mini'])->name('cart.mini');
+
 // ══════════════════════════════════════════════════════════════════════════════
 // 4. AUTHENTICATED CUSTOMER ROUTES  [EnsureCustomerAuth]
 // ══════════════════════════════════════════════════════════════════════════════

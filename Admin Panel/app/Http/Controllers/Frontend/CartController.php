@@ -20,6 +20,51 @@ class CartController extends Controller
         private readonly CartCheckoutService $checkout,
     ) {}
 
+    // ── JSON helpers (public — no auth gate, return 0 for guests) ─────────────
+
+    public function count(): JsonResponse
+    {
+        if (! auth('web')->check()) {
+            return response()->json(['count' => 0]);
+        }
+
+        $cart = Cart::where('user_id', auth('web')->id())->withCount('items')->first();
+        return response()->json(['count' => $cart ? (int) $cart->items->sum('quantity') : 0]);
+    }
+
+    public function mini(): JsonResponse
+    {
+        if (! auth('web')->check()) {
+            return response()->json(['count' => 0, 'items' => [], 'subtotal' => 0]);
+        }
+
+        $cart = Cart::where('user_id', auth('web')->id())
+            ->with('items.product.primaryImage')
+            ->first();
+
+        if (! $cart) {
+            return response()->json(['count' => 0, 'items' => [], 'subtotal' => 0]);
+        }
+
+        $items = $cart->items->map(fn ($item) => [
+            'id'       => $item->id,
+            'name'     => $item->product?->name ?? 'Product',
+            'price'    => (float) $item->unit_price,
+            'quantity' => (int) $item->quantity,
+            'subtotal' => round((float) $item->unit_price * $item->quantity, 2),
+            'image'    => $item->product?->primaryImage
+                ? \Illuminate\Support\Facades\Storage::url($item->product->primaryImage->path)
+                : null,
+            'url'      => route('shop.single', $item->product_id),
+        ]);
+
+        return response()->json([
+            'count'    => (int) $cart->items->sum('quantity'),
+            'items'    => $items->take(5)->values(),
+            'subtotal' => $cart->subtotal,
+        ]);
+    }
+
     // ── Cart management ────────────────────────────────────────────────────────
 
     public function index(): View
