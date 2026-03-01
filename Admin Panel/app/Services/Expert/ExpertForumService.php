@@ -6,8 +6,10 @@ use App\Models\Expert;
 use App\Models\ForumExpertResponse;
 use App\Models\ForumReply;
 use App\Models\ForumThread;
+use App\Notifications\ForumReplyNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * ExpertForumService
@@ -54,7 +56,7 @@ class ExpertForumService
             throw new \DomainException('This thread is locked and cannot receive new replies.');
         }
 
-        return DB::transaction(function () use ($expert, $thread, $body, $recommendation) {
+        $reply = DB::transaction(function () use ($expert, $thread, $body, $recommendation) {
             /** @var ForumReply $reply */
             $reply = ForumReply::create([
                 'thread_id'       => $thread->id,
@@ -77,6 +79,18 @@ class ExpertForumService
 
             return $reply->load(['expert', 'expertResponse']);
         });
+
+        // Section 14 – Trigger: Expert reply added → Thread owner → Email + In-app
+        $thread->loadMissing('user');
+        if ($thread->user && $thread->user_id !== $expert->user_id) {
+            try {
+                $thread->user->notify(new ForumReplyNotification($reply, $thread));
+            } catch (\Throwable $e) {
+                Log::warning('Expert forum reply notification failed: ' . $e->getMessage());
+            }
+        }
+
+        return $reply;
     }
 
     /**

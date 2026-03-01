@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\ForumCategory;
 use App\Models\ForumReply;
 use App\Models\ForumThread;
+use App\Notifications\ForumReplyNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -55,21 +57,29 @@ class ForumController extends Controller
         $this->requireAuth();
 
         $request->validate([
-            'title'            => 'required|string|min:5|max:255',
-            'body'             => 'required|string|min:20|max:10000',
-            'forum_category_id'=> 'nullable|exists:forum_categories,id',
+            'title'             => 'required|string|min:5|max:255',
+            'body'              => 'required|string|min:20|max:10000',
+            'forum_category_id' => 'nullable|exists:forum_categories,id',
         ]);
+
+        // Respect admin moderation toggle: config('plantix.forum_auto_approve', true)
+        $autoApprove = (bool) config('plantix.forum_auto_approve', true);
 
         $thread = ForumThread::create([
-            'user_id'          => auth('web')->id(),
-            'forum_category_id'=> $request->forum_category_id,
-            'title'            => strip_tags($request->title),
-            'body'             => htmlspecialchars(strip_tags($request->body), ENT_QUOTES, 'UTF-8'),
-            'is_approved'      => true, // auto-approve for now; can add moderation toggle
+            'user_id'           => auth('web')->id(),
+            'forum_category_id' => $request->forum_category_id,
+            'title'             => strip_tags($request->title),
+            'body'              => htmlspecialchars(strip_tags($request->body), ENT_QUOTES, 'UTF-8'),
+            'status'            => $autoApprove ? 'open' : 'pending',
+            'is_approved'       => $autoApprove,
         ]);
 
+        $message = $autoApprove
+            ? 'Thread posted!'
+            : 'Thread submitted — it will be visible after review.';
+
         return redirect()->route('forum.thread', $thread->id)
-                         ->with('success', 'Thread posted!');
+                         ->with('success', $message);
     }
 
     public function reply(Request $request, int $threadId): RedirectResponse
@@ -84,12 +94,24 @@ class ForumController extends Controller
             return back()->withErrors(['body' => 'This thread is locked.']);
         }
 
-        ForumReply::create([
-            'thread_id'   => $thread->id,
-            'user_id'     => auth('web')->id(),
-            'body'        => htmlspecialchars(strip_tags($request->body), ENT_QUOTES, 'UTF-8'),
-            'is_approved' => true,
+        $autoApprove = (bool) config('plantix.forum_auto_approve', true);
+
+        $reply = ForumReply::create([
+            'thread_id'      => $thread->id,
+            'user_id'        => auth('web')->id(),
+            'body'           => htmlspecialchars(strip_tags($request->body), ENT_QUOTES, 'UTF-8'),
+            'is_approved'    => $autoApprove,
+            'is_expert_answer' => false,
         ]);
+
+        // Section 14 – Trigger: Forum reply added → Thread owner → In-app
+        if ($autoApprove && $thread->user && $thread->user_id !== auth('web')->id()) {
+            try {
+                $thread->user->notify(new ForumReplyNotification($reply, $thread));
+            } catch (\Throwable $e) {
+                Log::warning('Forum reply notification failed: ' . $e->getMessage());
+            }
+        }
 
         return back()->with('success', 'Reply posted.');
     }

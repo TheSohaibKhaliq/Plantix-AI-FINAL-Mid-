@@ -26,6 +26,11 @@ use App\Services\Customer\CropRecommendationService;
 use App\Services\Customer\DiseaseDetectionService;
 use App\Services\Customer\FertilizerRecommendationService;
 use App\Services\Customer\WeatherService;
+// ── Vendor panel services ──────────────────────────────────────────────────────
+use App\Services\Vendor\VendorCouponService;
+use App\Services\Vendor\VendorInventoryService;
+use App\Services\Vendor\VendorOrderService;
+use App\Services\Vendor\VendorProductService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -68,6 +73,25 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(DiseaseDetectionService::class);
         $this->app->singleton(FertilizerRecommendationService::class);
         $this->app->singleton(WeatherService::class);
+
+        // ── Vendor panel singletons ────────────────────────────────────────────
+        $this->app->singleton(VendorOrderService::class, function ($app) {
+            return new VendorOrderService(
+                $app->make(CartCheckoutService::class),
+                $app->make(StockService::class),
+            );
+        });
+        $this->app->singleton(VendorProductService::class, function ($app) {
+            return new VendorProductService(
+                $app->make(StockService::class),
+            );
+        });
+        $this->app->singleton(VendorCouponService::class);
+        $this->app->singleton(VendorInventoryService::class, function ($app) {
+            return new VendorInventoryService(
+                $app->make(StockService::class),
+            );
+        });
 
         // ── Countries data shared with all views ───────────────────────────────
         $countriesData = [];

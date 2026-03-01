@@ -265,5 +265,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/seasonal-data/{id}',        [\App\Http\Controllers\Admin\AdminAiModuleController::class, 'deleteSeasonalData'])->name('seasonal-data.destroy');
         });
 
+        // ── Forum Moderation (Section 5 – Admin Flow) ────────────────────────
+        Route::prefix('forum')->name('forum.')->group(function () {
+            Route::get('/',                              [\App\Http\Controllers\Admin\AdminForumController::class, 'index'])->name('index');
+            Route::get('/threads',                       [\App\Http\Controllers\Admin\AdminForumController::class, 'threads'])->name('threads');
+            Route::get('/threads/{id}',                  [\App\Http\Controllers\Admin\AdminForumController::class, 'showThread'])->name('threads.show');
+            Route::put('/threads/{id}/moderate',         [\App\Http\Controllers\Admin\AdminForumController::class, 'moderateThread'])->name('threads.moderate');
+            Route::delete('/threads/{id}',               [\App\Http\Controllers\Admin\AdminForumController::class, 'destroyThread'])->name('threads.destroy');
+            Route::post('/threads/{id}/pin',             [\App\Http\Controllers\Admin\AdminForumController::class, 'pinThread'])->name('threads.pin');
+            Route::delete('/replies/{id}',               [\App\Http\Controllers\Admin\AdminForumController::class, 'destroyReply'])->name('replies.destroy');
+            Route::put('/replies/{id}/approve',          [\App\Http\Controllers\Admin\AdminForumController::class, 'approveReply'])->name('replies.approve');
+            Route::get('/categories',                    [\App\Http\Controllers\Admin\AdminForumController::class, 'categories'])->name('categories.index');
+            Route::post('/categories',                   [\App\Http\Controllers\Admin\AdminForumController::class, 'storeCategory'])->name('categories.store');
+            Route::put('/categories/{id}',               [\App\Http\Controllers\Admin\AdminForumController::class, 'updateCategory'])->name('categories.update');
+            Route::delete('/categories/{id}',            [\App\Http\Controllers\Admin\AdminForumController::class, 'destroyCategory'])->name('categories.destroy');
+        });
+
+        // ── Notification Broadcast (Section 5 – Admin Broadcast) ─────────────
+        Route::prefix('notifications')->name('notifications.broadcast.')->group(function () {
+            Route::get('/broadcast',                     [\App\Http\Controllers\Admin\AdminNotificationBroadcastController::class, 'index'])->name('index');
+            Route::post('/broadcast',                    [\App\Http\Controllers\Admin\AdminNotificationBroadcastController::class, 'send'])->name('send');
+            Route::get('/broadcast/history',             [\App\Http\Controllers\Admin\AdminNotificationBroadcastController::class, 'history'])->name('history');
+        });
+
     }); // end 'admin' middleware group
 }); // end /admin prefix

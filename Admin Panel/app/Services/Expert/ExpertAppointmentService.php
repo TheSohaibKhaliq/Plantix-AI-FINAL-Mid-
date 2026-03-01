@@ -8,8 +8,10 @@ use App\Models\AppointmentReschedule;
 use App\Models\AppointmentStatusHistory;
 use App\Models\Expert;
 use App\Models\User;
+use App\Notifications\AppointmentRescheduledNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * ExpertAppointmentService
@@ -131,6 +133,18 @@ class ExpertAppointmentService
             );
 
             event(new AppointmentStatusChanged($appointment, $expert->user, Appointment::STATUS_RESCHEDULED));
+
+            // Section 14 – Reschedule proposed → Customer → Email + In-app
+            $appointment->loadMissing('user');
+            if ($appointment->user) {
+                try {
+                    $appointment->user->notify(
+                        new AppointmentRescheduledNotification($appointment, $reschedule, 'proposed')
+                    );
+                } catch (\Throwable $e) {
+                    Log::warning('Reschedule proposal notification failed: ' . $e->getMessage());
+                }
+            }
 
             return $reschedule;
         });
