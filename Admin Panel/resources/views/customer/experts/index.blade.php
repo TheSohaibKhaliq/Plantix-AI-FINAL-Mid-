@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     {{-- Photo --}}
                     <div style="height:220px;overflow:hidden;position:relative;">
                         @if($expert->profile_image)
-                            <img src="{{ asset($expert->profile_image) }}" alt="{{ $expert->display_name }}"
+                            <img src="{{ Storage::url($expert->profile_image) }}" alt="{{ $expert->display_name }}"
                                  style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;"
                                  onmouseover="this.style.transform='scale(1.05)'"
                                  onmouseout="this.style.transform='scale(1)'">

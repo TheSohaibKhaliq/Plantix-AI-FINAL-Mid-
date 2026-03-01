@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ForumReply extends Model
@@ -102,6 +103,11 @@ class ForumReply extends Model
     public function flags(): HasMany
     {
         return $this->hasMany(ForumFlag::class, 'reply_id');
+    }
+
+    public function expertResponse(): HasOne
+    {
+        return $this->hasOne(ForumExpertResponse::class, 'forum_reply_id');
     }
 
     // ── Scopes ────────────────────────────────────────────────────────────────

@@ -17,8 +17,8 @@
             <div class="p-4">
                 <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 mb-4 p-4 bg-light rounded text-center text-sm-start border border-dashed">
                     <div class="position-relative">
-                        @if($expert->avatar)
-                            <img src="{{ Storage::url($expert->avatar) }}"
+                        @if($expert->profile_image)
+                            <img src="{{ Storage::url($expert->profile_image) }}"
                                  class="rounded-circle shadow-sm border border-3 border-white" style="width: 100px; height: 100px; object-fit: cover;">
                         @else
                             <div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center bg-primary text-white border border-3 border-white"

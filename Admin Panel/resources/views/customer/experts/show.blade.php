@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             {{-- Avatar --}}
                             <div style="width:110px;height:110px;border-radius:50%;border:4px solid white;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
                                 @if($expert->profile_image)
-                                    <img src="{{ asset($expert->profile_image) }}" alt="{{ $expert->display_name }}"
+                                    <img src="{{ Storage::url($expert->profile_image) }}" alt="{{ $expert->display_name }}"
                                          style="width:100%;height:100%;object-fit:cover;">
                                 @else
                                     <div style="width:100%;height:100%;background:var(--agri-primary-light);display:flex;align-items:center;justify-content:center;">

@@ -179,8 +179,8 @@
                 </div>
                 <div class="p-4 text-center">
                     <div class="mb-4 position-relative d-inline-block">
-                        @if($expert->avatar)
-                            <img src="{{ Storage::url($expert->avatar) }}" id="avatarPreview"
+                        @if($expert->profile_image)
+                            <img src="{{ Storage::url($expert->profile_image) }}" id="avatarPreview"
                                  class="rounded-circle shadow-sm border border-3 border-light" style="width:140px;height:140px;object-fit:cover;">
                         @else
                             <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white shadow-sm border border-3 border-light mx-auto"

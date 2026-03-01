@@ -113,8 +113,8 @@
             </div>
             <div class="p-4 flex-grow-1">
                 <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-dashed">
-                    @if($expert->avatar)
-                        <img src="{{ Storage::url($expert->avatar) }}"
+                    @if($expert->profile_image)
+                        <img src="{{ Storage::url($expert->profile_image) }}"
                              class="rounded-circle shadow-sm border border-3 border-white" style="width: 80px; height: 80px; object-fit: cover">
                     @else
                         <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white shadow-sm border border-3 border-white"
