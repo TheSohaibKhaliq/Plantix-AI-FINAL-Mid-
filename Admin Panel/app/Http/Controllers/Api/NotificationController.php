@@ -58,4 +58,13 @@ class NotificationController extends Controller
         $notification->delete();
         return response()->json(null, 204);
     }
+
+    public function unreadCount(Request $request): JsonResponse
+    {
+        $count = Notification::where('recipient_id', auth()->id())
+                             ->where('read', false)
+                             ->count();
+
+        return response()->json(['success' => true, 'unread_count' => $count]);
+    }
 }

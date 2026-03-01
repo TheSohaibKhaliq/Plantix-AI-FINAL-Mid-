@@ -398,15 +398,15 @@
     <section class="py-5" style="background: var(--agri-primary-dark); color: white;">
         <div class="container-agri py-5 text-center position-relative">
             <div style="max-width: 800px; margin: 0 auto; position: relative; z-index: 2;">
-                <h2 class="display-4 fw-bold mb-4 text-white">Join the Agricultural Revolution</h2>
-                <p class="lead mb-5 opacity-75" style="font-size: 18px;">
+                <h2 class="display-4 fw-bold mb-4 text-white" style="font-family: 'Outfit', sans-serif;">Join the Agricultural Revolution</h2>
+                <p class="lead text-white mb-4 opacity-75" style="font-size: 18px; line-height: 1.6;">
                     Empower your farm with intelligent technology designed for Pakistani agriculture. From wheat and rice to cotton and sugarcane, start optimizing your fields today.
                 </p>
                 <div class="d-flex justify-content-center gap-3">
-                    <a href="{{ route('signup') }}" class="btn-agri btn-agri-secondary text-decoration-none shadow" style="padding: 14px 32px; font-size: 16px; font-weight: 700;">
+                    <a href="{{ route('signup') }}" class="btn-agri text-decoration-none shadow" style="background: #FBBF24; color: #1F2937; padding: 14px 32px; font-size: 16px; font-weight: 700; border: none; border-radius: var(--agri-radius-md); transition: all 0.3s ease;">
                         Create Free Account
                     </a>
-                    <a href="{{ route('ai.chat') }}" class="btn-agri btn-agri-outline text-decoration-none text-white border-white" style="padding: 14px 32px; font-size: 16px;">
+                    <a href="{{ route('ai.chat') }}" class="btn-agri btn-agri-outline text-decoration-none text-white" style="border: 2px solid white; padding: 12px 32px; font-size: 16px; font-weight: 700; border-radius: var(--agri-radius-md); transition: all 0.3s ease;">
                         Try AI First
                     </a>
                 </div>

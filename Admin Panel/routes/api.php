@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\CustomerAuthApiController;
+use App\Http\Controllers\Api\CustomerAiApiController;
 use App\Http\Controllers\Api\CustomerCartApiController;
 use App\Http\Controllers\Api\CustomerOrderApiController;
 use App\Http\Controllers\Api\CustomerAppointmentApiController;
@@ -65,16 +66,34 @@ Route::prefix('customer')->group(function () {
         Route::get('/orders/{id}',           [CustomerOrderApiController::class, 'show']);
         Route::post('/orders/{id}/cancel',   [CustomerOrderApiController::class, 'cancel']);
         Route::post('/orders/{id}/return',   [CustomerOrderApiController::class, 'requestReturn']);
+        Route::get('/orders/{id}/invoice',   [CustomerOrderApiController::class, 'invoice']);
 
         // Appointments
-        Route::get('/appointments',                      [CustomerAppointmentApiController::class, 'index']);
-        Route::post('/appointments',                     [CustomerAppointmentApiController::class, 'store']);
-        Route::get('/appointments/{id}',                 [CustomerAppointmentApiController::class, 'show']);
-        Route::post('/appointments/{id}/cancel',         [CustomerAppointmentApiController::class, 'cancel']);
-        Route::patch('/appointments/{id}/reschedule',    [CustomerAppointmentApiController::class, 'reschedule']);
+        Route::get('/appointments',                              [CustomerAppointmentApiController::class, 'index']);
+        Route::post('/appointments',                             [CustomerAppointmentApiController::class, 'store']);
+        Route::get('/appointments/{id}',                         [CustomerAppointmentApiController::class, 'show']);
+        Route::post('/appointments/{id}/cancel',                 [CustomerAppointmentApiController::class, 'cancel']);
+        Route::patch('/appointments/{id}/reschedule',            [CustomerAppointmentApiController::class, 'reschedule']);
+        Route::post('/appointments/{id}/reschedule-response',    [CustomerAppointmentApiController::class, 'rescheduleResponse']);
+
+        // AI & Agri tools
+        Route::prefix('ai')->group(function () {
+            Route::post('/crop-recommendation',        [CustomerAiApiController::class, 'cropRecommendation']);
+            Route::post('/fertilizer-recommendation',  [CustomerAiApiController::class, 'fertilizerRecommendation']);
+            Route::post('/disease-detection',          [CustomerAiApiController::class, 'diseaseDetectionStore']);
+            Route::get('/disease-detection/{id}/status', [CustomerAiApiController::class, 'diseaseDetectionStatus']);
+        });
+
+        // Weather
+        Route::get('/weather', [CustomerAiApiController::class, 'weather']);
+
+        // Crop Plans
+        Route::get('/crop-plans',  [CustomerAiApiController::class, 'cropPlansIndex']);
+        Route::post('/crop-plans', [CustomerAiApiController::class, 'cropPlansStore']);
 
         // Notifications
         Route::get('/notifications',                          [NotificationController::class, 'index']);
+        Route::get('/notifications/unread-count',             [NotificationController::class, 'unreadCount']);
         Route::patch('/notifications/{notification}/read',    [NotificationController::class, 'markAsRead']);
         Route::patch('/notifications/mark-all-read',          [NotificationController::class, 'markAllAsRead']);
         Route::delete('/notifications/{notification}',        [NotificationController::class, 'destroy']);

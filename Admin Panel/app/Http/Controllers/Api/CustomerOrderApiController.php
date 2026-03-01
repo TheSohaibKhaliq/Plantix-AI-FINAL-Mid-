@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\ReturnReason;
 use App\Services\Shared\ReturnRefundService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CustomerOrderApiController extends Controller
 {
@@ -75,6 +77,21 @@ class CustomerOrderApiController extends Controller
         $this->returnService->requestReturn($request->user(), $order, $request->validated());
 
         return response()->json(['success' => true, 'message' => 'Return request submitted.']);
+    }
+
+    // ── Invoice download ─────────────────────────────────────────────────────
+
+    public function invoice(Request $request, int $id): Response
+    {
+        $order = Order::with(['vendor', 'items.product', 'user'])
+                      ->forCustomer($request->user()->id)
+                      ->whereIn('status', ['processing', 'shipped', 'delivered', 'completed'])
+                      ->findOrFail($id);
+
+        $pdf = Pdf::loadView('pdf.order-invoice', ['order' => $order])
+                  ->setPaper('a4', 'portrait');
+
+        return $pdf->download('invoice-' . $order->id . '.pdf');
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

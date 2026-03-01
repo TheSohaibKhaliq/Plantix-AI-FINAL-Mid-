@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
+use App\Models\AppointmentReschedule;
 use App\Models\Expert;
+use App\Notifications\AppointmentRescheduledNotification;
 use App\Services\Shared\AppointmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CustomerAppointmentApiController extends Controller
 {
@@ -112,6 +117,51 @@ class CustomerAppointmentApiController extends Controller
             'message'     => 'Appointment rescheduled.',
             'appointment' => $this->apptPayload($appt->fresh()->load('expert.user')),
         ]);
+    }
+
+    // ── Respond to expert reschedule proposal ────────────────────────────────
+    public function rescheduleResponse(Request $request, int $id): JsonResponse
+    {
+        $data = $request->validate([
+            'action' => 'required|in:accept,reject',
+        ]);
+
+        $appt = Appointment::where('user_id', $request->user()->id)
+            ->where('status', 'rescheduled')
+            ->findOrFail($id);
+
+        $reschedule = AppointmentReschedule::where('appointment_id', $appt->id)
+            ->where('status', 'pending')
+            ->latest()
+            ->firstOrFail();
+
+        DB::transaction(function () use ($data, $appt, $reschedule) {
+            if ($data['action'] === 'accept') {
+                $appt->update([
+                    'scheduled_at' => $reschedule->proposed_at,
+                    'status'       => 'confirmed',
+                ]);
+                $reschedule->update(['status' => 'accepted']);
+                $event = 'accepted';
+            } else {
+                $appt->update(['status' => 'cancelled']);
+                $reschedule->update(['status' => 'rejected']);
+                $event = 'rejected';
+            }
+
+            try {
+                optional($appt->expert?->user)
+                    ->notify(new AppointmentRescheduledNotification($appt, $reschedule, $event));
+            } catch (\Throwable $e) {
+                Log::warning('AppointmentRescheduledNotification (API) failed: ' . $e->getMessage());
+            }
+        });
+
+        $message = $data['action'] === 'accept'
+            ? 'Reschedule accepted. Appointment confirmed for the new time.'
+            : 'Reschedule rejected. Appointment has been cancelled.';
+
+        return response()->json(['success' => true, 'message' => $message]);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

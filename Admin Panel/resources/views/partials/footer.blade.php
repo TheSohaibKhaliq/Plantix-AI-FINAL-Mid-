@@ -8,23 +8,18 @@
                     <!-- Single Itme -->
                     <div class="col-lg-4 col-md-6 item">
                         <div class="footer-item about">
-                            <img class="logo" src="{{ asset('assets/img/plantix-ai-logo.png') }}" alt="Logo">
-                            <p>
+                            <img class="logo mb-4" src="{{ asset('assets/img/plantix-ai-logo.png') }}" alt="Logo" style="max-height: 50px;">
+                            <p style="line-height: 1.8; opacity: 0.9;">
                                 Plantix-AI is transforming Pakistani agriculture with intelligent technology. Get
                                 AI-powered crop recommendations, disease detection, and precision farming solutions
                                 delivered directly to your mobile device.
                             </p>
-                            <form action="#">
-                                <input type="email" placeholder="Subscribe for Farming Tips" class="form-control"
-                                    name="email" required>
-                                <button type="submit"> Go</button>
-                            </form>
                         </div>
                     </div>
                     <!-- End Single Itme -->
 
                     <!-- Single Itme -->
-                    <div class="col-lg-2 col-md-6 item">
+                    <div class="col-lg-4 col-md-6 item">
                         <div class="footer-item link">
                             <h4 class="widget-title">Explore</h4>
                             <ul>
@@ -51,46 +46,10 @@
                     </div>
                     <!-- End Single Itme -->
 
-                    <!-- Single Itme -->
-                    <div class="col-lg-3 col-md-6 item">
-                        <div class="footer-item recent-post">
-                            <h4 class="widget-title">Recent Posts</h4>
-                            <ul>
-                                <li>
-                                    <div class="thumb">
-                                        <a href="{{ route('forum') }}">
-                                            <img src="{{ asset('assets/img/800x800.png') }}" alt="Thumb">
-                                        </a>
-                                    </div>
-                                    <div class="info">
-                                        <div class="meta-title">
-                                            <span class="post-date">12 Sep, 2025</span>
-                                        </div>
-                                        <h5><a href="{{ route('forum') }}">How AI Detects Cotton Leaf Curl
-                                                Early</a></h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="thumb">
-                                        <a href="{{ route('forum') }}">
-                                            <img src="{{ asset('assets/img/fertilizer.png') }}" alt="Thumb">
-                                        </a>
-                                    </div>
-                                    <div class="info">
-                                        <div class="meta-title">
-                                            <span class="post-date">18 Jul, 2025</span>
-                                        </div>
-                                        <h5><a href="{{ route('forum') }}">Smart Fertilizer Plans Save 30% on
-                                                Costs</a></h5>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- End Single Itme -->
+
 
                     <!-- Single Itme -->
-                    <div class="col-lg-3 col-md-6 item">
+                    <div class="col-lg-4 col-md-6 item">
                         <div class="footer-item contact">
                             <h4 class="widget-title">Contact Info</h4>
                             <ul>
