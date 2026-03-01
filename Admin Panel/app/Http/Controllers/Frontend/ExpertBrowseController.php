@@ -109,7 +109,7 @@ class ExpertBrowseController extends Controller
             ->where('is_available', true)
             ->findOrFail($id);
 
-        $this->appointmentService->book($user, [
+        $this->appointmentService->initiateBooking($user, [
             'expert_id'    => $expert->id,
             'scheduled_at' => $request->scheduled_at,
             'topic'        => $request->topic,

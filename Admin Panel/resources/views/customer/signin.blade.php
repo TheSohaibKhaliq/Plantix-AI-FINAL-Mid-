@@ -20,49 +20,77 @@
                         <p class="text-muted" style="font-size: 15px;">Sign in to your Plantix-AI account</p>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label fw-bold text-dark mb-2" style="font-size: 14px;">Sign in as</label>
-                        <div class="d-flex gap-3">
-                            <div class="flex-grow-1 position-relative">
-                                <input type="radio" class="btn-check position-absolute opacity-0" name="signinRole" id="roleCustomer" value="customer" checked style="width:0;height:0;">
-                                <label class="btn-agri w-100 text-center" for="roleCustomer" style="border: 2px solid var(--agri-primary); background: transparent; color: var(--agri-primary); cursor: pointer; padding: 10px;">Customer</label>
-                            </div>
-                            <div class="flex-grow-1 position-relative">
-                                <input type="radio" class="btn-check position-absolute opacity-0" name="signinRole" id="roleExpert" value="expert" style="width:0;height:0;">
-                                <label class="btn-agri w-100 text-center" for="roleExpert" style="border: 2px solid var(--agri-border); background: transparent; color: var(--agri-text-muted); cursor: pointer; padding: 10px;">Expert</label>
-                            </div>
+                    {{-- Session / validation errors --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger mb-4" style="border-radius: var(--agri-radius-sm);">
+                            <ul class="mb-0 ps-3">
+                                @foreach ($errors->all() as $e)
+                                    <li>{{ $e }}</li>
+                                @endforeach
+                            </ul>
                         </div>
-                    </div>
+                    @endif
 
-                    <form id="signin-form">
+                    @if (session('success'))
+                        <div class="alert alert-success mb-4" style="border-radius: var(--agri-radius-sm);">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+
                         <div class="mb-4">
-                            <label class="form-label fw-bold text-dark" style="font-size: 14px;">Email</label>
-                            <input id="signinEmail" type="email" class="form-agri" placeholder="Enter your email" required data-label="Email address">
+                            <label class="form-label fw-bold text-dark" style="font-size: 14px;">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-agri @error('email') is-invalid @enderror"
+                                   placeholder="Enter your email" value="{{ old('email') }}" required
+                                   autocomplete="email">
+                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
+
                         <div class="mb-2">
-                            <label class="form-label fw-bold text-dark" style="font-size: 14px;">Password</label>
-                            <input id="signinPassword" type="password" class="form-agri" placeholder="Enter your password" minlength="8" required data-label="Password (min 8 characters)">
+                            <label class="form-label fw-bold text-dark" style="font-size: 14px;">Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password" class="form-agri @error('password') is-invalid @enderror"
+                                   placeholder="Enter your password" required
+                                   autocomplete="current-password">
+                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                        <div class="mb-4 d-flex justify-content-end">
-                            <a id="forgotLink" href="{{ route('password.forgot') }}" class="text-success text-decoration-none" style="font-size: 14px; font-weight: 500;">Forgot password?</a>
+
+                        <div class="mb-4 d-flex justify-content-between align-items-center">
+                            <label class="d-flex align-items-center gap-2 mb-0" style="cursor:pointer; font-size:14px; color: var(--agri-text-muted);">
+                                <input type="checkbox" name="remember" value="1" style="width:16px;height:16px;">
+                                Remember me
+                            </label>
+                            <a href="{{ route('password.forgot') }}" class="text-success text-decoration-none" style="font-size: 14px; font-weight: 500;">Forgot password?</a>
                         </div>
-                        <button class="btn-agri btn-agri-primary w-100 mb-4" type="submit" style="font-size: 16px; padding: 12px;">Sign In</button>
+
+                        <button class="btn-agri btn-agri-primary w-100 mb-4" type="submit" style="font-size: 16px; padding: 12px;">
+                            Sign In
+                        </button>
                     </form>
 
-                    <p class="text-center text-muted mb-0" style="font-size: 15px;">
-                        Don't have an account? <a id="go-to-signup" href="{{ route('signup') }}" class="text-success text-decoration-none fw-bold">Create one</a>
+                    <p class="text-center text-muted mb-2" style="font-size: 15px;">
+                        Don't have an account? <a href="{{ route('signup') }}" class="text-success text-decoration-none fw-bold">Create one</a>
                     </p>
+
+                    <hr style="border-color: #e0e0e0;">
+
+                    <div class="text-center p-3" style="background: #f0f9f0; border-radius: 10px; border: 1px solid #c8e6c9;">
+                        <p class="mb-1 fw-semibold text-dark" style="font-size: 14px;">
+                            <i class="fas fa-user-tie text-success me-1"></i> Are you an agricultural expert?
+                        </p>
+                        <div class="d-flex gap-2 justify-content-center mt-2">
+                            <a href="{{ route('expert.login') }}" class="btn-agri btn-agri-outline" style="font-size: 13px; padding: 7px 16px; display: inline-block; border: 2px solid var(--agri-primary); color: var(--agri-primary); text-decoration: none; border-radius: 8px;">
+                                Expert Sign In
+                            </a>
+                            <a href="{{ route('expert.register') }}" class="btn-agri" style="font-size: 13px; padding: 7px 16px; display: inline-block; background: var(--agri-primary); color: #fff; text-decoration: none; border-radius: 8px; border: 2px solid var(--agri-primary);">
+                                Register as Expert
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    input[type="radio"]:checked + label {
-        background-color: var(--agri-primary-light) !important;
-        border-color: var(--agri-primary) !important;
-        color: var(--agri-primary-dark) !important;
-    }
-</style>
 @endsection

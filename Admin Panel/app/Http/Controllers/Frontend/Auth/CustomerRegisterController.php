@@ -26,8 +26,8 @@ class CustomerRegisterController extends Controller
     public function register(RegisterRequest $request): RedirectResponse
     {
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name'     => trim($request->name),
+            'email'    => strtolower(trim($request->email)),
             'phone'    => $request->phone,
             'password' => Hash::make($request->password),
             'role'     => 'user',
@@ -37,7 +37,9 @@ class CustomerRegisterController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect()->route('home')
-                         ->with('success', 'Welcome to Plantix AI, ' . $user->name . '!');
+        // Redirect to email verification notice so user verifies before accessing
+        // protected routes (which require 'verified' middleware).
+        return redirect()->route('verification.notice')
+                         ->with('success', 'Account created! Please verify your email to continue.');
     }
 }

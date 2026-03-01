@@ -141,7 +141,7 @@
     }
 @endphp
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="far fa-shopping-cart"></i>
                                     <span class="badge">{{ $cartCount }}</span>
                                 </a>
@@ -160,7 +160,7 @@
                             </li>
                             @auth('web')
                             <li class="dropdown user-nav">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="far fa-user"></i> {{ Str::limit(auth('web')->user()->name, 14) }}
                                 </a>
                                 <ul class="dropdown-menu">

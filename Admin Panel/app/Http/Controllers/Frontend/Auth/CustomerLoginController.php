@@ -56,11 +56,17 @@ class CustomerLoginController extends Controller
         if (! $user->active) {
             Auth::logout();
             throw ValidationException::withMessages([
-                'email' => 'Your account has been disabled.',
+                'email' => 'Your account has been disabled. Please contact support.',
             ]);
         }
 
         $request->session()->regenerate();
+
+        // If email is not verified yet, send to verification notice instead of intended page
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice')
+                             ->with('success', 'Signed in! Please verify your email to continue.');
+        }
 
         return redirect()->intended(route('home'));
     }

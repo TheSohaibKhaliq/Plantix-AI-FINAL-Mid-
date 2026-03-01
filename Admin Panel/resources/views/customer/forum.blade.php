@@ -47,81 +47,114 @@
 
             <div class="card-agri p-4 border-0 shadow-sm">
                 <!-- Forum Controls -->
-                <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-4 bg-light p-3 rounded-3 border">
-                    <form method="GET" action="{{ route('forum') }}" class="d-flex flex-wrap gap-2 flex-grow-1" style="max-width: 600px;">
-                        <div class="input-group" style="flex: 1; min-width: 250px;">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ request('search') }}"
-                                class="form-agri border-start-0 ps-0"
-                                placeholder="Search threads, topics, or keywords..."
-                                style="border-radius: 0 0.375rem 0.375rem 0;"
-                            />
+                <div class="mb-4" style="padding: 0;">
+                    <form method="GET" action="{{ route('forum') }}" class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Search Discussions</label>
+                            <div style="position: relative;">
+                                <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--agri-text-muted);"></i>
+                                <input type="text" name="search" class="form-agri" style="padding-left: 40px;" placeholder="Search threads, topics, or keywords..." value="{{ request('search') }}">
+                            </div>
                         </div>
-                        <select
-                            name="category"
-                            class="form-select text-dark shadow-none"
-                            onchange="this.form.submit()"
-                            style="width: 150px; font-weight: 500; border-color: #dee2e6;"
-                        >
-                            <option value="">All Categories</option>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->slug }}" {{ request('category') === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="d-none"></button>
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Category</label>
+                            <select name="category" class="form-agri" onchange="this.form.submit()">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->slug }}" {{ request('category') === $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="submit" class="btn-agri btn-agri-primary w-50" style="justify-content: center;">Filter</button>
+                            <a href="{{ route('forum') }}" class="btn-agri btn-agri-outline w-50" style="justify-content: center; text-decoration: none;">Reset</a>
+                        </div>
                     </form>
                 </div>
 
                 <!-- Forum Threads List -->
-                <div id="forumThreads" class="list-group list-group-flush border rounded-3 overflow-hidden">
-                    @forelse($threads->items() as $thread)
-                    <a href="{{ route('forum.thread', $thread->slug) }}"
-                       class="list-group-item list-group-item-action px-4 py-4 position-relative text-decoration-none" style="transition: all 0.2s; border-left: 4px solid transparent; border-bottom: 1px solid var(--agri-border);" onmouseover="this.style.background='#F9FAFB'; this.style.borderLeft='4px solid var(--agri-primary)';" onmouseout="this.style.background='white'; this.style.borderLeft='4px solid transparent';">
-                        
-                        <div class="d-flex align-items-start gap-4">
-                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                                 style="width: 56px; height: 56px; font-size: 1.5rem; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: var(--agri-primary); border: 1px solid rgba(16, 185, 129, 0.2);">
-                                {{ strtoupper(substr($thread->user->name ?? 'F', 0, 1)) }}
-                            </div>
-                            
-                            <div class="flex-grow-1">
-                                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
-                                    <h5 class="mb-0 fw-bold text-dark pe-md-4" style="line-height: 1.4;">{{ $thread->title }}</h5>
-                                    <div class="d-flex gap-2 flex-shrink-0">
-                                        <span class="badge bg-light text-dark border shadow-sm d-flex align-items-center gap-1" style="font-size: 12px;">
-                                            <i class="fas fa-reply text-success"></i> {{ $thread->replies->count() }} {{ Str::plural('Reply', $thread->replies->count()) }}
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <div class="d-flex flex-wrap align-items-center gap-3 text-muted small text-uppercase fw-bold mb-3" style="font-size: 11px; letter-spacing: 0.5px;">
-                                    <span class="text-primary"><i class="fas fa-user-circle me-1"></i>{{ $thread->user->name ?? 'Farmer' }}</span>
-                                    <span><i class="fas fa-hashtag me-1 opacity-50"></i>{{ $thread->category?->name ?? 'General' }}</span>
-                                    <span><i class="far fa-clock me-1 opacity-50"></i>{{ $thread->created_at->diffForHumans() }}</span>
-                                </div>
-                                
-                                <p class="text-dark fw-medium mb-0" style="line-height: 1.6; font-size: 14px; opacity: 0.8;">
-                                    {{ Str::limit($thread->body, 180) }}
-                                </p>
-                            </div>
+                <div style="padding: 0; overflow: hidden; border: 1px solid var(--agri-border); border-radius: 12px;">
+                    <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); background: var(--agri-bg); display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; background: var(--agri-primary-light); color: var(--agri-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa fa-comments"></i></div>
+                            <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">All Threads</h6>
                         </div>
-                        
-                        <div class="position-absolute text-muted opacity-25" style="top: 50%; right: 20px; transform: translateY(-50%); font-size: 1.5rem;">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                    </a>
-                    @empty
-                    <div class="p-5 text-center my-4 border-0">
-                        <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3 border" style="width: 90px; height: 90px;">
-                            <i class="far fa-comments fs-2 text-muted opacity-50"></i>
-                        </div>
-                        <h4 class="fw-bold text-dark">No Discussions Found</h4>
-                        <p class="text-muted small fw-medium mb-0">Try adjusting your search criteria or start a new discussion.</p>
+                        <span style="background: white; border: 1px solid var(--agri-border); color: var(--agri-text-muted); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800;">{{ $threads->total() }} discussions</span>
                     </div>
-                    @endforelse
+                    <div class="table-responsive">
+                        <table class="table mb-0" style="vertical-align: middle; border-collapse: separate; border-spacing: 0;">
+                            <thead style="background: white; border-bottom: 1px solid var(--agri-border);">
+                                <tr>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Topic</th>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Author</th>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Category</th>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: center;">Replies</th>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: center;">Status</th>
+                                    <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: center;">Pinned</th>
+                                </tr>
+                            </thead>
+                            <tbody style="background: white;">
+                                @forelse($threads->items() as $thread)
+                                <tr style="border-bottom: 1px solid var(--agri-border); transition: background 0.2s;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+                                    <td style="padding: 18px 24px;">
+                                        <a href="{{ route('forum.thread', $thread->slug) }}" style="font-size: 14px; font-weight: 700; color: var(--agri-text-heading); text-decoration: none; display: block; max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            {{ Str::limit($thread->title, 60) }}
+                                        </a>
+                                        <div style="font-size: 12px; color: var(--agri-text-muted); margin-top: 4px;">Posted {{ $thread->created_at->diffForHumans() }}</div>
+                                    </td>
+                                    <td style="padding: 18px 24px; font-size: 13px; color: var(--agri-text-main); font-weight: 600;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.1); color: var(--agri-primary); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">
+                                                {{ strtoupper(substr($thread->user->name ?? 'F', 0, 1)) }}
+                                            </div>
+                                            {{ $thread->user->name ?? 'Farmer' }}
+                                        </div>
+                                    </td>
+                                    <td style="padding: 18px 24px;">
+                                        <span style="background: var(--agri-bg); border: 1px solid var(--agri-border); color: var(--agri-text-heading); padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700;">
+                                            {{ optional($thread->category)->name ?? 'General' }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 18px 24px; text-align: center; font-size: 14px; font-weight: 800; color: var(--agri-primary-dark);">
+                                        {{ $thread->replies->count() }}
+                                    </td>
+                                    <td style="padding: 18px 24px; text-align: center;">
+                                        @php
+                                            $status = $thread->status ?? 'open';
+                                            $colors = [
+                                                'open'     => ['#D1FAE5', '#065F46'],
+                                                'resolved' => ['#E0F2FE', '#0369A1'],
+                                                'locked'   => ['#F3F4F6', '#4B5563'],
+                                                'archived' => ['#FEF3C7', '#92400E'],
+                                            ];
+                                            $c = $colors[$status] ?? ['#F9FAFB', '#6B7280'];
+                                        @endphp
+                                        <span style="background: {{ $c[0] }}; color: {{ $c[1] }}; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; border: 1px solid {{ $c[0] }};">
+                                            {{ ucfirst($status) }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 18px 24px; text-align: center;">
+                                        @if($thread->is_pinned)
+                                            <i class="fa fa-thumbtack" style="color: #D97706;" title="Pinned"></i>
+                                        @else
+                                            <span style="color: var(--agri-text-muted);">—</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" style="padding: 60px 24px; text-align: center; border: none; background: white;">
+                                        <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3 border" style="width: 90px; height: 90px;">
+                                            <i class="far fa-comments fs-2 text-muted opacity-50"></i>
+                                        </div>
+                                        <h4 class="fw-bold text-dark">No Discussions Found</h4>
+                                        <p class="text-muted small fw-medium mb-0">Try adjusting your search criteria or start a new discussion.</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 @if($threads->hasPages())

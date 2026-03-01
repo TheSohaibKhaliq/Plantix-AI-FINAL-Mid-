@@ -15,198 +15,191 @@
 <div class="row g-4 mb-4">
     <div class="col-lg-8 d-flex flex-column gap-4">
         {{-- Thread Original Post --}}
-        <div class="card-agri p-0 border-0 bg-white">
-            <div class="p-4 p-md-5">
-                <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-                    <span class="badge-agri border {{ match($thread->category?->name) { 'Crop Diseases' => 'border-danger bg-danger text-danger', 'Pest Control' => 'border-warning bg-warning text-warning', 'Fertilizers' => 'border-info bg-info text-info', default => 'border-success bg-success text-success' } }} bg-opacity-10 border-opacity-25 shadow-sm" style="padding: 0.4em 1em; font-size: 12px;">
-                        <i class="fas fa-hashtag me-1"></i>{{ $thread->category?->name ?? 'General Discussion' }}
-                    </span>
-                    <span class="text-muted small text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">
-                        <i class="far fa-clock me-1 text-primary"></i>Posted {{ $thread->created_at->diffForHumans() }}
-                    </span>
-                    @if($thread->is_locked)
-                        <span class="badge-agri bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 ms-auto shadow-sm" style="padding: 0.4em 1em; font-size: 12px;">
-                            <i class="fas fa-lock me-1"></i>Locked
+        <div class="card-agri mb-4" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); display: flex; align-items: flex-start; justify-content: space-between;">
+                <div>
+                    <h5 style="margin-bottom: 12px; font-weight: 800; color: var(--agri-text-heading); font-size: 18px; line-height: 1.4;">{{ $thread->title }}</h5>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        @php
+                            $status = $thread->status ?? 'open';
+                            $colors = [
+                                'open'     => ['#D1FAE5', '#065F46'],
+                                'resolved' => ['#E0F2FE', '#0369A1'],
+                                'locked'   => ['#F3F4F6', '#4B5563'],
+                            ];
+                            $c = $colors[$status] ?? ['#F9FAFB', '#6B7280'];
+                        @endphp
+                        <span style="background: {{ $c[0] }}; color: {{ $c[1] }}; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; border: 1px solid {{ $c[0] }};">
+                            {{ ucfirst($status) }}
                         </span>
-                    @endif
+                        @if($thread->is_pinned ?? false)
+                            <span style="background: #FEF3C7; color: #D97706; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; border: 1px solid #FDE68A;">
+                                <i class="fa fa-thumbtack me-1"></i>Pinned
+                            </span>
+                        @endif
+                        @if($thread->category)
+                        <span style="background: var(--agri-bg); border: 1px solid var(--agri-border); color: var(--agri-text-heading); padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700;">
+                            {{ $thread->category->name }}
+                        </span>
+                        @endif
+                    </div>
                 </div>
-                
-                <h3 class="fw-bold text-dark mb-4 pb-4 border-bottom-dashed" style="line-height: 1.4;">{{ $thread->title }}</h3>
-                
-                <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded text-dark border border-dashed">
-                    <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; font-weight: bold; font-family: var(--font-heading); font-size: 1.4rem;">
-                        {{ strtoupper(substr($thread->user->name, 0, 1)) }}
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 12px;">
+                    <small style="color: var(--agri-text-muted); font-size: 12px; font-weight: 600;">{{ $thread->created_at->format('d M Y, H:i') }}</small>
+                </div>
+            </div>
+            <div style="padding: 28px;">
+                <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+                    <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: var(--agri-primary); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; flex-shrink: 0; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        {{ strtoupper(substr($thread->user->name ?? 'F', 0, 1)) }}
                     </div>
                     <div>
-                        <div class="text-uppercase small text-muted fw-bold mb-1" style="font-size: 11px; letter-spacing: 0.5px;">Farmer / Author</div>
-                        <div class="fw-bold fs-6">{{ $thread->user->name }}</div>
-                    </div>
-                    <div class="ms-auto pe-2 text-end">
-                        <div class="badge-agri bg-white text-dark border shadow-sm d-flex align-items-center gap-2 px-3 py-2">
-                            <i class="far fa-eye text-primary"></i> <span class="fw-bold">{{ $thread->views }}</span> Views
-                        </div>
+                        <div style="font-weight: 800; color: var(--agri-text-heading); font-size: 15px;">{{ $thread->user->name ?? 'Farmer' }}</div>
+                        <div style="color: var(--agri-text-muted); font-size: 12px; margin-top: 2px;">Author</div>
                     </div>
                 </div>
-                
-                <div class="fs-6 text-dark fw-medium" style="line-height: 1.8;">
+                <div class="thread-content" style="margin: 0; color: var(--agri-text-main); font-size: 15px; line-height: 1.7;">
                     {!! nl2br(e($thread->body)) !!}
                 </div>
             </div>
         </div>
 
         {{-- Replies --}}
-        <h5 class="fw-bold text-dark mb-0 mt-2"><i class="far fa-comments text-success me-2"></i>Responses & Insights ({{ $replies->total() }})</h5>
-        
-        <div class="card-agri p-0 border-0 bg-white overflow-hidden shadow-sm">
-            <div class="list-group list-group-flush pt-1">
+        <div class="card-agri" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+            <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); display: flex; align-items: center; justify-content: space-between;">
+                <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">Replies ({{ $replies->total() }})</h6>
+            </div>
+            <div>
                 @forelse($replies as $reply)
-                <div class="list-group-item border-bottom-dashed p-4 p-md-5 {{ $reply->is_expert_reply ? 'bg-success bg-opacity-10' : '' }}" style="border-left: {{ $reply->is_expert_reply ? '4px solid var(--agri-primary)' : '4px solid transparent' }};">
-                    
-                    @if($reply->is_expert_reply)
-                        <div class="mb-4">
-                            <span class="badge-agri bg-success text-white px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2 border border-success">
-                                <i class="fas fa-check-circle"></i> Verified Expert Response
-                            </span>
-                        </div>
-                    @endif
-
-                    <div class="d-flex align-items-start gap-3 gap-md-4">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm
-                            {{ $reply->is_expert_reply ? 'bg-success text-white border-2 border-white' : 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25' }}"
-                             style="width: 48px; height: 48px; font-size: 1.3rem; font-family: var(--font-heading); font-weight: 700;">
-                            {{ strtoupper(substr($reply->user->name ?? '?', 0, 1)) }}
-                        </div>
-                        
-                        <div class="flex-grow-1">
-                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                <span class="fw-bold text-dark fs-6">{{ $reply->user->name }}</span>
-                                <span class="text-muted small text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;"><i class="far fa-clock me-1 text-primary opacity-50"></i>{{ $reply->created_at->diffForHumans() }}</span>
+                <div style="padding: 24px; border-bottom: 1px solid var(--agri-border); {{ $reply->is_expert_reply ? 'background: rgba(16, 185, 129, 0.03); border-left: 3px solid var(--agri-primary);' : '' }}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: {{ $reply->is_expert_reply ? '#D97706' : ( $reply->user_id === $thread->user_id ? 'rgba(16, 185, 129, 0.1)' : '#F3F4F6' ) }}; color: {{ $reply->is_expert_reply ? 'white' : ( $reply->user_id === $thread->user_id ? 'var(--agri-primary)' : '#4B5563' ) }}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; border: 1px solid {{ $reply->is_expert_reply ? 'transparent' : ( $reply->user_id === $thread->user_id ? 'rgba(16, 185, 129, 0.2)' : '#E5E7EB' ) }};">
+                                {{ strtoupper(substr(optional($reply->user)->name ?? 'U', 0, 1)) }}
                             </div>
-                            
-                            <div class="text-dark fw-medium mb-0" style="line-height: 1.7;">
-                                {!! nl2br(e($reply->body)) !!}
-                            </div>
-
-                            @if($reply->is_official)
-                                <div class="mt-3">
-                                    <span class="badge-agri bg-warning text-dark px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2 border border-warning">
-                                        <i class="fas fa-star"></i> Official Answer
-                                    </span>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span style="font-weight: 800; color: var(--agri-text-heading); font-size: 14px;">{{ optional($reply->user)->name ?? 'Farmer' }}</span>
+                                    @if($reply->is_official)
+                                        <span style="background: #D1FAE5; color: #065F46; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800;"><i class="fa fa-check-circle me-1"></i>Official</span>
+                                    @endif
+                                    @if($reply->is_expert_reply)
+                                        <span style="background: #FEF3C7; color: #92400E; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800;"><i class="fa fa-star me-1"></i>Expert</span>
+                                    @endif
+                                    @if($reply->user_id === $thread->user_id)
+                                        <span style="background: var(--agri-bg); color: var(--agri-text-muted); padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 700; border: 1px solid var(--agri-border);">Author</span>
+                                    @endif
                                 </div>
-                            @endif
+                                <div style="color: var(--agri-text-muted); font-size: 12px; margin-top: 4px;">{{ $reply->created_at->format('d M Y, H:i') }}
+                                </div>
+                            </div>
                         </div>
+                        @if(!$reply->is_official && $reply->is_expert_reply && $reply->user_id === auth('expert')->id())
+                        <div>
+                            <form method="POST" action="{{ route('expert.forum.reply.official', $reply) }}" onsubmit="return confirm('Mark this as the official answer?');">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="btn-agri" style="padding: 6px 12px; background: white; color: #065F46; border: 1px solid #D1FAE5; font-size: 12px; font-weight: 700; border-radius: 100px;"><i class="fas fa-check-circle me-1"></i> Mark Official</button>
+                            </form>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="reply-content" style="margin: 0 0 0 56px; color: var(--agri-text-main); font-size: 14px; line-height: 1.6;">
+                        {!! nl2br(e($reply->body)) !!}
                     </div>
                 </div>
                 @empty
-                <div class="p-5 text-center my-3">
-                    <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3 border border-dashed" style="width: 80px; height: 80px;">
-                        <i class="far fa-comment-dots fs-2 text-muted opacity-50"></i>
+                <div style="padding: 40px 24px; text-align: center; color: var(--agri-text-muted);">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3 border" style="width: 70px; height: 70px;">
+                        <i class="far fa-comments fs-3 text-muted opacity-50"></i>
                     </div>
-                    <h5 class="fw-bold text-dark">No Responses Yet</h5>
-                    <p class="text-muted small fw-medium mb-0">Be the first expert to respond and provide valuable insights to this farmer.</p>
+                    <h6 class="fw-bold text-dark mb-1">No responses yet</h6>
+                    <p class="text-muted small fw-medium mb-0">Be the first to share your knowledge.</p>
                 </div>
                 @endforelse
             </div>
+            
+            @if($replies->hasPages())
+            <div style="padding: 20px; border-top: 1px solid var(--agri-border);">
+                {{ $replies->links('pagination::bootstrap-5') }}
+            </div>
+            @endif
         </div>
-
-        @if($replies->hasPages())
-        <div class="card-agri p-3 border-0 bg-white text-center shadow-sm">
-            {{ $replies->links('pagination::bootstrap-5') }}
-        </div>
-        @endif
 
         {{-- Reply Form --}}
         @if(!$thread->is_locked)
-        <div class="card-agri p-0 border-0 shadow-sm mt-2 mb-4">
-            <div class="p-4 bg-success bg-opacity-10 border-bottom border-success border-opacity-25 d-flex align-items-center gap-3">
-                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;"><i class="fas fa-reply" style="font-size: 12px;"></i></div>
-                <h5 class="mb-0 fw-bold text-success">Post Expert Answer</h5>
+        <div class="card-agri" style="padding: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid var(--agri-border); padding-bottom: 16px;">
+                <div style="width: 36px; height: 36px; background: rgba(16, 185, 129, 0.1); color: var(--agri-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa fa-reply"></i></div>
+                <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">Post Expert Answer</h6>
             </div>
-            <div class="p-4 p-md-5 bg-white">
-                <form method="POST" action="{{ route('expert.forum.reply', $thread) }}">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="form-label text-dark fw-bold small mb-2">Detailed Response <span class="text-danger">*</span></label>
-                        <textarea name="body" rows="6" class="form-agri @error('body') is-invalid @enderror"
-                                  placeholder="Provide your professional diagnosis or advice here (minimum 20 characters)..."
-                                  required minlength="20">{{ old('body') }}</textarea>
-                        @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="form-label text-dark fw-bold small mb-2 d-flex align-items-center gap-2">
-                            Structured Recommendation
-                            <span class="badge bg-light text-muted border fw-normal py-1 px-2">Optional</span>
-                        </label>
-                        <textarea name="recommendation" rows="3" class="form-agri"
-                                  placeholder="If applicable, provide a clear, step-by-step action plan or formal recommendation..."></textarea>
-                        <div class="form-text mt-2 small fw-medium text-success d-flex align-items-center gap-1">
-                            <i class="fas fa-magic"></i> This will be highlighted uniquely as an authoritative recommendation.
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex flex-wrap align-items-center justify-content-between p-3 bg-light rounded border border-dashed gap-3 pt-3 mt-4 border-top">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-shield-alt text-success fs-5"></i>
-                            <span class="text-dark fw-bold text-uppercase small" style="letter-spacing: 0.5px;">Posting as Verified Expert</span>
-                        </div>
-                        <button type="submit" class="btn-agri btn-agri-primary shadow-sm px-4 py-2 d-flex align-items-center gap-2">
-                            <i class="fas fa-paper-plane m-0"></i> Submit Response
-                        </button>
-                    </div>
-                </form>
-            </div>
+            
+            <form method="POST" action="{{ route('expert.forum.reply', $thread) }}">
+                @csrf
+                <div style="margin-bottom: 20px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Detailed Response <span style="color: #DC2626;">*</span></label>
+                    <textarea name="body" rows="6" class="form-agri focus-primary" placeholder="Provide your professional diagnosis or advice here (minimum 20 characters)..." required minlength="20">{{ old('body') }}</textarea>
+                    @error('body')<div style="color: #DC2626; font-size: 12px; margin-top: 6px; font-weight: 600;"><i class="fas fa-exclamation-circle me-1"></i> {{ $message }}</div>@enderror
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Structured Recommendation <span style="background: rgba(107, 114, 128, 0.1); color: var(--agri-text-muted); padding: 2px 8px; border-radius: 100px; font-size: 10px; margin-left: 8px;">Optional</span></label>
+                    <textarea name="recommendation" rows="3" class="form-agri" placeholder="If applicable, provide a clear, step-by-step action plan..."></textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--agri-border);">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--agri-primary);"><i class="fas fa-shield-alt"></i> Posting as Verified Expert</div>
+                    <button type="submit" class="btn-agri btn-agri-primary" style="font-weight: 700; padding: 10px 24px;">Submit Response <i class="fas fa-paper-plane ms-2"></i></button>
+                </div>
+            </form>
         </div>
         @else
-        <div class="bg-light border border-dashed text-center p-5 rounded mt-2 mb-4 d-flex flex-column align-items-center justify-content-center">
-            <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mb-3 text-danger" style="width: 60px; height: 60px;">
-                <i class="fas fa-lock fs-3"></i>
-            </div>
-            <h5 class="fw-bold text-dark">Discussion Closed</h5>
-            <p class="mb-0 text-muted small fw-medium">This thread has been locked and is no longer accepting new replies.</p>
+        <div style="padding: 40px 24px; text-align: center; border: 1px dashed var(--agri-border); background: var(--agri-bg); border-radius: 14px;">
+            <i class="fas fa-lock text-muted fs-3 mb-3"></i>
+            <h5 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 16px;">Discussion Closed</h5>
+            <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--agri-text-muted);">This thread has been locked and is no longer accepting new replies.</p>
         </div>
         @endif
     </div>
 
     <div class="col-lg-4">
-        <div class="card-agri p-0 border-0 bg-white position-sticky" style="top: 100px;">
-            <div class="p-4 bg-light border-bottom">
-                <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-info-circle me-2 text-info"></i>Thread Details</h5>
+        <div class="card-agri" style="padding: 0; position: sticky; top: 100px;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid var(--agri-border); background: var(--agri-bg);">
+                <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">Thread Details</h6>
             </div>
-            <div class="p-4">
-                <ul class="list-unstyled mb-0 d-grid gap-3">
-                    <li class="d-flex flex-column gap-1 bg-light p-3 rounded border border-dashed">
-                        <span class="text-muted text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">Topic Category</span>
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-tags text-primary opacity-50"></i>
-                            <span class="fw-bold text-dark">{{ $thread->category?->name ?? 'General' }}</span>
+            <div style="padding: 24px;">
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px;">
+                    <li style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--agri-border);">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase;">Topic Category</span>
+                        <div style="font-size: 14px; font-weight: 800; color: var(--agri-text-heading); display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-tags" style="color: var(--agri-primary); opacity: 0.7;"></i>
+                            {{ $thread->category?->name ?? 'General' }}
                         </div>
                     </li>
-                    <li class="d-flex flex-column gap-1 bg-light p-3 rounded border border-dashed">
-                        <span class="text-muted text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">Original Author</span>
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-user-circle text-primary opacity-50"></i>
-                            <span class="fw-bold text-dark">{{ $thread->user->name }}</span>
+                    <li style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--agri-border);">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase;">Original Author</span>
+                        <div style="font-size: 14px; font-weight: 800; color: var(--agri-text-heading); display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-user-circle" style="color: var(--agri-primary); opacity: 0.7;"></i>
+                            {{ $thread->user->name }}
                         </div>
                     </li>
-                    <li class="d-flex flex-column gap-1 bg-light p-3 rounded border border-dashed">
-                        <span class="text-muted text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">Creation Date</span>
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="far fa-calendar-alt text-primary opacity-50"></i>
-                            <span class="fw-bold text-dark">{{ $thread->created_at->format('d M Y, h:i A') }}</span>
+                    <li style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--agri-border);">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase;">Creation Date</span>
+                        <div style="font-size: 14px; font-weight: 800; color: var(--agri-text-heading); display: flex; align-items: center; gap: 8px;">
+                            <i class="far fa-calendar-alt" style="color: var(--agri-primary); opacity: 0.7;"></i>
+                            {{ $thread->created_at->format('d M Y, H:i') }}
                         </div>
                     </li>
-                    <li class="d-flex justify-content-between align-items-center p-3">
-                        <span class="text-muted text-uppercase fw-bold d-flex align-items-center gap-2" style="font-size: 11px; letter-spacing: 0.5px;">
-                            <i class="far fa-eye text-primary"></i> Total Views
+                    <li style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--agri-border);">
+                        <span style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                            <i class="far fa-eye" style="color: var(--agri-primary); font-size: 14px;"></i> Total Views
                         </span>
-                        <span class="badge-agri bg-light text-dark border">{{ $thread->views }}</span>
+                        <span style="background: var(--agri-bg); color: var(--agri-text-heading); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800; border: 1px solid var(--agri-border);">{{ $thread->views }}</span>
                     </li>
-                    <li class="d-flex justify-content-between align-items-center p-3 border-top-dashed">
-                        <span class="text-muted text-uppercase fw-bold d-flex align-items-center gap-2" style="font-size: 11px; letter-spacing: 0.5px;">
-                            <i class="far fa-comments text-success"></i> Total Replies
+                    <li style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                            <i class="far fa-comments" style="color: #059669; font-size: 14px;"></i> Total Replies
                         </span>
-                        <span class="badge-agri bg-success text-white shadow-sm">{{ $replies->total() }}</span>
+                        <span style="background: #D1FAE5; color: #065F46; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800; border: 1px solid #A7F3D0;">{{ $replies->total() }}</span>
                     </li>
                 </ul>
             </div>

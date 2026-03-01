@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Brand;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -30,10 +29,6 @@ class ShopController extends Controller
             $query->whereHas('category', fn($q) => $q->where('slug', $request->category));
         }
 
-        if ($request->filled('brand')) {
-            $query->whereHas('brand', fn($q) => $q->where('slug', $request->brand));
-        }
-
         if ($request->filled('vendor')) {
             $query->whereHas('vendor', fn($q) => $q->where('slug', $request->vendor));
         }
@@ -54,22 +49,20 @@ class ShopController extends Controller
             default      => ['created_at', 'desc'],
         };
 
-        $products   = $query->orderBy(...$sort)->with(['category', 'primaryImage', 'brand', 'vendor'])->get();
+        $products   = $query->orderBy(...$sort)->with(['category', 'primaryImage', 'vendor'])->get();
         $categories = Category::orderBy('name')->get();
-        $brands     = Brand::active()->orderBy('name')->get();
         $vendors    = Vendor::where('is_active', true)->where('is_approved', true)->orderBy('title')->get();
 
         $shopData = $products->map(fn ($p) => [
             'id'              => $p->id,
             'name'            => $p->name,
-            'subtitle'        => $p->brand?->name,
+            'subtitle'        => null,
             'description'     => $p->description,
             'price'           => (float) $p->price,
             'effective_price' => (float) $p->effective_price,
             'discount_price'  => $p->discount_price ? (float) $p->discount_price : null,
             'is_on_sale'      => (bool) $p->is_on_sale,
             'category'        => $p->category?->name,
-            'brand'           => $p->brand?->name,
             'vendor'          => $p->vendor?->title,
             'vendor_id'       => $p->vendor_id,
             'rating_avg'      => (float) ($p->rating_avg ?? 0),
@@ -81,19 +74,19 @@ class ShopController extends Controller
 
         $priceMin   = (int) ($products->min('price') ?? 0);
         $priceMax   = (int) ($products->max('price') ?? 50000);
-        $brandList  = $brands->map(fn ($b) => ['id' => $b->id, 'name' => $b->name])->values()->all();
         $vendorList = $vendors->map(fn ($v) => ['id' => $v->id, 'name' => $v->title])->values()->all();
+        $brandList  = $vendorList; // brands map to vendors in this catalogue
 
         return view('customer.shop', compact(
-            'products', 'categories', 'brands', 'vendors',
-            'shopData', 'priceMin', 'priceMax', 'brandList', 'vendorList'
+            'products', 'categories', 'vendors',
+            'shopData', 'priceMin', 'priceMax', 'vendorList', 'brandList'
         ));
     }
 
     public function show(int $id): View
     {
         $product  = Product::with([
-            'vendor', 'category', 'brand', 'images',
+            'vendor', 'category', 'images',
             'attributes', 'approvedReviews.user', 'stock',
         ])->active()->findOrFail($id);
 
