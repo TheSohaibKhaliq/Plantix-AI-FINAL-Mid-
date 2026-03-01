@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Global Inventory Ledger')
+@section('title', 'Products')
 
 @section('content')
 <div class="container-fluid" style="padding-top: 24px; padding-bottom: 40px;">
@@ -9,40 +9,40 @@
     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px;">
         <div>
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                <a href="{{url('/dashboard')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">E-Commerce Hub</a>
+                <a href="{{url('/dashboard')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">Dashboard</a>
                 <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
-                <span style="color: var(--agri-primary); font-size: 14px; font-weight: 600;">Inventory Intelligence</span>
+                <span style="color: var(--agri-primary); font-size: 14px; font-weight: 600;">Products</span>
             </div>
-            <h1 style="font-size: 28px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;">Global Inventory Ledger</h1>
-            <p style="color: var(--agri-text-muted); margin: 4px 0 0 0;">Unified management of agriculture supplies, equipment, and digital assets.</p>
+            <h1 style="font-size: 28px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;">Products</h1>
+            <p style="color: var(--agri-text-muted); margin: 4px 0 0 0;">View, edit, and manage all products.</p>
         </div>
         <div style="display: flex; gap: 16px;">
             <div style="background: white; padding: 10px 20px; border-radius: 14px; border: 1px solid var(--agri-border); font-size: 13px; font-weight: 800; color: var(--agri-primary); display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                 <i class="fas fa-warehouse"></i>
-                TOTAL SKU: {{ $products->total() }}
+                TOTAL PRODUCTS: {{ $products->total() }}
             </div>
             <a href="{{ route('admin.products.create') }}" class="btn-agri btn-agri-primary" style="text-decoration: none; display: flex; align-items: center; gap: 10px; font-weight: 700;">
-                <i class="fas fa-plus"></i> Register SKU
+                <i class="fas fa-plus"></i> Add Product
             </a>
         </div>
     </div>
 
-    {{-- Strategy Filters --}}
+    {{-- Filters --}}
     <div class="card-agri mb-4" style="padding: 24px 32px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.04); background: white;">
         <form method="GET" action="{{ route('admin.products.index') }}">
             <div class="row g-4">
                 <div class="col-lg-3">
-                    <label class="agri-filter-label">SKU Discovery</label>
+                    <label class="agri-filter-label">Search Products</label>
                     <div style="position: relative;">
                         <i class="fas fa-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--agri-primary); opacity: 0.6;"></i>
                         <input type="text" name="search" class="form-agri" style="padding-left: 44px; font-size: 14px; font-weight: 600;"
-                               placeholder="Scan Name or SKU..." value="{{ $filters['search'] ?? '' }}">
+                               placeholder="Search by Name or SKU..." value="{{ $filters['search'] ?? '' }}">
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <label class="agri-filter-label">Taxonomy Area</label>
+                    <label class="agri-filter-label">Category</label>
                     <select name="category_id" class="form-agri" style="font-size: 14px; font-weight: 600;">
-                        <option value="">All Branches</option>
+                        <option value="">All Categories</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" @selected(($filters['category_id'] ?? '') == $cat->id)>
                                 {{ $cat->name }}
@@ -51,7 +51,7 @@
                     </select>
                 </div>
                 <div class="col-lg-2">
-                    <label class="agri-filter-label">Partner Node</label>
+                    <label class="agri-filter-label">Vendor</label>
                     <select name="vendor_id" class="form-agri" style="font-size: 14px; font-weight: 600;">
                         <option value="">All Vendors</option>
                         @foreach($vendors as $vendor)
@@ -62,11 +62,11 @@
                     </select>
                 </div>
                 <div class="col-lg-2">
-                    <label class="agri-filter-label">Ledger Status</label>
+                    <label class="agri-filter-label">Status</label>
                     <select name="is_active" class="form-agri" style="font-size: 14px; font-weight: 600;">
-                        <option value="">All States</option>
-                        <option value="1" @selected(($filters['is_active'] ?? '') === '1')>Active Portfolio</option>
-                        <option value="0" @selected(($filters['is_active'] ?? '') === '0')>Archived/Inactive</option>
+                        <option value="">All Statuses</option>
+                        <option value="1" @selected(($filters['is_active'] ?? '') === '1')>Active</option>
+                        <option value="0" @selected(($filters['is_active'] ?? '') === '0')>Inactive</option>
                     </select>
                 </div>
                 <div class="col-lg-3 d-flex align-items-end gap-2">
@@ -87,12 +87,12 @@
             <table class="table mb-0" style="vertical-align: middle;">
                 <thead style="background: var(--agri-bg);">
                     <tr>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">SKU Item Details</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Ecosystem Segments</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Valuation</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Inventory Density</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Operational State</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-end">Management</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Product Details</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Category & Vendor</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Price</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Stock</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Status</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -157,23 +157,23 @@
                             <td style="padding: 24px 32px;" class="text-center">
                                 @if($product->is_active)
                                     <div style="display: inline-flex; align-items: center; gap: 8px; color: var(--agri-primary); background: var(--agri-primary-light); padding: 4px 14px; border-radius: 100px; font-size: 11px; font-weight: 900; border: 1px solid var(--agri-primary)30;">
-                                        <i class="fas fa-check-circle" style="font-size: 10px;"></i> LIVE
+                                        <i class="fas fa-check-circle" style="font-size: 10px;"></i> ACTIVE
                                     </div>
                                 @else
                                     <div style="display: inline-flex; align-items: center; gap: 8px; color: #6B7280; background: #F3F4F6; padding: 4px 14px; border-radius: 100px; font-size: 11px; font-weight: 900; border: 1px solid #E5E7EB;">
-                                        <i class="fas fa-archive" style="font-size: 10px;"></i> ARCHIVED
+                                        <i class="fas fa-archive" style="font-size: 10px;"></i> INACTIVE
                                     </div>
                                 @endif
                             </td>
                             <td style="padding: 24px 32px;" class="text-end">
                                 <div style="display: flex; justify-content: flex-end; gap: 8px;">
-                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn-agri" style="padding: 10px 14px; background: var(--agri-bg); color: var(--agri-text-heading); border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 700; border: none;" title="Reconfigure SKU">
+                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn-agri" style="padding: 10px 14px; background: var(--agri-bg); color: var(--agri-text-heading); border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 700; border: none;" title="Edit Product">
                                         <i class="fas fa-layer-group"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" class="d-inline" onsubmit="return confirm('CRITICAL: Decommission this SKU from the global ledger?')">
+                                    <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-agri" style="padding: 10px 14px; background: #FEF2F2; color: var(--agri-error); border-radius: 12px; border: none;" title="Decommission SKU">
+                                        <button type="submit" class="btn-agri" style="padding: 10px 14px; background: #FEF2F2; color: var(--agri-error); border-radius: 12px; border: none;" title="Delete Product">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
@@ -188,11 +188,11 @@
                                         <i class="fas fa-box-open" style="opacity: 0.4;"></i>
                                     </div>
                                     <div>
-                                        <h4 style="margin: 0; font-weight: 800; color: var(--agri-text-heading);">REGISTRY IS VOID</h4>
-                                        <p style="margin: 8px 0 0 0; font-size: 14px; color: var(--agri-text-muted); max-width: 400px;">Adjust your intelligence filters or initiate a new SKU registration to populate the ledger.</p>
+                                        <h4 style="margin: 0; font-weight: 800; color: var(--agri-text-heading);">No Products Found</h4>
+                                        <p style="margin: 8px 0 0 0; font-size: 14px; color: var(--agri-text-muted); max-width: 400px;">Adjust your filters or add a new product.</p>
                                     </div>
                                     <a href="{{ route('admin.products.create') }}" class="btn-agri btn-agri-primary" style="padding: 12px 32px; text-decoration: none; font-weight: 700;">
-                                        Inaugurate First SKU
+                                        Add First Product
                                     </a>
                                 </div>
                             </td>

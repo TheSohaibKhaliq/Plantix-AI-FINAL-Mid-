@@ -55,9 +55,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware(['permission:users,users.view'])->group(function () {
             Route::get('/users/view/{id}', [\App\Http\Controllers\UserController::class, 'view'])->name('users.view');
         });
-        Route::post('/users/store',       [\App\Http\Controllers\UserController::class, 'storeAdminUsers'])->name('users.store');
-        Route::post('/users/update/{id}', [\App\Http\Controllers\UserController::class, 'updateAdminUsers'])->name('users.update');
-        Route::get('/users/delete/{id}',  [\App\Http\Controllers\UserController::class, 'deleteAdminUsers'])->name('users.delete');
+        Route::post('/users/store',              [\App\Http\Controllers\UserController::class, 'storeAdminUsers'])->name('users.store');
+        Route::post('/users/update/{id}',        [\App\Http\Controllers\UserController::class, 'updateAdminUsers'])->name('users.update');
+        Route::post('/users/update-profile/{id}',[\App\Http\Controllers\UserController::class, 'updateUserProfile'])->name('users.update-profile');
+        Route::post('/users/send-reset/{id}',    [\App\Http\Controllers\UserController::class, 'sendPasswordReset'])->name('users.send-reset');
+        Route::get('/users/delete/{id}',         [\App\Http\Controllers\UserController::class, 'deleteAdminUsers'])->name('users.delete');
 
         // ── Admin Sub-users ───────────────────────────────────────────────────
         Route::middleware(['permission:admins,admin.users'])->group(function () {

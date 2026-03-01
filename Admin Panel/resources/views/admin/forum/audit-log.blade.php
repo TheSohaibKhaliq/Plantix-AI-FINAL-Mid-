@@ -3,185 +3,198 @@
 @section('content')
 <div class="page-wrapper">
 
-    <div class="row page-titles mb-4 pb-3 border-bottom">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-history text-success me-2"></i> Forum Audit Log</h3>
-        </div>
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.forum.index') }}">Forum</a></li>
-                <li class="breadcrumb-item active">Audit Log</li>
-            </ol>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <a href="{{ route('admin.forum.index') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                    Forum
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <span style="color: var(--agri-primary); font-size: 13px; font-weight: 600;">Audit Log</span>
+            </div>
+            <h1 style="font-size: 26px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;"><i class="fa fa-history text-success me-2"></i> Forum Audit Log</h1>
         </div>
     </div>
 
     <div class="container-fluid">
 
         {{-- Filters --}}
-        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
-            <div class="card-body py-3">
-                <form method="GET" class="row g-2 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label small fw-semibold text-muted mb-1">Action</label>
-                        <select name="action" class="form-select form-select-sm rounded-pill border-0 bg-light">
-                            <option value="">All Actions</option>
-                            @foreach($actions as $action)
-                                <option value="{{ $action }}" {{ request('action') === $action ? 'selected' : '' }}>
-                                    {{ $action }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-semibold text-muted mb-1">User ID</label>
-                        <input type="number" name="user_id" class="form-control form-control-sm rounded-pill border-0 bg-light"
-                               placeholder="e.g. 42" value="{{ request('user_id') }}">
-                    </div>
-                    <div class="col-md-3 d-flex gap-2">
-                        <button type="submit" class="btn btn-success btn-sm rounded-pill px-4">Filter</button>
-                        <a href="{{ route('admin.forum.audit-log') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-4">Reset</a>
-                    </div>
-                    <div class="col-md-2 text-end">
-                        <a href="{{ route('admin.forum.index') }}" class="btn btn-outline-primary btn-sm rounded-pill">
-                            <i class="fa fa-arrow-left me-1"></i> Forum
-                        </a>
-                    </div>
-                </form>
-            </div>
+        {{-- Filters --}}
+        <div class="card-agri mb-4" style="padding: 24px;">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Action</label>
+                    <select name="action" class="form-agri">
+                        <option value="">All Actions</option>
+                        @foreach($actions as $action)
+                            <option value="{{ $action }}" {{ request('action') === $action ? 'selected' : '' }}>
+                                {{ $action }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">User ID</label>
+                    <input type="number" name="user_id" class="form-agri" placeholder="e.g. 42" value="{{ request('user_id') }}">
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn-agri btn-agri-primary" style="padding-left: 24px; padding-right: 24px;">Filter</button>
+                    <a href="{{ route('admin.forum.audit-log') }}" class="btn-agri btn-agri-outline" style="padding-left: 24px; padding-right: 24px; text-decoration: none;">Reset</a>
+                </div>
+                <div class="col-md-2 text-end">
+                    <a href="{{ route('admin.forum.index') }}" class="btn-agri btn-agri-outline" style="display: inline-flex; text-decoration: none;">
+                        <i class="fa fa-arrow-left"></i> Forum
+                    </a>
+                </div>
+            </form>
         </div>
 
         {{-- Audit Log Table --}}
-        <div class="card border-0 shadow-sm" style="border-radius:16px;">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold"><i class="fa fa-history me-2"></i>Action Log</h5>
-                <span class="text-muted small">{{ $logs->total() }} entries</span>
+        {{-- Audit Log Table --}}
+        <div class="card-agri" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 36px; height: 36px; background: var(--agri-bg); color: var(--agri-text-muted); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa fa-history"></i></div>
+                    <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">Action Log</h6>
+                </div>
+                <span style="background: var(--agri-bg); color: var(--agri-text-muted); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800;">{{ $logs->total() }} entries</span>
             </div>
-            <div class="card-body p-0">
+            <div class="table-responsive">
                 @if($logs->isEmpty())
-                    <div class="text-center py-5 text-muted">
-                        <i class="fa fa-history fa-3x mb-3 d-block"></i>No audit log entries found.
+                    <div style="padding: 60px 24px; text-align: center; color: var(--agri-text-muted);">
+                        <i class="fa fa-history" style="font-size: 48px; opacity: 0.3; margin-bottom: 16px;"></i>
+                        <p style="margin: 0; font-weight: 600; color: var(--agri-text-heading);">No audit log entries found.</p>
                     </div>
                 @else
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0 align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Action</th>
-                                    <th>Performed By</th>
-                                    <th>Thread</th>
-                                    <th>Reply</th>
-                                    <th>Meta</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($logs as $log)
-                                @php
-                                    // Colour-code actions by category
-                                    $actionColor = 'secondary';
-                                    if (str_starts_with($log->action, 'thread.')) {
-                                        $actionColor = match(true) {
-                                            str_contains($log->action, 'delete')  => 'danger',
-                                            str_contains($log->action, 'lock')    => 'warning',
-                                            str_contains($log->action, 'resolve') => 'success',
-                                            str_contains($log->action, 'archive') => 'secondary',
-                                            str_contains($log->action, 'pin')     => 'info',
-                                            default                               => 'primary',
-                                        };
-                                    } elseif (str_starts_with($log->action, 'reply.')) {
-                                        $actionColor = match(true) {
-                                            str_contains($log->action, 'delete')   => 'danger',
-                                            str_contains($log->action, 'flag')     => 'warning',
-                                            str_contains($log->action, 'official') => 'success',
-                                            default                                => 'info',
-                                        };
-                                    } elseif (str_starts_with($log->action, 'user.')) {
-                                        $actionColor = str_contains($log->action, 'ban') ? 'danger' : 'success';
-                                    }
-                                @endphp
-                                <tr>
-                                    <td class="text-muted small">{{ $log->id }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ $actionColor }}">{{ $log->action }}</span>
-                                    </td>
-                                    <td>
-                                        @if($log->user)
-                                            <span class="fw-semibold small">{{ $log->user->name }}</span>
-                                            <br><span class="text-muted" style="font-size:11px;">#{{ $log->user_id }}</span>
+                    <table class="table mb-0" style="vertical-align: middle;">
+                        <thead style="background: var(--agri-bg);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; width: 60px;">#</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Action</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Performed By</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Thread</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Reply</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Meta</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($logs as $log)
+                            @php
+                                // Colour-code actions by category
+                                $actionColors = [
+                                    'primary'   => ['#E0E7FF', '#3730A3'],
+                                    'danger'    => ['#FEE2E2', '#991B1B'],
+                                    'warning'   => ['#FEF3C7', '#92400E'],
+                                    'success'   => ['#D1FAE5', '#065F46'],
+                                    'info'      => ['#E0F2FE', '#0369A1'],
+                                    'secondary' => ['#F3F4F6', '#4B5563'],
+                                ];
+                                
+                                $actionColorKey = 'secondary';
+                                if (str_starts_with($log->action, 'thread.')) {
+                                    $actionColorKey = match(true) {
+                                        str_contains($log->action, 'delete')  => 'danger',
+                                        str_contains($log->action, 'lock')    => 'warning',
+                                        str_contains($log->action, 'resolve') => 'success',
+                                        str_contains($log->action, 'archive') => 'secondary',
+                                        str_contains($log->action, 'pin')     => 'info',
+                                        default                               => 'primary',
+                                    };
+                                } elseif (str_starts_with($log->action, 'reply.')) {
+                                    $actionColorKey = match(true) {
+                                        str_contains($log->action, 'delete')   => 'danger',
+                                        str_contains($log->action, 'flag')     => 'warning',
+                                        str_contains($log->action, 'official') => 'success',
+                                        default                                => 'info',
+                                    };
+                                } elseif (str_starts_with($log->action, 'user.')) {
+                                    $actionColorKey = str_contains($log->action, 'ban') ? 'danger' : 'success';
+                                }
+                                $ac = $actionColors[$actionColorKey];
+                            @endphp
+                            <tr style="border-bottom: 1px solid var(--agri-border);">
+                                <td style="padding: 18px 24px; font-size: 13px; font-weight: 600; color: var(--agri-text-muted);">{{ $log->id }}</td>
+                                <td style="padding: 18px 24px;">
+                                    <span style="background: {{ $ac[0] }}; color: {{ $ac[1] }}; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid {{ $ac[0] }}; font-family: monospace;">{{ $log->action }}</span>
+                                </td>
+                                <td style="padding: 18px 24px;">
+                                    @if($log->user)
+                                        <div style="font-size: 14px; font-weight: 700; color: var(--agri-text-main);">{{ $log->user->name }}</div>
+                                        <div style="font-size: 12px; color: var(--agri-text-muted);">#{{ $log->user_id }}</div>
+                                    @else
+                                        <span style="font-size: 13px; color: var(--agri-text-muted); font-weight: 600;">#{{ $log->user_id }}</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 18px 24px; max-width:200px;">
+                                    @if($log->thread)
+                                        <a href="{{ route('admin.forum.threads.show', $log->thread_id) }}" style="font-size: 13px; font-weight: 700; color: var(--agri-primary); text-decoration: none;" title="{{ $log->thread->title }}">
+                                            {{ Str::limit($log->thread->title, 50) }}
+                                        </a>
+                                    @elseif($log->thread_id)
+                                        <span style="font-size: 13px; color: var(--agri-text-muted);">#{{ $log->thread_id }} <em style="font-size: 11px; opacity: 0.7;">(deleted)</em></span>
+                                    @else
+                                        <span style="font-size: 13px; color: var(--agri-text-muted);">—</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 18px 24px;">
+                                    @if($log->reply)
+                                        <span style="font-size: 13px; font-weight: 600; color: var(--agri-text-main);">#{{ $log->reply_id }}</span>
+                                    @elseif($log->reply_id)
+                                        <span style="font-size: 13px; color: var(--agri-text-muted);">#{{ $log->reply_id }} <em style="font-size: 11px; opacity: 0.7;">(deleted)</em></span>
+                                    @else
+                                        <span style="font-size: 13px; color: var(--agri-text-muted);">—</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 18px 24px; max-width:200px;">
+                                    @if($log->meta)
+                                        @php $meta = is_array($log->meta) ? $log->meta : json_decode($log->meta, true); @endphp
+                                        @if($meta)
+                                            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px;">
+                                                @foreach($meta as $k => $v)
+                                                    @if(!is_null($v) && $v !== '')
+                                                    <div style="display: flex; align-items: flex-start;">
+                                                        <strong style="color: var(--agri-text-muted); margin-right: 6px; white-space: nowrap;">{{ $k }}:</strong>
+                                                        <span style="color: var(--agri-text-main); word-break: break-all;">{{ is_bool($v) ? ($v ? 'yes' : 'no') : Str::limit((string) $v, 40) }}</span>
+                                                    </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         @else
-                                            <span class="text-muted small">#{{ $log->user_id }}</span>
+                                            <span style="font-size: 13px; color: var(--agri-text-muted);">—</span>
                                         @endif
-                                    </td>
-                                    <td style="max-width:200px;">
-                                        @if($log->thread)
-                                            <a href="{{ route('admin.forum.threads.show', $log->thread_id) }}"
-                                               class="text-dark small text-decoration-none"
-                                               title="{{ $log->thread->title }}">
-                                                {{ Str::limit($log->thread->title, 50) }}
-                                            </a>
-                                        @elseif($log->thread_id)
-                                            <span class="text-muted small">#{{ $log->thread_id }} <em>(deleted)</em></span>
-                                        @else
-                                            <span class="text-muted">—</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($log->reply)
-                                            <span class="small text-muted">#{{ $log->reply_id }}</span>
-                                        @elseif($log->reply_id)
-                                            <span class="text-muted small">#{{ $log->reply_id }} <em>(deleted)</em></span>
-                                        @else
-                                            <span class="text-muted">—</span>
-                                        @endif
-                                    </td>
-                                    <td style="max-width:200px;">
-                                        @if($log->meta)
-                                            @php $meta = is_array($log->meta) ? $log->meta : json_decode($log->meta, true); @endphp
-                                            @if($meta)
-                                                <ul class="list-unstyled mb-0 small text-muted">
-                                                    @foreach($meta as $k => $v)
-                                                        @if(!is_null($v) && $v !== '')
-                                                        <li>
-                                                            <span class="fw-semibold">{{ $k }}:</span>
-                                                            {{ is_bool($v) ? ($v ? 'yes' : 'no') : Str::limit((string) $v, 40) }}
-                                                        </li>
-                                                        @endif
-                                                    @endforeach
-                                                </ul>
-                                            @else
-                                                <span class="text-muted">—</span>
-                                            @endif
-                                        @else
-                                            <span class="text-muted">—</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-muted small" style="white-space:nowrap;">
-                                        {{ $log->created_at->format('d M Y') }}<br>
-                                        {{ $log->created_at->format('H:i:s') }}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="px-4 py-3">
-                        {{ $logs->links() }}
-                    </div>
+                                    @else
+                                        <span style="font-size: 13px; color: var(--agri-text-muted);">—</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 18px 24px; color: var(--agri-text-muted); font-size: 12px; white-space: nowrap;">
+                                    {{ $log->created_at->format('d M Y') }}<br>
+                                    {{ $log->created_at->format('H:i:s') }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
+            @if($logs->hasPages())
+            <div style="padding: 24px; border-top: 1px solid var(--agri-border); display: flex; justify-content: center;">
+                {{ $logs->links() }}
+            </div>
+            @endif
         </div>
 
         {{-- Action Legend --}}
-        <div class="mt-3 d-flex flex-wrap gap-2">
-            <span class="badge bg-primary">thread.*</span>
-            <span class="badge bg-danger">thread.delete / reply.delete</span>
-            <span class="badge bg-warning text-dark">thread.lock / reply.flag</span>
-            <span class="badge bg-success">thread.resolve / reply.official</span>
-            <span class="badge bg-info">thread.pin / reply.edit</span>
-            <span class="badge bg-danger">user.ban</span>
-            <span class="badge bg-success">user.unban</span>
+        <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+            <span style="background: #E0E7FF; color: #3730A3; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid #C7D2FE; font-family: monospace;">thread.*</span>
+            <span style="background: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid #FECACA; font-family: monospace;">thread.delete / reply.delete / user.ban</span>
+            <span style="background: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid #FDE68A; font-family: monospace;">thread.lock / reply.flag</span>
+            <span style="background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid #A7F3D0; font-family: monospace;">thread.resolve / reply.official / user.unban</span>
+            <span style="background: #E0F2FE; color: #0369A1; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid #BAE6FD; font-family: monospace;">thread.pin / reply.edit</span>
         </div>
 
     </div>

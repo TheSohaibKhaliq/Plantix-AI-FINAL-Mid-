@@ -2,47 +2,53 @@
 
 @section('content')
 <div class="page-wrapper">
-    <div class="row page-titles mb-4 pb-3 border-bottom">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-bell text-success me-2"></i>Send Notification</h3>
-        </div>
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.notification') }}">Notifications</a></li>
-                <li class="breadcrumb-item active">Send</li>
-            </ol>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <a href="{{ route('admin.notification') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                    Notifications
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <span style="color: var(--agri-primary); font-size: 13px; font-weight: 600;">Send</span>
+            </div>
+            <h1 style="font-size: 26px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;"><i class="fa fa-bell text-success me-2"></i>Send Notification</h1>
         </div>
     </div>
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                    <div class="card-header bg-white border-bottom py-3">
-                        <h5 class="mb-0 fw-bold text-dark"><i class="fa fa-bullhorn me-2 text-success"></i>Broadcast Notification</h5>
+                <div class="card-agri" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); display: flex; align-items: center; justify-content: space-between;">
+                        <h2 style="font-size: 18px; font-weight: 800; color: var(--agri-text-heading); margin: 0; display: flex; align-items: center; gap: 12px;">
+                            <i class="fa fa-bullhorn" style="color: var(--agri-primary);"></i> Broadcast Notification
+                        </h2>
                     </div>
-                    <div class="card-body p-4">
-                        <div id="data-table_processing" class="text-center py-3" style="display: none;">
+                    <div style="padding: 32px 28px;">
+                        <div id="data-table_processing" class="text-center py-3" style="display: none; color: var(--agri-text-muted);">
                             <i class="fa fa-spinner fa-spin me-2"></i> Sending...
                         </div>
-                        <div class="error_top alert alert-danger rounded border-0 shadow-sm" style="display:none"></div>
-                        <div class="success_top alert alert-success rounded border-0 shadow-sm" style="display:none"></div>
+                        <div class="error_top alert alert-danger" style="display:none; background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; border-radius: 12px; padding: 16px; font-size: 14px; font-weight: 600; margin-bottom: 24px;"></div>
+                        <div class="success_top alert alert-success" style="display:none; background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; border-radius: 12px; padding: 16px; font-size: 14px; font-weight: 600; margin-bottom: 24px;"></div>
 
                         <div class="row">
                             <div class="col-md-10 mx-auto">
                                 <div class="mb-4">
-                                    <label class="form-label fw-semibold text-muted">Subject</label>
-                                    <input type="text" class="form-control shadow-sm rounded-pill border-0" style="background:#f8f9fa;" id="subject" placeholder="Enter notification subject...">
+                                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Subject</label>
+                                    <input type="text" class="form-agri" id="subject" placeholder="Enter notification subject...">
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label fw-semibold text-muted">Message</label>
-                                    <textarea class="form-control shadow-sm border-0" style="background:#f8f9fa; border-radius:12px;" rows="5" id="message" placeholder="Enter the notification message..."></textarea>
+                                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Message</label>
+                                    <textarea class="form-agri" rows="5" id="message" placeholder="Enter the notification message..."></textarea>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label fw-semibold text-muted">Send To</label>
-                                    <select id="role" class="form-control shadow-sm rounded-pill border-0" style="background:#f8f9fa;">
+                                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Send To</label>
+                                    <select id="role" class="form-agri">
                                         <option value="customer">Customers (Farmers)</option>
                                         <option value="vendor">Vendors</option>
                                         <option value="expert">Experts</option>
@@ -52,12 +58,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-white border-top py-4 d-flex justify-content-end gap-3" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-                        <a href="{{ route('admin.notification') }}" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold border">
-                            <i class="fa fa-undo me-2"></i>Cancel
+                    <div style="padding: 24px 28px; border-top: 1px solid var(--agri-border); display: flex; justify-content: flex-end; gap: 16px; background: #F9FAFB;">
+                        <a href="{{ route('admin.notification') }}" class="btn-agri btn-agri-outline" style="text-decoration: none;">
+                            <i class="fa fa-undo"></i> Cancel
                         </a>
-                        <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold save-form-btn">
-                            <i class="fa fa-paper-plane me-2"></i>Send Notification
+                        <button type="button" class="btn-agri btn-agri-primary save-form-btn">
+                            <i class="fa fa-paper-plane"></i> Send Notification
                         </button>
                     </div>
                 </div>

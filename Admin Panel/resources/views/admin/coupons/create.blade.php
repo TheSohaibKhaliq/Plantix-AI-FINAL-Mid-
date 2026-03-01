@@ -22,7 +22,7 @@
                 <div id="data-table_processing" class="dataTables_processing" style="display: none; background: rgba(255,255,255,0.9); z-index: 10; position: absolute; top:0; left:0; width:100%; height:100%; border-radius: 16px; align-items: center; justify-content: center;">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
                         <div class="spinner-border" role="status" style="width: 3rem; height: 3rem; color: var(--agri-primary);"></div>
-                        <div style="font-weight: 800; color: var(--agri-primary); letter-spacing: 1px;">INITIALIZING TELEMETRY...</div>
+                        <div style="font-weight: 800; color: var(--agri-primary); letter-spacing: 1px;">LOADING...</div>
                     </div>
                 </div>
 

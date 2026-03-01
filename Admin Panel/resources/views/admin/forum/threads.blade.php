@@ -3,130 +3,146 @@
 @section('content')
 <div class="page-wrapper">
 
-    <div class="row page-titles mb-4 pb-3 border-bottom">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor fw-bold"><i class="fa fa-comments text-success me-2"></i> Forum Threads</h3>
-        </div>
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.forum.index') }}">Forum</a></li>
-                <li class="breadcrumb-item active">Threads</li>
-            </ol>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <a href="{{ route('admin.forum.index') }}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                    Forum
+                </a>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
+                <span style="color: var(--agri-primary); font-size: 13px; font-weight: 600;">Threads</span>
+            </div>
+            <h1 style="font-size: 26px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;"><i class="fa fa-comments text-success me-2"></i> Forum Threads</h1>
         </div>
     </div>
 
     <div class="container-fluid">
 
         {{-- Filters --}}
-        <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
-            <div class="card-body py-3">
-                <form method="GET" class="row g-2 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label small fw-semibold text-muted mb-1">Search</label>
-                        <input type="text" name="search" class="form-control form-control-sm rounded-pill border-0 bg-light"
-                               placeholder="Title or content…" value="{{ request('search') }}">
+        <div class="card-agri mb-4" style="padding: 24px;">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Search</label>
+                    <div style="position: relative;">
+                        <i class="fa fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--agri-text-muted);"></i>
+                        <input type="text" name="search" class="form-agri" style="padding-left: 40px;" placeholder="Title or content…" value="{{ request('search') }}">
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-semibold text-muted mb-1">Status</label>
-                        <select name="status" class="form-select form-select-sm rounded-pill border-0 bg-light">
-                            <option value="">All Statuses</option>
-                            <option value="open"     {{ request('status') === 'open'     ? 'selected' : '' }}>Open</option>
-                            <option value="locked"   {{ request('status') === 'locked'   ? 'selected' : '' }}>Locked</option>
-                            <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                            <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-semibold text-muted mb-1">Category</label>
-                        <select name="category_id" class="form-select form-select-sm rounded-pill border-0 bg-light">
-                            <option value="">All Categories</option>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex gap-2">
-                        <button type="submit" class="btn btn-success btn-sm w-50 rounded-pill">Filter</button>
-                        <a href="{{ route('admin.forum.threads') }}" class="btn btn-outline-secondary btn-sm w-50 rounded-pill">Reset</a>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="col-md-3">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Status</label>
+                    <select name="status" class="form-agri">
+                        <option value="">All Statuses</option>
+                        <option value="open"     {{ request('status') === 'open'     ? 'selected' : '' }}>Open</option>
+                        <option value="locked"   {{ request('status') === 'locked'   ? 'selected' : '' }}>Locked</option>
+                        <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Resolved</option>
+                        <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Category</label>
+                    <select name="category_id" class="form-agri">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn-agri btn-agri-primary w-50" style="justify-content: center;">Filter</button>
+                    <a href="{{ route('admin.forum.threads') }}" class="btn-agri btn-agri-outline w-50" style="justify-content: center; text-decoration: none;">Reset</a>
+                </div>
+            </form>
         </div>
 
         {{-- Threads Table --}}
-        <div class="card border-0 shadow-sm" style="border-radius:16px;">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">All Threads</h5>
-                <span class="text-muted small">{{ $threads->total() }} total</span>
+        <div class="card-agri" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 28px; border-bottom: 1px solid var(--agri-border); display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 36px; height: 36px; background: var(--agri-primary-light); color: var(--agri-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa fa-comments"></i></div>
+                    <h6 style="margin: 0; font-weight: 800; color: var(--agri-text-heading); font-size: 14px; text-transform: uppercase;">All Threads</h6>
+                </div>
+                <span style="background: var(--agri-bg); color: var(--agri-text-muted); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800;">{{ $threads->total() }} total</span>
             </div>
-            <div class="card-body p-0">
+            <div class="table-responsive">
                 @if($threads->isEmpty())
-                    <div class="text-center py-5 text-muted">
-                        <i class="fa fa-comments fa-3x mb-3 d-block"></i>No threads found.
+                    <div style="padding: 60px 24px; text-align: center; color: var(--agri-text-muted);">
+                        <i class="fa fa-comments" style="font-size: 48px; opacity: 0.3; margin-bottom: 16px;"></i>
+                        <p style="margin: 0; font-weight: 600; color: var(--agri-text-heading);">No threads found.</p>
+                        <p style="margin: 4px 0 0 0; font-size: 14px;">Try adjusting your filters.</p>
                     </div>
                 @else
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0 align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Category</th>
-                                    <th>Replies</th>
-                                    <th>Status</th>
-                                    <th>Pinned</th>
-                                    <th>Created</th>
-                                    <th style="min-width:160px;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($threads as $thread)
-                                <tr>
-                                    <td class="text-muted small">{{ $thread->id }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.forum.threads.show', $thread->id) }}" class="text-dark fw-semibold text-decoration-none">
-                                            {{ Str::limit($thread->title, 55) }}
-                                        </a>
-                                    </td>
-                                    <td>{{ optional($thread->user)->name ?? '—' }}</td>
-                                    <td>
-                                        <span class="badge bg-light text-dark border">{{ optional($thread->category)->name ?? '—' }}</span>
-                                    </td>
-                                    <td class="text-center">{{ $thread->replies_count }}</td>
-                                    <td>
-                                        @php
-                                            $colors = ['open'=>'success','locked'=>'secondary','resolved'=>'info','archived'=>'dark'];
-                                            $c = $colors[$thread->status] ?? 'light';
-                                        @endphp
-                                        <span class="badge bg-{{ $c }}">{{ ucfirst($thread->status) }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        @if($thread->is_pinned)
-                                            <i class="fa fa-thumbtack text-warning" title="Pinned"></i>
-                                        @else
-                                            <span class="text-muted">—</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-muted small">{{ $thread->created_at->format('d M Y') }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.forum.threads.show', $thread->id) }}" class="btn btn-xs btn-outline-primary me-1">
+                    <table class="table mb-0" style="vertical-align: middle;">
+                        <thead style="background: var(--agri-bg);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; width: 60px;">#</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Title</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Author</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Category</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: center;">Replies</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Status</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: center;">Pinned</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Created</th>
+                                <th style="padding: 16px 24px; font-size: 12px; font-weight: 700; color: var(--agri-text-muted); text-transform: uppercase; border: none; text-align: end; min-width: 160px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($threads as $thread)
+                            <tr style="border-bottom: 1px solid var(--agri-border);">
+                                <td style="padding: 18px 24px; font-size: 13px; font-weight: 600; color: var(--agri-text-muted);">{{ $thread->id }}</td>
+                                <td style="padding: 18px 24px;">
+                                    <a href="{{ route('admin.forum.threads.show', $thread->id) }}" style="font-size: 14px; font-weight: 700; color: var(--agri-text-heading); text-decoration: none; display: block; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ Str::limit($thread->title, 55) }}
+                                    </a>
+                                </td>
+                                <td style="padding: 18px 24px; font-size: 13px; color: var(--agri-text-main);">{{ optional($thread->user)->name ?? '—' }}</td>
+                                <td style="padding: 18px 24px;">
+                                    <span style="background: var(--agri-bg); border: 1px solid var(--agri-border); color: var(--agri-text-heading); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">{{ optional($thread->category)->name ?? '—' }}</span>
+                                </td>
+                                <td style="padding: 18px 24px; text-align: center; font-size: 14px; font-weight: 800; color: var(--agri-primary-dark);">{{ $thread->replies_count }}</td>
+                                <td style="padding: 18px 24px;">
+                                    @php
+                                        $colors = [
+                                            'open'     => ['#D1FAE5', '#065F46'],
+                                            'locked'   => ['#F3F4F6', '#4B5563'],
+                                            'resolved' => ['#E0F2FE', '#0369A1'],
+                                            'archived' => ['#FEF3C7', '#92400E'],
+                                        ];
+                                        $c = $colors[$thread->status] ?? ['#F9FAFB', '#6B7280'];
+                                    @endphp
+                                    <span style="background: {{ $c[0] }}; color: {{ $c[1] }}; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800; border: 1px solid {{ $c[0] }};">
+                                        {{ ucfirst($thread->status) }}
+                                    </span>
+                                </td>
+                                <td style="padding: 18px 24px; text-align: center;">
+                                    @if($thread->is_pinned)
+                                        <i class="fa fa-thumbtack" style="color: #D97706;" title="Pinned"></i>
+                                    @else
+                                        <span style="color: var(--agri-text-muted);">—</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 18px 24px; font-size: 13px; color: var(--agri-text-muted);">{{ $thread->created_at->format('d M Y') }}</td>
+                                <td style="padding: 18px 24px; text-align: end;">
+                                    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                        <a href="{{ route('admin.forum.threads.show', $thread->id) }}" class="btn-agri btn-agri-primary" style="padding: 6px 10px; font-size: 12px; font-weight: 600; text-decoration: none;">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         {{-- Action drop-down --}}
-                                        <div class="btn-group btn-group-sm me-1">
-                                            <button type="button" class="btn btn-xs btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                                                Actions
+                                        <div class="dropdown">
+                                            <button type="button" class="btn-agri" style="padding: 6px 10px; background: var(--agri-bg); color: var(--agri-text-muted); border: 1px solid var(--agri-border); font-size: 12px; font-weight: 600;" data-bs-toggle="dropdown">
+                                                Actions <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
+                                            <ul class="dropdown-menu dropdown-menu-end" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-radius: 12px; padding: 8px;">
                                                 @if(!$thread->is_approved)
                                                 <li>
                                                     <form method="POST" action="{{ route('admin.forum.threads.approve', $thread->id) }}">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item text-success"><i class="fa fa-check me-1"></i>Approve</button>
+                                                        <button type="submit" class="dropdown-item" style="font-size: 13px; font-weight: 600; color: #10B981; padding: 8px 16px; border-radius: 8px;"><i class="fa fa-check" style="margin-right: 8px;"></i>Approve</button>
                                                     </form>
                                                 </li>
                                                 @endif
@@ -134,7 +150,7 @@
                                                 <li>
                                                     <form method="POST" action="{{ route('admin.forum.threads.lock', $thread->id) }}">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item"><i class="fa fa-lock me-1"></i>Lock</button>
+                                                        <button type="submit" class="dropdown-item" style="font-size: 13px; font-weight: 600; color: var(--agri-text-main); padding: 8px 16px; border-radius: 8px;"><i class="fa fa-lock" style="margin-right: 8px; color: var(--agri-text-muted);"></i>Lock</button>
                                                     </form>
                                                 </li>
                                                 @endif
@@ -142,7 +158,7 @@
                                                 <li>
                                                     <form method="POST" action="{{ route('admin.forum.threads.unlock', $thread->id) }}">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item"><i class="fa fa-unlock me-1"></i>Unlock</button>
+                                                        <button type="submit" class="dropdown-item" style="font-size: 13px; font-weight: 600; color: var(--agri-text-main); padding: 8px 16px; border-radius: 8px;"><i class="fa fa-unlock" style="margin-right: 8px; color: var(--agri-text-muted);"></i>Unlock</button>
                                                     </form>
                                                 </li>
                                                 @endif
@@ -150,38 +166,39 @@
                                                 <li>
                                                     <form method="POST" action="{{ route('admin.forum.threads.archive', $thread->id) }}">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item text-secondary"><i class="fa fa-archive me-1"></i>Archive</button>
+                                                        <button type="submit" class="dropdown-item" style="font-size: 13px; font-weight: 600; color: var(--agri-text-main); padding: 8px 16px; border-radius: 8px;"><i class="fa fa-archive" style="margin-right: 8px; color: var(--agri-text-muted);"></i>Archive</button>
                                                     </form>
                                                 </li>
                                                 @endif
                                             </ul>
                                         </div>
                                         {{-- Pin toggle --}}
-                                        <form method="POST" action="{{ route('admin.forum.threads.pin', $thread->id) }}" class="d-inline me-1">
+                                        <form method="POST" action="{{ route('admin.forum.threads.pin', $thread->id) }}" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-xs btn-outline-warning" title="{{ $thread->is_pinned ? 'Unpin' : 'Pin' }}">
+                                            <button type="submit" class="btn-agri" style="padding: 6px 10px; background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; font-size: 12px; font-weight: 600;" title="{{ $thread->is_pinned ? 'Unpin' : 'Pin' }}">
                                                 <i class="fa fa-thumbtack"></i>
                                             </button>
                                         </form>
                                         {{-- Delete --}}
-                                        <form method="POST" action="{{ route('admin.forum.threads.destroy', $thread->id) }}" class="d-inline"
-                                              onsubmit="return confirm('Delete thread permanently?')">
+                                        <form method="POST" action="{{ route('admin.forum.threads.destroy', $thread->id) }}" class="d-inline" onsubmit="return confirm('Delete thread permanently?')">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-xs btn-outline-danger">
+                                            <button type="submit" class="btn-agri" style="padding: 6px 10px; background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; font-size: 12px; font-weight: 600;">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="px-4 py-3">
-                        {{ $threads->links() }}
-                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
+            @if($threads->hasPages())
+            <div style="padding: 24px; border-top: 1px solid var(--agri-border); display: flex; justify-content: center;">
+                {{ $threads->links() }}
+            </div>
+            @endif
         </div>
 
     </div>

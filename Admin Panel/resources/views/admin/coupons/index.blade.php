@@ -73,7 +73,7 @@
         <div id="data-table_processing" class="dataTables_processing" style="display: none; background: rgba(255,255,255,0.9); color: var(--agri-primary); font-weight: 800; border-radius: 12px; z-index: 10; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top:0; left:0;">
             <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
                 <div class="spinner-border" role="status" style="width: 3rem; height: 3rem; color: var(--agri-primary);"></div>
-                <div>INITIALIZING TELEMETRY...</div>
+                <div>LOADING...</div>
             </div>
         </div>
 

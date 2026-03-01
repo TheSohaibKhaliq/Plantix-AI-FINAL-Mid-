@@ -29,10 +29,37 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::where('role', 'customer')
+        $users = User::where('role', 'user')
                      ->orderByDesc('created_at')
                      ->get();
         return view("admin.settings.users.index", compact('users'));
+    }
+
+    public function updateUserProfile(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->first_name = $request->input('first_name', $user->first_name);
+        $user->last_name  = $request->input('last_name',  $user->last_name);
+        $user->phone      = $request->input('phone_number', $user->phone);
+        $user->active     = $request->boolean('is_active');
+
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profiles', 'public');
+            $user->profile_photo = $path;
+        }
+
+        $user->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function sendPasswordReset(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $status = Password::broker()->sendResetLink(['email' => $user->email]);
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false, 'message' => __($status)], 422);
     }
 
     public function edit($id)

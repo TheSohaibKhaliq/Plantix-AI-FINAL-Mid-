@@ -30,18 +30,6 @@
                         </div>
                     </div>
                 </div>
-
-            <div class="card-agri" style="padding: 24px; padding-left: 32px; border-left: 6px solid var(--agri-primary); transition: transform 0.2s;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <p style="font-size: 13px; font-weight: 600; color: var(--agri-text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">{{trans('lang.wallet_Balance')}}</p>
-                        <h2 style="font-size: 32px; font-weight: 800; color: var(--agri-primary); margin: 0;" id="wallet_amount">0</h2>
-                    </div>
-                    <div style="width: 56px; height: 56px; border-radius: 14px; background: var(--agri-primary-light); color: var(--agri-primary); display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                        <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                </div>
             </a>
         </div>
     </div>
@@ -161,26 +149,24 @@
 
 @section('scripts')
 <script>
-    var id             = "<?php echo $id; ?>";
-    var currentCurrency  = @json($currencySymbol);
-    var currencyAtRight  = @json($currencyAtRight);
-    var decimal_degits   = @json($decimalDigits);
+    var id               = '{{ $id }}';
+    var currentCurrency  = '{{ $currencySymbol }}';
+    var currencyAtRight  = {{ $currencyAtRight ? 'true' : 'false' }};
+    var decimal_degits   = {{ (int)$decimalDigits }};
     var photoFile        = null;
-    var currentImageUrl  = '';
-    var placeholderImage = @json($placeholderImage);
+    var placeholderImage = '{{ asset('images/placeholder.png') }}';
 
     // ── User data injected server-side ────────────────────────────────────
     @if($user)
-    var userData = @json([
-        'first_name'          => $user->first_name,
-        'last_name'           => $user->last_name,
-        'email'               => $user->email,
-        'phone_number'        => $user->phone_number,
-        'wallet_amount'       => $user->wallet_amount,
-        'profile_picture_url' => $user->profile_photo,
-        'is_active'           => (bool)$user->active,
-    ]);
-    var totalOrders = @json($totalOrders);
+    var userData = {
+        first_name:          '{{ addslashes($user->first_name ?? '') }}',
+        last_name:           '{{ addslashes($user->last_name ?? '') }}',
+        email:               '{{ addslashes($user->email ?? '') }}',
+        phone_number:        '{{ addslashes($user->phone ?? '') }}',
+        profile_picture_url: '{{ $user->profile_photo ? asset('storage/'.$user->profile_photo) : '' }}',
+        is_active:           {{ $user->active ? 'true' : 'false' }},
+    };
+    var totalOrders = {{ (int)$totalOrders }};
     @else
     var userData = null;
     var totalOrders = 0;
@@ -190,11 +176,9 @@
         if ($("#reset_password").is(":checked")) {
             var email = $(".user_email").val();
             $.ajax({
-                url: '{{ route("api.admin.users.send-password-reset", ":id") }}'.replace(':id', id),
+                url: '{{ route("admin.users.send-reset", ":id") }}'.replace(':id', id),
                 method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+                data: { _token: '{{ csrf_token() }}' },
                 success: function(response) {
                     alert('{{trans("lang.mail_sent")}}');
                 },
@@ -215,22 +199,13 @@
             $(".user_email").val(user.email || '');
             $(".user_phone").val(user.phone_number || '');
 
-            if (user.profile_picture_url && user.profile_picture_url != '') {
-                currentImageUrl = user.profile_picture_url;
-                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + user.profile_picture_url + '" alt="image">');
-            } else {
-                $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + placeholderImage + '" alt="image">');
-            }
+            var imgSrc = user.profile_picture_url || placeholderImage;
+            $(".user_image").html('<img class="rounded" style="width:100%; height:100%; object-fit:cover;" src="' + imgSrc + '" alt="image">');
 
             if (user.is_active) $(".user_active").prop('checked', true);
 
-            var wallet_amount = user.wallet_amount || 0;
-            if (currencyAtRight) {
-                wallet_amount = parseFloat(wallet_amount).toFixed(decimal_degits) + currentCurrency;
-            } else {
-                wallet_amount = currentCurrency + parseFloat(wallet_amount).toFixed(decimal_degits);
+            if (false) {
             }
-            $("#wallet_amount").text(wallet_amount);
             $("#total_orders").text(totalOrders);
         }
 
@@ -251,6 +226,7 @@
 
                 // Prepare form data
                 var formData = new FormData();
+                formData.append('_token', '{{ csrf_token() }}');
                 formData.append('first_name', userFirstName);
                 formData.append('last_name', userLastName);
                 formData.append('phone_number', userPhone);
@@ -261,14 +237,11 @@
 
                 // Update user via API
                 $.ajax({
-                    url: '{{ route("api.admin.users.update", ":id") }}'.replace(':id', id),
+                    url: '{{ route("admin.users.update-profile", ":id") }}'.replace(':id', id),
                     method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    data: formData,
                     processData: false,
                     contentType: false,
-                    data: formData,
                     success: function(response) {
                         jQuery("#data-table_processing").hide();
                         window.location.href = '{{ route("admin.users")}}';

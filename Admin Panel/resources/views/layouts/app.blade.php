@@ -58,7 +58,12 @@
 
     <link href="{{ asset('assets/plugins/summernote/summernote-bs4.css') }}" rel="stylesheet">
 
-    
+    <!-- FontAwesome 6 (Used heavily in the admin panel) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Icon Libraries Missing from the Redesign -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="{{ asset('css/icons/themify-icons/themify-icons.css') }}" rel="stylesheet">
     
     <!-- AgriTech Redesign: Core Design System -->
     <link href="{{ asset('css/agritech-redesign.css') }}" rel="stylesheet">
@@ -148,7 +153,7 @@
 
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
 <script src="{{ asset('assets/plugins/bootstrap/js/popper.min.js') }}"></script>
 
@@ -257,111 +262,11 @@
         return true;
     }
 
-    async function loadGoogleMapsScript() {
-        // Firebase geolocation removed - using browser geolocation
-        const script = document.createElement('script');
-        let googleMapKey = 'AIzaSyD7-lVVm_uo5ydwCqRYZUP9Sy_qHF8Oi8w'; // Fallback key
-        script.src = "https://maps.googleapis.com/maps/api/js?key=" + googleMapKey + "&libraries=drawing,geometry,places";
-        script.onload = function () {
-            navigator.geolocation.getCurrentPosition(GeolocationSuccessCallback, GeolocationErrorCallback);
-            if(typeof window['InitializeGodsEyeMap'] === 'function') {
-                InitializeGodsEyeMap();
-            }
-        };
-        document.head.appendChild(script);
-    }
+    function loadGoogleMapsScript() { /* Google Maps removed */ }
 
 
 
-    const GeolocationSuccessCallback = (position) => {
-
-        if(position.coords != undefined){
-
-            default_latitude = position.coords.latitude
-
-            default_longitude = position.coords.longitude
-
-            setCookie('default_latitude', default_latitude, 365);
-
-            setCookie('default_longitude', default_longitude, 365);
-
-        }
-
-    };
-
-
-
-    const GeolocationErrorCallback = (error) => {
-
-        console.log('Error: You denied for your default Geolocation',error.message);
-
-        setCookie('default_latitude', '23.022505', 365);
-
-        setCookie('default_longitude','72.571365', 365);
-
-    };
-
-
-
-    loadGoogleMapsScript();
-
-
-
-    async function sendNotification(fcmToken = '', title, body) {
-
-        var checkFlag = false;
-
-        // FCM notification endpoint (route not yet defined)
-        var sendNotificationUrl = null;
-
-        if (fcmToken !== '' && sendNotificationUrl) {
-
-            await $.ajax({
-
-                type: 'POST',
-
-                url: sendNotificationUrl,
-
-                data: {
-
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-
-                    'fcm': fcmToken,
-
-                    'title': title,
-
-                    'message': body
-
-                },
-
-                success: function (data) {
-
-                    checkFlag = true;
-
-                },
-
-                error: function (error) {
-
-                    checkFlag = true;
-
-                }
-
-            });
-
-        } else {
-
-            checkFlag = true;
-
-        }
-
-
-
-        return checkFlag;
-
-    }
-
-
-    // Firebase notification service removed
+    // Geolocation and Google Maps removed
 
 </script>
 

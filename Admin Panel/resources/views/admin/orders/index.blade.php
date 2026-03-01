@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Fulfillment Command Center')
+@section('title', 'Orders')
 
 @section('content')
 <div class="container-fluid" style="padding-top: 24px; padding-bottom: 40px;">
@@ -9,17 +9,17 @@
     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px;">
         <div>
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                <a href="{{url('/dashboard')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">E-Commerce Hub</a>
+                <a href="{{url('/dashboard')}}" style="text-decoration: none; color: var(--agri-text-muted); font-size: 14px; font-weight: 600;">Dashboard</a>
                 <i class="fas fa-chevron-right" style="font-size: 10px; color: var(--agri-text-muted);"></i>
-                <span style="color: var(--agri-primary); font-size: 14px; font-weight: 600;">Transaction Telemetry</span>
+                <span style="color: var(--agri-primary); font-size: 14px; font-weight: 600;">Orders</span>
             </div>
-            <h1 style="font-size: 28px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;">Multi-Channel Fulfillment Hub</h1>
-            <p style="color: var(--agri-text-muted); margin: 4px 0 0 0;">Provide real-time oversight of cross-platform commerce velocity and logistics routing.</p>
+            <h1 style="font-size: 28px; font-weight: 700; color: var(--agri-primary-dark); margin: 0;">Orders</h1>
+            <p style="color: var(--agri-text-muted); margin: 4px 0 0 0;">Manage and track all customer orders.</p>
         </div>
         <div style="display: flex; gap: 16px;">
             <div style="background: white; padding: 10px 20px; border-radius: 14px; border: 1px solid var(--agri-border); font-size: 13px; font-weight: 800; color: var(--agri-primary); display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                 <i class="fas fa-satellite-dish"></i>
-                LIVE TELEMETRY: {{ $orders->total() }} ACTIVE NODES
+                TOTAL ORDERS: {{ $orders->total() }}
             </div>
         </div>
     </div>
@@ -29,17 +29,17 @@
         <form method="GET" action="{{ route('admin.orders.index') }}">
             <div class="row g-4">
                 <div class="col-lg-4">
-                    <label class="agri-filter-label">Transaction Identifier</label>
+                    <label class="agri-filter-label">Order ID / User</label>
                     <div style="position: relative;">
                         <i class="fas fa-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--agri-primary); opacity: 0.6;"></i>
                         <input type="text" name="search" class="form-agri" style="padding-left: 44px; font-size: 14px; font-weight: 600;"
-                               placeholder="Scan Order ID or Account Name..." value="{{ request('search') }}">
+                               placeholder="Search Order ID or Account Name..." value="{{ request('search') }}">
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <label class="agri-filter-label">Logistics State</label>
+                    <label class="agri-filter-label">Order Status</label>
                     <select name="status" class="form-agri" style="font-size: 14px; font-weight: 600;">
-                        <option value="">All Fulfillment States</option>
+                        <option value="">All Statuses</option>
                         @foreach($statuses as $s)
                             <option value="{{ $s }}" @selected(request('status') === $s)>
                                 {{ strtoupper(str_replace('_', ' ', $s)) }}
@@ -48,13 +48,13 @@
                     </select>
                 </div>
                 <div class="col-lg-2">
-                    <label class="agri-filter-label">Fulfillment Partner ID</label>
+                    <label class="agri-filter-label">Vendor ID</label>
                     <input type="number" name="vendor_id" class="form-agri" style="font-size: 14px; font-weight: 600;"
-                           placeholder="Filter by Node ID" value="{{ request('vendor_id') }}">
+                           placeholder="Filter by Vendor ID" value="{{ request('vendor_id') }}">
                 </div>
                 <div class="col-lg-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn-agri btn-agri-primary" style="flex: 1; font-weight: 800; letter-spacing: 0.5px;">
-                        ENGAGE FILTERS
+                        FILTER
                     </button>
                     <a href="{{ route('admin.orders.index') }}" class="btn-agri btn-agri-outline" style="min-width: 90px; text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center;">
                         RESET
@@ -70,13 +70,13 @@
             <table class="table mb-0" style="vertical-align: middle;">
                 <thead style="background: var(--agri-bg);">
                     <tr>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Transaction Nexus</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Engaged Parties</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Cargo Volume</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Financial Exchange</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Settlement Status</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Logistics State</th>
-                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-end">Command</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Order Details</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Customer & Vendor</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Items</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;">Amount</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Payment Status</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-center">Order Status</th>
+                        <th style="padding: 20px 32px; font-size: 11px; font-weight: 800; color: var(--agri-text-muted); text-transform: uppercase; letter-spacing: 1px; border: none;" class="text-end">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,19 +99,19 @@
                                         <div style="width: 20px; height: 20px; background: var(--agri-primary-light); border-radius: 5px; display: flex; align-items: center; justify-content: center; color: var(--agri-primary);">
                                             <i class="fas fa-user" style="font-size: 10px;"></i>
                                         </div>
-                                        <span style="font-weight: 700; color: var(--agri-text-heading); font-size: 13px;">{{ $order->user->name ?? 'Account Terminated' }}</span>
+                                        <span style="font-weight: 700; color: var(--agri-text-heading); font-size: 13px;">{{ $order->user->name ?? 'Deleted User' }}</span>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <div style="width: 20px; height: 20px; background: var(--agri-bg); border-radius: 5px; display: flex; align-items: center; justify-content: center; color: var(--agri-secondary);">
                                             <i class="fas fa-store" style="font-size: 10px;"></i>
                                         </div>
-                                        <span style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted);">{{ $order->vendor->name ?? 'Direct Fulfillment' }}</span>
+                                        <span style="font-size: 12px; font-weight: 700; color: var(--agri-text-muted);">{{ $order->vendor->name ?? 'No Vendor' }}</span>
                                     </div>
                                 </div>
                             </td>
                             <td style="padding: 24px 32px;" class="text-center">
                                 <div style="background: var(--agri-bg); color: var(--agri-primary-dark); padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--agri-border);">
-                                    <i class="fas fa-box" style="font-size: 10px; opacity: 0.5;"></i> {{ $order->items->count() }} Assets
+                                    <i class="fas fa-box" style="font-size: 10px; opacity: 0.5;"></i> {{ $order->items->count() }} Items
                                 </div>
                             </td>
                             <td style="padding: 24px 32px;">
@@ -152,7 +152,7 @@
                             </td>
                             <td style="padding: 24px 32px;" class="text-end">
                                 <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-agri" style="padding: 10px 16px; background: var(--agri-primary-light); color: var(--agri-primary); border-radius: 12px; text-decoration: none; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px;">
-                                    OVERVIEW <i class="fas fa-arrow-right" style="font-size: 10px;"></i>
+                                    VIEW <i class="fas fa-arrow-right" style="font-size: 10px;"></i>
                                 </a>
                             </td>
                         </tr>
@@ -164,8 +164,8 @@
                                         <i class="fas fa-satellite" style="opacity: 0.4;"></i>
                                     </div>
                                     <div>
-                                        <h4 style="margin: 0; font-weight: 800; color: var(--agri-text-heading);">TELEMETRY DEADZONE</h4>
-                                        <p style="margin: 8px 0 0 0; font-size: 14px; color: var(--agri-text-muted); max-width: 400px;">No active transactions detected within your specified filtering parameters.</p>
+                                        <h4 style="margin: 0; font-weight: 800; color: var(--agri-text-heading);">No Orders Found</h4>
+                                        <p style="margin: 8px 0 0 0; font-size: 14px; color: var(--agri-text-muted); max-width: 400px;">No orders found matching your search filters.</p>
                                     </div>
                                 </div>
                             </td>

@@ -60,7 +60,6 @@
                         <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: var(--agri-text-muted); text-transform: uppercase; border: none;">{{trans('lang.email')}}</th>
                         <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: var(--agri-text-muted); text-transform: uppercase; border: none;">{{trans('lang.date')}}</th>
                         <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: var(--agri-text-muted); text-transform: uppercase; border: none;">{{trans('lang.active')}}</th>
-                        <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: var(--agri-text-muted); text-transform: uppercase; border: none;">Wallet</th>
                         <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: var(--agri-text-muted); text-transform: uppercase; border: none;" class="text-end">{{trans('lang.actions')}}</th>
                     </tr>
                 </thead>
@@ -108,11 +107,6 @@
                             </label>
                         </td>
                         <td class="px-4 py-3">
-                            <span style="font-size:13px;font-weight:600;">
-                                {{ number_format($user->wallet_amount ?? 0, 2) }}
-                            </span>
-                        </td>
-                        <td class="px-4 py-3">
                             <div class="text-end" style="display:flex;justify-content:flex-end;gap:8px;">
                                 <a href="{{ $viewRoute }}" class="btn-agri" style="padding:8px;background:var(--agri-bg);color:var(--agri-primary);border-radius:10px;" title="View"><i class="fas fa-eye"></i></a>
                                 <a href="{{ $editRoute }}" class="btn-agri" style="padding:8px;background:var(--agri-bg);color:var(--agri-primary);border-radius:10px;" title="Edit"><i class="fas fa-edit"></i></a>
@@ -124,7 +118,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="8" class="text-center py-5" style="color:var(--agri-text-muted);">{{trans('lang.no_record_found')}}</td></tr>
+                    <tr><td colspan="7" class="text-center py-5" style="color:var(--agri-text-muted);">{{trans('lang.no_record_found')}}</td></tr>
                     @endforelse
                 </tbody>
             </table>
