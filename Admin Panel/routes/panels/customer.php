@@ -64,6 +64,10 @@ Route::middleware('auth:web')->group(function () {
 Route::get('/shop',      [\App\Http\Controllers\Frontend\ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{id}', [\App\Http\Controllers\Frontend\ShopController::class, 'show'])->name('shop.single');
 
+// ── Stores (Vendors) ──────────────────────────────────────────────────────────
+Route::get('/stores',      [\App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('stores');
+Route::get('/stores/{id}', [\App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.single');
+
 Route::get('/forum',                  [\App\Http\Controllers\Frontend\ForumController::class, 'index'])->name('forum');
 Route::get('/forum/{slug}',           [\App\Http\Controllers\Frontend\ForumController::class, 'show'])->name('forum.thread');
 Route::redirect('/blog',              '/forum')->name('blog');

@@ -54,16 +54,17 @@ class ForumThreadPolicy
     }
 
     /**
-     * Anyone can view an approved, non-soft-deleted thread.
+     * Anyone (including guests) can view an approved, non-soft-deleted thread.
      * Pending (not approved) threads are only visible to their owner.
      */
-    public function view(User $user, ForumThread $thread): bool
+    public function view(?User $user, ForumThread $thread): bool
     {
         if ($thread->is_approved) {
-            return true;
+            return true;           // guests and all logged-in users can read
         }
 
-        return $user->id === $thread->user_id;
+        // Unapproved: owner only
+        return $user !== null && $user->id === $thread->user_id;
     }
 
     /**
