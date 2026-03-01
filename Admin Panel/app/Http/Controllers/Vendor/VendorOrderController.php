@@ -23,6 +23,7 @@ class VendorOrderController extends Controller
     public function index(Request $request): View
     {
         $query = Order::with(['user', 'items'])
+                      ->withCount('items as order_items_count')
                       ->forVendor($this->vendorId())
                       ->latest();
 

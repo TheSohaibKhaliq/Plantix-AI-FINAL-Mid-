@@ -96,7 +96,7 @@
                         </div>
                         @if(!$reply->is_official && $reply->is_expert_reply && $reply->user_id === auth('expert')->id())
                         <div>
-                            <form method="POST" action="{{ route('expert.forum.reply.official', $reply) }}" onsubmit="return confirm('Mark this as the official answer?');">
+                            <form method="POST" action="{{ route('expert.forum.replies.official', $reply) }}" onsubmit="return confirm('Mark this as the official answer?');">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn-agri" style="padding: 6px 12px; background: white; color: #065F46; border: 1px solid #D1FAE5; font-size: 12px; font-weight: 700; border-radius: 100px;"><i class="fas fa-check-circle me-1"></i> Mark Official</button>
                             </form>

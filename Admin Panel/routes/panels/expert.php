@@ -60,7 +60,7 @@ Route::prefix('expert')->name('expert.')->group(function () {
             Route::get('/{thread}',                    [\App\Http\Controllers\Expert\ExpertForumController::class, 'show'])->name('show');
             Route::post('/{thread}/reply',             [\App\Http\Controllers\Expert\ExpertForumController::class, 'reply'])->name('reply')
                 ->middleware('throttle:10,1');
-            Route::post('/replies/{reply}/official',   [\App\Http\Controllers\Expert\ExpertForumController::class, 'markOfficial'])->name('replies.official');
+            Route::patch('/replies/{reply}/official',  [\App\Http\Controllers\Expert\ExpertForumController::class, 'markOfficial'])->name('replies.official');
         });
 
         // ── Notifications ─────────────────────────────────────────────────────

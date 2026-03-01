@@ -9,6 +9,7 @@ use App\Models\ForumThread;
 use App\Services\Forum\ForumService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 /**
@@ -40,7 +41,7 @@ class ExpertForumController extends Controller
 
     public function show(ForumThread $thread): View
     {
-        $this->authorize('view', $thread);
+        Gate::forUser(auth('expert')->user())->authorize('view', $thread);
 
         ['thread' => $thread, 'replies' => $replies] = $this->forum->showThread($thread);
 
@@ -51,7 +52,7 @@ class ExpertForumController extends Controller
 
     public function reply(PostExpertReplyRequest $request, ForumThread $thread): RedirectResponse
     {
-        $this->authorize('create', [ForumReply::class, $thread]);
+        Gate::forUser(auth('expert')->user())->authorize('create', [ForumReply::class, $thread]);
 
         $author = auth('expert')->user();
 
@@ -80,7 +81,7 @@ class ExpertForumController extends Controller
 
     public function markOfficial(ForumReply $reply): RedirectResponse
     {
-        $this->authorize('markOfficial', $reply);
+        Gate::forUser(auth('expert')->user())->authorize('markOfficial', $reply);
 
         try {
             $this->forum->markOfficialAnswer(auth('expert')->user(), $reply);
