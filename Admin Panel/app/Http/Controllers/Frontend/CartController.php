@@ -238,13 +238,27 @@ class CartController extends Controller
 
         try {
             if ($payload['payment_method'] === 'stripe') {
-                // Stripe: create order + PI, return client_secret to JS
+                // Stripe: create order + PI
                 $result = $this->checkout->initiate($user, $payload);
-                return response()->json([
-                    'client_secret'     => $result['client_secret'],
-                    'order_id'          => $result['order']->id,
-                    'payment_intent_id' => $result['order']->payment_intent_id,
+
+                /** @var \App\Models\Order $order */
+                $order = $result['order'];
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'client_secret'     => $result['client_secret'],
+                        'order_id'          => $order->id,
+                        'payment_intent_id' => $order->payment_intent_id,
+                    ]);
+                }
+
+                // Regular form POST — store PI secret in session, redirect to payment page
+                session([
+                    'pending_order_id' => $order->id,
+                    'stripe_secret'    => $result['client_secret'],
                 ]);
+
+                return redirect()->route('checkout.pay', ['order' => $order->id]);
             }
 
             // COD: deduct stock immediately, redirect to success

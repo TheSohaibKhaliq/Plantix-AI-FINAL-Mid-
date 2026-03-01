@@ -471,7 +471,9 @@ class AppointmentService
     private function notifyAdmin(string $event, Appointment $appointment): void
     {
         try {
-            $admins = \App\Models\User::where('role', 'admin')->get();
+            // Only notify super admins (role_id = null means unrestricted super admin).
+            // Staff sub-admins (role_id set) should not receive every system notification.
+            $admins = \App\Models\User::where('role', 'admin')->whereNull('role_id')->get();
             if ($admins->isEmpty()) {
                 return;
             }

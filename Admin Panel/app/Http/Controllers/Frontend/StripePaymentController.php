@@ -109,6 +109,64 @@ class StripePaymentController extends Controller
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // Simulated payment confirmation (demo / test mode)
+    // Route: POST /checkout/pay/{order}
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Process the demo card form submission and advance the order to paid status.
+     */
+    public function processOrderPayment(Request $request, Order $order): RedirectResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ((int) $order->user_id !== (int) $user->id) {
+            abort(403);
+        }
+
+        if (! $order->isPendingPayment()) {
+            if ($order->payment_status === 'paid') {
+                return redirect()->route('order.success', $order->id);
+            }
+            return redirect()->route('checkout')->withErrors(['order' => 'This order cannot be paid.']);
+        }
+
+        $request->validate([
+            'card_name'   => 'required|string|max:100',
+            'card_number' => 'required|string',
+            'card_exp'    => 'required|string',
+            'card_cvc'    => 'required|string',
+        ]);
+
+        try {
+            if ($order->payment_intent_id) {
+                // Use CartCheckoutService to confirm — mirrors what the webhook does
+                $this->checkout->confirmPayment($order->payment_intent_id);
+            } else {
+                // No real PI — advance directly (pure demo env)
+                $order->update([
+                    'status'         => \App\Models\Order::STATUS_PROCESSING,
+                    'payment_status' => 'paid',
+                ]);
+            }        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Payment record not yet created (e.g. no real Stripe webhook) — advance directly
+            $order->update([
+                'status'         => \App\Models\Order::STATUS_CONFIRMED,
+                'payment_status' => 'paid',
+            ]);        } catch (\Throwable $e) {
+            Log::error('processOrderPayment error', ['order_id' => $order->id, 'error' => $e->getMessage()]);
+            return redirect()->route('checkout.pay', $order->id)
+                             ->with('error', 'Payment could not be processed. Please try again.');
+        }
+
+        session()->forget(['pending_order_id', 'stripe_secret']);
+
+        return redirect()->route('order.success', $order->id)
+                         ->with('success', 'Payment successful! Your order has been placed.');
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Legacy createIntent endpoint (kept for backwards-compat with API clients)
     // Creates a PI for an already-existing pending_payment order
     // ─────────────────────────────────────────────────────────────────────────

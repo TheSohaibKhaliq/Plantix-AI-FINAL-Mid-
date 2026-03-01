@@ -112,6 +112,7 @@ Route::middleware(['customer', 'verified'])->group(function () {
     Route::post('/checkout',                   [\App\Http\Controllers\Frontend\CartController::class, 'placeOrder'])->name('checkout.place');
     Route::post('/checkout/stripe/initiate',   [\App\Http\Controllers\Frontend\StripePaymentController::class, 'initiateCheckout'])->name('checkout.stripe.initiate');
     Route::get('/checkout/pay/{order}',        [\App\Http\Controllers\Frontend\StripePaymentController::class, 'showPaymentPage'])->name('checkout.pay');
+    Route::post('/checkout/pay/{order}',       [\App\Http\Controllers\Frontend\StripePaymentController::class, 'processOrderPayment'])->name('checkout.pay.confirm');
 
     // ── Orders ────────────────────────────────────────────────────────────────
     Route::get('/orders',                  [\App\Http\Controllers\Frontend\CustomerOrderController::class, 'index'])->name('orders');
