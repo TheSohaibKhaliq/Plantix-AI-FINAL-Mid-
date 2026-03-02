@@ -85,6 +85,13 @@
             <i class="bi bi-arrow-left me-1"></i>Back to Login
         </a>
     </div>
+
+    <div class="text-center mt-3 pt-3 border-top">
+        <p class="text-muted small mb-2">Don't have an account?</p>
+        <a href="{{ route('vendor.register') }}" class="text-decoration-none text-success small fw-semibold">
+            <i class="bi bi-shop me-1"></i>Register Your Store
+        </a>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

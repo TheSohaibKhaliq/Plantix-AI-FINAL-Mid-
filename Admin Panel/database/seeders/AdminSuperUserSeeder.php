@@ -25,14 +25,14 @@ class AdminSuperUserSeeder extends Seeder
         $superRoleId  = DB::table('roles')->where('slug', 'super-admin')->value('id');
 
         // ── Super Admin (no role_id needed — role=admin with null role_id = unrestricted)
-        // We also assign role_id for completeness
+        // Super admin must have role_id = NULL to bypass permission middleware
         DB::table('users')->insert([
             'name'               => 'Super Admin',
             'email'              => 'admin@plantix.com',
             'password'           => Hash::make('Admin@123456'),
             'phone'              => '+923001000001',
             'role'               => 'admin',
-            'role_id'            => $superRoleId,
+            'role_id'            => null,
             'active'             => 1,
             'email_verified_at'  => $now,
             'password_changed_at'=> $now,

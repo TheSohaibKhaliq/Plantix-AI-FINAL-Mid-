@@ -77,6 +77,20 @@
     </form>
 
     <div class="text-center mt-3">
+        <p class="text-muted small mb-2">Don't have an account?</p>
+        <a href="{{ route('vendor.register') }}" class="text-decoration-none text-success fw-semibold">
+            <i class="bi bi-shop me-1"></i>Register Your Store
+        </a>
+    </div>
+
+    <div class="text-center mt-3 pt-3 border-top">
+        <p class="text-muted small mb-2">Forgot your password?</p>
+        <a href="{{ route('vendor.password.forgot') }}" class="text-decoration-none text-success small">
+            <i class="bi bi-key me-1"></i>Reset Password
+        </a>
+    </div>
+
+    <div class="text-center mt-3">
         <a href="{{ route('home') }}" class="text-muted small">
             <i class="bi bi-arrow-left me-1"></i>Back to website
         </a>

@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request
 from markupsafe import Markup
+from datetime import datetime
 import numpy as np
 import pandas as pd
 from utils.disease import disease_dic
@@ -128,6 +129,10 @@ def predict_image(img, model=disease_model):
 
 
 app = Flask(__name__)
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow()}
 
 # render home page
 
@@ -263,4 +268,4 @@ def disease_prediction():
 
 # ===============================================================================================
 if __name__ == '__main__':
-    app.run(debug=False, port=8001)
+    app.run(debug=True, port=8001, use_reloader=False)

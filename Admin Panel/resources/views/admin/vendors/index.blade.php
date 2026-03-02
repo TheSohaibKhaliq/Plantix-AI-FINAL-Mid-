@@ -108,13 +108,31 @@
                                 </span>
                             </td>
                             <td style="padding: 16px 32px; text-align: right;">
-                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;">
                                     <a href="{{ route('admin.vendors.view', $vendor->id) }}" class="btn btn-sm btn-info" style="font-size: 12px; padding: 6px 12px;">
-                                        View
+                                        <i class="fas fa-eye"></i> View
                                     </a>
-                                    <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="btn btn-sm btn-primary" style="font-size: 12px; padding: 6px 12px;">
-                                        Edit
-                                    </a>
+                                    
+                                    @if(!$vendor->is_approved)
+                                        <form method="POST" action="{{ route('admin.vendors.toggle', $vendor->id) }}" style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" name="action" value="approve">
+                                            <button type="submit" class="btn btn-sm btn-success" style="font-size: 12px; padding: 6px 12px;" title="Approve this vendor">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.vendors.toggle', $vendor->id) }}" style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" name="action" value="reject">
+                                            <button type="submit" class="btn btn-sm btn-danger" style="font-size: 12px; padding: 6px 12px;" title="Reject this vendor" onclick="return confirm('Are you sure you want to reject this vendor?');">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="btn btn-sm btn-primary" style="font-size: 12px; padding: 6px 12px;">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

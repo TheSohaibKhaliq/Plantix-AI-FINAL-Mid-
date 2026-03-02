@@ -23,6 +23,11 @@ Route::prefix('vendor')->name('vendor.')->group(function () {
         Route::get('/login',  [\App\Http\Controllers\Vendor\Auth\VendorLoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [\App\Http\Controllers\Vendor\Auth\VendorLoginController::class, 'login'])->middleware('throttle:5,1');
 
+        // Registration
+        Route::get('/register',  [\App\Http\Controllers\Vendor\Auth\VendorRegisterController::class, 'showRegistrationForm'])->name('register');
+        Route::post('/register', [\App\Http\Controllers\Vendor\Auth\VendorRegisterController::class, 'register'])->name('register');
+        Route::get('/registration-success', [\App\Http\Controllers\Vendor\Auth\VendorRegisterController::class, 'registrationSuccess'])->name('registration.success');
+
         // Password reset
         Route::get('/password/forgot',        [\App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController::class, 'showLinkRequestForm'])->name('password.forgot');
         Route::post('/password/email',         [\App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');

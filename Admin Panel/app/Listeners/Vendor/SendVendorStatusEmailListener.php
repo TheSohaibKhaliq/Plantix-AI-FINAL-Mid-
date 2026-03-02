@@ -17,20 +17,20 @@ class SendVendorStatusEmailListener implements ShouldQueue
 
     public function handle(VendorStatusChanged $event): void
     {
-        $vendor = $event->vendor->load('user');
+        $vendor = $event->vendor->load('author');
         $status = $event->status;
         $reason = $event->reason;
 
         // Email the vendor user
-        if ($vendor->user?->email) {
+        if ($vendor->author?->email) {
             $this->notifLog->send(
                 mailable:         new VendorStatusMail($vendor, $status, $reason),
-                to:               $vendor->user->email,
-                recipientName:    $vendor->user->name,
+                to:               $vendor->author->email,
+                recipientName:    $vendor->author->name,
                 recipientRole:    'vendor',
                 notificationType: "vendor_status_{$status}",
                 notifiable:       $vendor,
-                userId:           $vendor->user_id,
+                userId:           $vendor->author_id,
                 dedupKey:         "vendor_status_{$status}:{$vendor->id}:" . now()->format('YmdH'),
             );
         }
@@ -50,11 +50,11 @@ class SendVendorStatusEmailListener implements ShouldQueue
                         default     => "Vendor {$vendor->business_name} status changed to {$status}.",
                     },
                     details:    [
-                        'Business' => $vendor->business_name ?? $vendor->user?->name ?? '—',
+                        'Business' => $vendor->business_name ?? $vendor->author?->name ?? '—',
                         'Status'   => ucfirst($status),
                         'Reason'   => $reason ?? '—',
                     ],
-                    actionUrl:  route('admin.vendors.show', $vendor->id),
+                    actionUrl:  route('admin.vendors.view', $vendor->id),
                     adminEmail: $adminEmail,
                 ),
                 to:               $adminEmail,

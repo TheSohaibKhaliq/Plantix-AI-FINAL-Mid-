@@ -100,7 +100,7 @@
                 </a>
 
                 <!-- Mobile Toggle -->
-                <button type="button" class="navbar-toggler border-0 d-lg-none" data-toggle="collapse" data-target="#navbar-menu">
+                <button type="button" class="navbar-toggler border-0 d-lg-none" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
                     <i class="fas fa-bars text-dark" style="font-size: 24px;"></i>
                 </button>
 
@@ -127,7 +127,7 @@
                         }
                     @endphp
                     <div class="dropdown">
-                        <a href="#" class="text-dark position-relative dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;">
+                        <a href="#" class="text-dark position-relative dropdown-toggle" data-bs-toggle="dropdown" style="text-decoration: none;">
                             <i class="far fa-shopping-cart text-dark" style="font-size: 20px;"></i>
                             @if($cartCount > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 10px; top: -5px !important; right: -10px !important;">
@@ -149,7 +149,7 @@
 
                     @auth('web')
                     <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center gap-2 text-dark dropdown-toggle" data-toggle="dropdown" style="text-decoration: none; font-weight: 600;">
+                        <a href="#" class="d-flex align-items-center gap-2 text-dark dropdown-toggle" data-bs-toggle="dropdown" style="text-decoration: none; font-weight: 600;">
                             <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--agri-primary-light); color: var(--agri-primary); display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-user"></i>
                             </div>

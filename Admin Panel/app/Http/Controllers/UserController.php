@@ -217,7 +217,7 @@ class UserController extends Controller
 
     public function vendorToggle(Request $request, int $id)
     {
-        $vendor = Vendor::findOrFail($id);
+        $vendor = Vendor::with('author')->findOrFail($id);
 
         $action = $request->input('action'); // 'toggle_active' or 'approve'
 
@@ -225,9 +225,12 @@ class UserController extends Controller
             $vendor->update(['is_active' => ! $vendor->is_active]);
             $message = 'Vendor ' . ($vendor->is_active ? 'activated' : 'deactivated') . ' successfully.';
         } elseif ($action === 'approve') {
+            // Approve vendor AND activate their user account
             $vendor->update(['is_approved' => true]);
-            $message = 'Vendor approved successfully.';
+            $vendor->author->update(['active' => true]);
+            $message = 'Vendor approved successfully! They can now log in and manage their store.';
         } elseif ($action === 'reject') {
+            // Reject vendor but keep user account inactive
             $vendor->update(['is_approved' => false]);
             $message = 'Vendor approval revoked.';
         } else {

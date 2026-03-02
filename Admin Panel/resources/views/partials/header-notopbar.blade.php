@@ -4,7 +4,7 @@
 
             {{-- Brand --}}
             <div class="navbar-header" style="flex-shrink:0; display:flex; align-items:center;">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"
+                <button type="button" class="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
                     title="Open menu" aria-label="Open menu">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -16,7 +16,7 @@
             {{-- Nav links (collapse on mobile) --}}
             <div class="collapse navbar-collapse" id="navbar-menu" style="flex:1; min-width:0;">
                 <img src="{{ asset('assets/img/plantix-ai-logo.png') }}" alt="Logo" />
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"
+                <button type="button" class="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
                     title="Close menu" aria-label="Close menu">
                     <i class="fa fa-times"></i>
                 </button>
@@ -66,12 +66,14 @@
                                 <i class="far fa-user"></i> {{ Str::limit(auth('web')->user()->name, 14) }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ route('account.profile') }}"><i class="fas fa-user fa-fw"></i> Profile</a></li>
-                                <li><a href="{{ route('orders') }}"><i class="fas fa-box fa-fw"></i> Orders</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('account.profile') }}"><i class="fas fa-user fa-fw"></i> Profile</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('orders') }}"><i class="fas fa-box fa-fw"></i> Orders</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('appointments') }}"><i class="fas fa-calendar fa-fw"></i> Appointments</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button type="submit" class="dropdown-item border-0 bg-transparent">
+                                        <button type="submit" class="dropdown-item text-danger py-2 border-0 bg-transparent">
                                             <i class="fas fa-sign-out-alt fa-fw"></i> Logout
                                         </button>
                                     </form>
