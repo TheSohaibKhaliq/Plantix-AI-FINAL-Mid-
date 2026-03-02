@@ -105,6 +105,7 @@ Route::middleware(['customer', 'verified'])->group(function () {
     Route::patch('/cart/{id}',      [\App\Http\Controllers\Frontend\CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{id}',     [\App\Http\Controllers\Frontend\CartController::class, 'remove'])->name('cart.remove');
     Route::delete('/cart',          [\App\Http\Controllers\Frontend\CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/cart/coupon',      fn() => redirect()->route('cart'))->name('cart.coupon');
     Route::post('/cart/coupon',     [\App\Http\Controllers\Frontend\CartController::class, 'applyCoupon'])->name('cart.coupon.apply');
     Route::delete('/cart/coupon',   [\App\Http\Controllers\Frontend\CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
 

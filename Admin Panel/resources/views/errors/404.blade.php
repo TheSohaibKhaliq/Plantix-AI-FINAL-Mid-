@@ -58,12 +58,12 @@
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
                         <h1>404</h1>
-                        <h2>Sorry Page Was Not Found!</h2>
+                        <h2>Page Not Found</h2>
                         <p>
-                            Household shameless incommode at no objection behaviour. Especially do at he possession
-                            insensible sympathize boisterous it. Songs he on an widen me event truth.
+                            Sorry! The page you are looking for doesn't exist. It may have been moved or deleted.
+                            Please check the URL and try again, or return to the home page.
                         </p>
-                        <a class="btn mt-20 btn-md btn-theme" href="{{ route('home') }}">Back to home</a>
+                        <a class="btn mt-20 btn-md btn-theme" href="{{ route('home') }}">Back to Home</a>
                     </div>
                 </div>
             </div>
