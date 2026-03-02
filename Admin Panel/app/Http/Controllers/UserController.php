@@ -222,8 +222,12 @@ class UserController extends Controller
         $action = $request->input('action'); // 'toggle_active' or 'approve'
 
         if ($action === 'toggle_active') {
-            $vendor->update(['is_active' => ! $vendor->is_active]);
-            $message = 'Vendor ' . ($vendor->is_active ? 'activated' : 'deactivated') . ' successfully.';
+            $newState = ! $vendor->is_active;
+            $vendor->update(['is_active' => $newState]);
+            // Keep the users.active flag in sync so login and session middleware
+            // correctly block/allow the vendor account.
+            $vendor->author->update(['active' => $newState]);
+            $message = 'Vendor ' . ($newState ? 'activated' : 'suspended') . ' successfully.';
         } elseif ($action === 'approve') {
             // Approve vendor AND activate their user account
             $vendor->update(['is_approved' => true]);

@@ -39,8 +39,14 @@ class EnsureVendorGuard
                 ->withErrors(['email' => 'Your account is not active. Contact support.']);
         }
 
-        // Share vendor entity with all Blade templates in vendor scope
+        // Also check the vendor record directly — handles cases where vendors.is_active
+        // was flipped without touching users.active (suspension via admin panel).
         $vendor = $user->vendor;
+        if ($vendor && ! $vendor->is_active) {
+            auth('vendor')->logout();
+            return redirect()->route('vendor.login')
+                ->withErrors(['email' => 'Your vendor account has been suspended. Contact support.']);
+        }
         view()->share('currentVendor', $vendor);
         view()->share('vendorUser', $user);
 

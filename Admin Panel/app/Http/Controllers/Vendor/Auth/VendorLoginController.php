@@ -52,6 +52,14 @@ class VendorLoginController extends Controller
             ]);
         }
 
+        // Block suspended vendors (vendors.is_active = false) even when users.active = 1
+        if ($user->vendor && ! $user->vendor->is_active) {
+            $this->guard()->logout();
+            throw ValidationException::withMessages([
+                $this->username() => ['Your vendor account has been suspended. Please contact the admin.'],
+            ]);
+        }
+
         return redirect()->intended($this->redirectPath());
     }
 
