@@ -87,7 +87,7 @@
                         <td class="px-4 py-3">
                             <div style="font-weight:700;color:var(--agri-text-heading);">
                                 <a href="{{ $viewRoute }}" style="text-decoration:none;color:inherit;">
-                                    {{ trim(($user->first_name ?? '').' '.($user->last_name ?? '')) ?: 'No Name' }}
+                                    {{ $user->name ?? 'No Name' }}
                                 </a>
                             </div>
                         </td>
