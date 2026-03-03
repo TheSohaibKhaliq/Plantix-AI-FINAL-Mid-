@@ -81,7 +81,7 @@ class CartController extends Controller
         ]);
 
         $product = Product::active()->inStock()->findOrFail($request->product_id);
-        $cart    = $this->getOrCreateCart();
+        $cart    = $this->getOrCreateCart($product->vendor_id);
 
         $existing = CartItem::where('cart_id', $cart->id)
                             ->where('product_id', $product->id)
@@ -305,11 +305,14 @@ class CartController extends Controller
 
     // ── Helper ────────────────────────────────────────────────────────────────
 
-    private function getOrCreateCart(): Cart
+    private function getOrCreateCart($vendorId = null): Cart
     {
         $user = auth('web')->user();
-
-        return Cart::firstOrCreate(['user_id' => $user->id]);
+        $attributes = ['user_id' => $user->id];
+        if ($vendorId) {
+            $attributes['vendor_id'] = $vendorId;
+        }
+        return Cart::firstOrCreate($attributes);
     }
 }
 

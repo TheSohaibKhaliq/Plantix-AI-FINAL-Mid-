@@ -1,1 +1,1 @@
-<footer class="footer"> © 2019-<?php echo date('Y');?> GroMart. All rights reserved.</footer>
+<footer class="footer"> <?php echo date('Y');?> PlantixAI. All rights reserved.</footer>

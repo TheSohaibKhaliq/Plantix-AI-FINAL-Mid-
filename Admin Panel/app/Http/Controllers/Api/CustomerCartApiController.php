@@ -38,7 +38,7 @@ class CustomerCartApiController extends Controller
 
         $user    = $request->user();
         $product = Product::active()->inStock()->findOrFail($request->product_id);
-        $cart    = $this->getOrCreateCart($user);
+        $cart    = $this->getOrCreateCart($user, $product->vendor_id);
 
         $existing = CartItem::where('cart_id', $cart->id)
                             ->where('product_id', $product->id)
@@ -187,9 +187,13 @@ class CustomerCartApiController extends Controller
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private function getOrCreateCart($user): Cart
+    private function getOrCreateCart($user, $vendorId = null): Cart
     {
-        return Cart::firstOrCreate(['user_id' => $user->id]);
+        $attributes = ['user_id' => $user->id];
+        if ($vendorId) {
+            $attributes['vendor_id'] = $vendorId;
+        }
+        return Cart::firstOrCreate($attributes);
     }
 
     private function cartPayload(Cart $cart): array
